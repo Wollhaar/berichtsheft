@@ -48,15 +48,16 @@
               </ul>
             </li>
           </ul>
-          <form class="navbar-form navbar-right" role="form">
+          <form class="navbar-form navbar-right" role="form" method="post" action="?<?php header('location: Resources/Private/layouts/dashboard.html'); ?>">
             <div class="form-group">
-              <input type="text" placeholder="Benutzer" class="form-control">
+              <input type="text" placeholder="Benutzer" class="form-control" name="username">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
+              <input type="password" placeholder="Password" class="form-control" name="password">
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
           </form>
+            <a href="?case=register">Registrieren</a>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
@@ -65,7 +66,7 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Aktuelles!</h1>
-        <button value="Reset Box" class="btn-default" data-toggle="collapse" data-target="#jumbo">Collaps Information</button>
+        <button value="Reset Box" class="btn-default" data-toggle="collapse" data-target="#jumbo">Collapse Information</button>
         <div id="jumbo">
           <div>
               <?php
