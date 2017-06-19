@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>Berichtsheft-Tool</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="Resources/Public/css/bootstrap.css" rel="stylesheet">
+    <link href="Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="Resources/Public/js/bootstrap.min.js"></script>
+
+
+    <!-- Eigene Scripts-->
+    <script src="Resources/js/recordbook.js"></script>
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Berichtsheft-Tool</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#overview">Übersicht</a></li>
+            <li><a href="#settings">Einstellungen</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Editieren</a></li>
+                <li><a href="#">Drucken</a></li>
+                <li><a href="#">Kalender übersicht</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Benutzer" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+
+    <div class="jumbotron">
+
+    </div>
+    <div class="container well">
+
+      <div>
+          <form>
+            <p class="col-sm-12">
+            <div class="row">
+              <div class="col-md-1 col-md-offset-1">Datum</div>
+              <div class="col-md-2">
+                <select class="form-control" name="status">
+                  <option value="1">Anwesend</option>
+                  <option value="2">Urlaub</option>
+                  <option value="3">Sonderurlaub</option>
+                  <option value="4">Feiertag</option>
+                  <option value="5">Krank</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <select class="form-control" name="ort">
+                  <option value="1">Schule</option>
+                  <option value="2">Betrieb</option>
+                  <option value="3">Überbetrieblich</option>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+              </div>
+            </div>
+
+
+            <div class="row" id="newRecordDiv">
+              <div class="col-md-1 col-md-offset-1">
+                <button id="addRecord" class="form-control" value="+ Eintrag" type="button" onclick="document.write(<h1>'Hallo Welt'</h1>)"></button>
+                <p id="test"></p>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="text" value="Berichtshefteintrag">
+              </div>
+              <div class="col-md-1">
+                <input class="form-control" type="text" value="00:h 00:m">
+              </div>
+              <div class="col-md-4">
+                <input class="form-control" type="text" value="Kommentare zum Eintrag">
+              </div>
+            </div>
+          </form>
+      </div>
+
+    </div>
+  </body>
+</html>
+
