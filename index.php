@@ -33,7 +33,7 @@ switch ($request['case']) {
     case 'register':
         if (empty($_SESSION['request'])) {
             $_SESSION['request'] = $request;
-            header('location: Resources/Private/layout/register.html');
+            header('location: /Resources/Private/layout/register.html');
         }
 
         if (isset($request['request']) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
