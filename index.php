@@ -1,5 +1,5 @@
 <?php
-require_once 'model/config.php';
+require_once 'Resources/PHP/model/config.php';
 
 $request = $_REQUEST;
 if (empty($request['request'])) {
@@ -10,7 +10,6 @@ if (empty($request['request'])) {
 
 switch ($request['case']) {
     case 'login':
-        $temp = 'home';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $login = array( 'username' => $request['username'], 'password' => $request['password']);
@@ -26,6 +25,10 @@ switch ($request['case']) {
             }
             if (is_object($user)) {
                 $access = $user->checkLogin($check);
+                if ($access === TRUE) {
+                    $_SESSION['user'] = $login;
+                    header('location: Resources/Private/layouts/dashboard.html');
+                }
             }
         }
         break;
