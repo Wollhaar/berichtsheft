@@ -39,7 +39,7 @@ class DB_Connection extends PDO
             if (isset($this->dbc)) {
                 return $this->dbc;
             } elseif ($this->dbc === NULL || !isset($this->dbc)) {
-                $this->dbc = new PDO("mysql:dbname=davidz_report;host=localhost", $this->user, $this->password);
+                $this->dbc = new PDO('mysql:dbname='.$this->options['db_name'].';host='.$this->host, $this->user, $this->password);
                 return $this->dbc;
             }
 
