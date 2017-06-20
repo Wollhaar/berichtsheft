@@ -12,11 +12,11 @@
   <title>Berichtsheft-Tool</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="Resources/Public/css/bootstrap.css" rel="stylesheet">
-  <link href="Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+  <link href="/Resources/Public/css/bootstrap.css" rel="stylesheet">
+  <link href="/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="Resources/Public/js/bootstrap.min.js"></script>
+  <script src="/Resources/Public/js/bootstrap.min.js"></script>
 </head>
 
 
@@ -48,8 +48,7 @@
           </ul>
         </li>
       </ul>
-      <?php if(!$access === TRUE): ?>
-      <form class="navbar-form navbar-right" role="form" method="post" action="?<?php header('location: Resources/Private/layouts/dashboard.html'); ?>">
+      <form class="navbar-form navbar-right" role="form" method="post" action="?case=login">
         <div class="form-group">
           <?php if(is_array($access) && !empty($access)): ?>
           <span class="wrong"><?php echo($access[0]); ?></span>
@@ -61,10 +60,7 @@
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
-      <a href="?case=register">Registrieren</a>
-    <?php elseif($access === TRUE && !empty($access)): ?>
-    <span class="user-field" style="color: #fefefe">logged in as: <?php echo $login['username'];?></span>
-    <?php endif; ?>
+      <button href="?case=register">Registrieren</button>
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
