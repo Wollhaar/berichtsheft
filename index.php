@@ -1,118 +1,79 @@
-<!DOCTYPE html>
-<html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+<?php
+require_once 'model/config.php';
+
+$request = $_REQUEST;
+if (empty($request['request'])) {
+    $request['request'] = $_SESSION['request'];
+}
+//? isset($_POST['case']) : array('case' => '');
+//var_dump($request);
+
+switch ($request['case']) {
+    case 'login':
+        $temp = 'home';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $login = array( 'username' => $request['username'], 'password' => $request['password']);
+            if (isset($login)) {
+                $user = new DB_User();
+                $check = $user->login($login['username'], $login['password']);
+            }
+            elseif (isset($login) && is_object($user)) {
+                $check = $user->login($login['username'], $login['password']);
+            }
+            if(is_string($check)) {
+                die($check);
+            }
+            if (is_object($user)) {
+                $access = $user->checkLogin($check);
+            }
+        }
+        break;
+
+    case 'register':
+        if (empty($_SESSION['request'])) {
+            $_SESSION['request'] = $request;
+            header('location: Resources/Private/layout/register.html');
+        }
+
+        if (isset($request['request']) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
+            $request = $_SESSION['request'];
+        }
+
+        if (isset($request['username'])&& $request['password'] && $request['email']) {
+            $regist = array('username' => $request['username'], 'password' => $request['password'], 'email' => $request['email'],
+                'first_name' => $request['first_name'], 'last_name' => $request['last_name'], 'adress' => $request['adress'],
+                'PLZ' => $request['PLZ'], 'place' => $request['place'], 'birthday' => $request['birthday']);
+            if (is_object($user)) {
+                $fb = $user->registUser($regist);
+            } else {
+                $user = new DB_User();
+                $fb = $user->registUser($regist);
+            }
+        }
+        else {
+            echo 'please set all fields';
+        }
+
+        break;
+
+    default:
+        header('location: Resources/Private/Layouts/main.html');
+}
 
 
-    <title>Berichtsheft-Tool</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="Resources/Public/js/bootstrap.min.js"></script>
-  </head>
+/*
+include "Resources/PHP/model/database.php";
 
 
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Berichtsheft-Tool</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#overview">Übersicht</a></li>
-            <li><a href="#settings">Einstellungen</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Editieren</a></li>
-                <li><a href="#">Drucken</a></li>
-                <li><a href="#">Kalender übersicht</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="navbar-form navbar-right" role="form" method="post" action="?<?php header('location: Resources/Private/layouts/dashboard.html'); ?>">
-            <div class="form-group">
-              <input type="text" placeholder="Benutzer" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-            <a href="?case=register">Registrieren</a>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>
+$user = 'frankb_7';
+$pass = 'eB7NBTH1Xkt7Tamc';
+$server = 'dedi3098.your-server.de';
+$db = 'recordbook';
 
 
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Aktuelles!</h1>
-        <button value="Reset Box" class="btn-default" data-toggle="collapse" data-target="#jumbo">Collapse Information</button>
-        <div id="jumbo">
-          <div>
-              <?php
-              ini_set('display_errors', 1);
-              error_reporting( E_ALL );
-              /**
-               * Created by PhpStorm.
-               * User: exinit
-               * Date: 14.06.2017
-               * Time: 10:42
-               */
-              include "Resources/PHP/model/database.php";
-
-
-              $user = 'frankb_7';
-              $pass = 'eB7NBTH1Xkt7Tamc';
-              $server = 'dedi3098.your-server.de';
-              $db = 'recordbook';
-
-
-              $connection = new database();
-              if($connection)
-              //$connection->deleteDatabase($server, $db, $user, $pass);
-              //$connection->createDatabase($server, $db, $user, $pass);
-              $connection->restoreTabels($server, $db, $user, $pass);
-              ?>
-          </div>
-
-
-        </div>
-
-        <form class="form-control" action="index.php" method="post">
-          <div class="form-group">
-            <label></label>
-            <input type="submit" class="btn-danger" value="Create New Database">
-
-          </div>
-
-        </form>
-
-      </div>
-    </div>
-
-
-
-
-  </body>
-
-</html>
+$connection = new database();
+if($connection)
+//$connection->deleteDatabase($server, $db, $user, $pass);
+//$connection->createDatabase($server, $db, $user, $pass);
+$connection->restoreTabels($server, $db, $user, $pass);*/
