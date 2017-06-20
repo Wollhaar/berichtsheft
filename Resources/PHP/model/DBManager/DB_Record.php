@@ -1,7 +1,7 @@
 <?php
 
 
-class DB_Report
+class DB_Record
 {
     private $dbc;
 
