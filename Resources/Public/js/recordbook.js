@@ -19,20 +19,17 @@ function addRecord(){
     document.getElementById('end').innerHTML =
       '<div class="row" id="newRecordDiv'+ recordCount + '">' +
         '<div class="row">' +
-          '<div class="col-md-1">' +
-            '<button id="addRecordButton' + recordCount +'" class="form-control" value="" type="button"  onclick="addRecord();">' +recordCount + '</button>' +
-          '</div>' +
-          '<div class="col-md-1">' +
+          '<div class="col-md-1 col-md-offset-1">' +
             '<button id="delRecordButton' + recordCount +'" class="form-control" value="-" type="button" onclick="delRecord(this.id);">-</button>' +
           '</div>'+
           '<div class="col-md-3">' +
-            '<input class="form-control" type="text" value="Berichtshefteintrag">' +
+            '<input class="form-control" id="record' + recordCount +'" type="text" value="Berichtshefteintrag">' +
           '</div> ' +
           '<div class="col-md-1"> ' +
-            '<input class="form-control" type="text" value="00:h 00:m">' +
+            '<input class="form-control" id="time' + recordCount +'" type="text" value="00:h 00:m">' +
           '</div> ' +
           '<div class="col-md-4">' +
-            '<input class="form-control" type="text" value="Kommentare zum Eintrag">' +
+            '<input class="form-control" id="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -48,29 +45,21 @@ function addRecord(){
     document.getElementById('end'+ (recordCount-1)).innerHTML =
       '<div class="row" id="newRecordDiv'+ recordCount + '">' +
         '<div class="row">' +
-          '<div class="col-md-1">' +
-            '<button id="addRecordButton' + recordCount +'" class="form-control" value="" type="button" onclick="addRecord();">' + recordCount +'</button>' +
-          '</div>' +
-          '<div class="col-md-1">' +
+          '<div class="col-md-1 col-md-offset-1">' +
             '<button id="delRecordButton' + recordCount +'" class="form-control" value="delRecordButton' + recordCount + '" type="button" onclick="delRecord(this.id);">-</button>' +
           '</div>' +
       '<div class="col-md-3">' +
-      '<input class="form-control" type="text" value="Berichtshefteintrag">' +
+      '<input class="form-control" id="record' + recordCount +'" type="text" value="Berichtshefteintrag">' +
       '</div> ' +
       '<div class="col-md-1"> ' +
-      '<input class="form-control" type="text" value="00:h 00:m">' +
+      '<input class="form-control" id="time' + recordCount +'" type="text" value="00:h 00:m">' +
       '</div> ' +
       '<div class="col-md-4">' +
-      '<input class="form-control" type="text" value="Kommentare zum Eintrag">' +
+      '<input class="form-control" id="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
       '</div>' +
       '</div>' +
       '</div>' +
       '<div id="end' + recordCount +'"></div>';
-
-    if(recordCount>0){
-     // document.getElementById('addRecordButton' + (recordCount-1)).setAttribute('onclick', 'doNothing()');
-    }
-
   }
 
   return recordCount++;
