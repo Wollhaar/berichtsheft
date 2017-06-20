@@ -1,9 +1,12 @@
 <?php
 require_once 'Resources/PHP/model/config.php';
 
-$request = $_REQUEST;
-if (empty($request['request'])) {
+if (!empty($_REQUEST)) {
+    $request = $_REQUEST;
+} elseif (empty($request['request'])) {
     $request['request'] = $_SESSION['request'];
+} else {
+    $request['case'] = '';
 }
 //? isset($_POST['case']) : array('case' => '');
 //var_dump($request);
