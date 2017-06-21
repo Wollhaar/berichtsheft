@@ -1,15 +1,14 @@
 <?php
 require_once 'Resources/PHP/model/config.php';
 
-if (!empty($_REQUEST)) {
+if (!empty($_REQUEST['case'])) {
     $request = $_REQUEST;
-} elseif (empty($request['request'])) {
+} elseif (empty($request['request']) && empty($_REQUEST)) {
     $request['request'] = $_SESSION['request'];
 } else {
-    $request['case'] = '';
+    $request = array('case' => '');
 }
-//? isset($_POST['case']) : array('case' => '');
-//var_dump($request);
+//var_dump($request, ' | ', $_SESSION);
 
 switch ($request['case']) {
     case 'login':
@@ -30,16 +29,15 @@ switch ($request['case']) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
                     $_SESSION['user'] = $login;
-                    header('location: Resources/Private/layouts/dashboard.html');
+                    header('location: /Berichtsheft/Resources/Private/layouts/dashboard.html');
                 }
             }
         }
         break;
 
     case 'register':
-        if (empty($_SESSION['request'])) {
-            $_SESSION['request'] = $request;
-            header('location: /Resources/Private/layout/register.html');
+        if (!isset($request['request'])) {
+            header('location: /Berichtsheft/Resources/Private/Layouts/register.html');
         }
 
         if (isset($request['request']) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -56,15 +54,17 @@ switch ($request['case']) {
                 $user = new DB_User();
                 $fb = $user->registUser($regist);
             }
+            echo $fb;
         }
         else {
             echo 'please set all fields';
         }
+        var_dump($fb);
 
         break;
 
     default:
-        header('location: Resources/Private/Layouts/main.html');
+        header('Location: http://frankb.exinitdev.de/Berichtsheft/Resources/Private/Layouts/main.html');
 }
 
 

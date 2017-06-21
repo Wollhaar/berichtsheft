@@ -5,13 +5,7 @@
 var recordCount = 0;
 
 
-function doNothing(){
-  alert('Do Nothing');
-  if(recordCount==0){
-    document.getElementById('addRecordButton').setAttribute('onclick', 'addRecord()');
-  }
 
-}
 
 function addRecord(){
 

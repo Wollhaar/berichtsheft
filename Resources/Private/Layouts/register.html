@@ -12,11 +12,11 @@
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/Resources/Public/js/bootstrap.min.js"></script>
+    <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
 </head>
 
 
@@ -48,16 +48,6 @@
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right" role="form" method="post" action="?<?php header('location: Resources/Private/layouts/dashboard.html'); ?>">
-                <div class="form-group">
-                    <input type="text" placeholder="Benutzer" class="form-control" name="username">
-                </div>
-                <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control" name="password">
-                </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
-            </form>
-            <a href="?case=register">Registrieren</a>
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
@@ -76,6 +66,7 @@
             <input type="text" name="adress" placeholder="Adresse" />
             <input type="text" name="PLZ" placeholder="PLZ" />
             <input type="text" name="place" placeholder="Ort" />
+            <input type="text" name="country" placeholder="Land" />
             <button type="submit">Registrieren</button>
         </form>
         <?php elseif($fb === true): ?>
