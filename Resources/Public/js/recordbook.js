@@ -5,13 +5,7 @@
 var recordCount = 0;
 
 
-function doNothing(){
-  alert('Do Nothing');
-  if(recordCount==0){
-    document.getElementById('addRecordButton').setAttribute('onclick', 'addRecord()');
-  }
 
-}
 
 function addRecord(){
 
@@ -23,13 +17,13 @@ function addRecord(){
             '<button id="delRecordButton' + recordCount +'" class="form-control" value="-" type="button" onclick="delRecord(this.id);">-</button>' +
           '</div>'+
           '<div class="col-md-3">' +
-            '<input class="form-control" id="record' + recordCount +'" type="text" value="Berichtshefteintrag">' +
+            '<input class="form-control" id="record' + recordCount +'" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
           '</div> ' +
           '<div class="col-md-1"> ' +
-            '<input class="form-control" id="time' + recordCount +'" type="text" value="00:h 00:m">' +
+            '<input class="form-control" id="time' + recordCount +'" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
           '</div> ' +
           '<div class="col-md-4">' +
-            '<input class="form-control" id="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
+            '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -49,13 +43,13 @@ function addRecord(){
             '<button id="delRecordButton' + recordCount +'" class="form-control" value="delRecordButton' + recordCount + '" type="button" onclick="delRecord(this.id);">-</button>' +
           '</div>' +
       '<div class="col-md-3">' +
-      '<input class="form-control" id="record' + recordCount +'" type="text" value="Berichtshefteintrag">' +
+      '<input class="form-control" id="record' + recordCount +'" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
       '</div> ' +
       '<div class="col-md-1"> ' +
-      '<input class="form-control" id="time' + recordCount +'" type="text" value="00:h 00:m">' +
+      '<input class="form-control" id="time' + recordCount +'" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
       '</div> ' +
       '<div class="col-md-4">' +
-      '<input class="form-control" id="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
+      '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
       '</div>' +
       '</div>' +
       '</div>' +
