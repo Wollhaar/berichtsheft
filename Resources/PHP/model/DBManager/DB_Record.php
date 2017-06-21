@@ -42,7 +42,58 @@ class DB_Record
         }
     }
 
-    public function restoreTabels()
+
+
+    public function restoreTabels(){
+        $this->dbc = new DB_Connection();
+        if(isset($this->dbc) || is_a($this->dbc, 'PDO')){
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('CREATE TABLE recordbook.recordday (
+                id_recordday INT NOT NULL AUTO_INCREMENT,
+                status VARCHAR(200),
+                place VARCHAR(200),
+                attachment INT,
+                record INT,
+                date DATE,
+                PRIMARY KEY(id_recordday))');
+
+                $sth->execute();
+
+                $sth = $this->dbc->prepare('CREATE TABLE recordbook.record (
+                id_record INT NOT NULL AUTO_INCREMENT,
+                torecordday INT,
+                record LONGTEXT,
+                comment LONGTEXT,
+                PRIMARY KEY(id_record))');
+
+                $sth->execute();
+
+                $sth = $this->dbc->prepare('CREATE TABLE recordbook.attachment(
+                id_attachment INT NOT NULL AUTO_INCREMENT,
+                filename VARCHAR(100,
+                filepath VARCHA(200),
+                torecordday INT,
+                PRIMARY KEY(id_attachment)))');
+
+                $sth->execute();
+                $this->dbc->commit();
+
+
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+    /*
+  public function restoreTabels()
     {
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
@@ -132,5 +183,5 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
-    }
+    }*/
 }
