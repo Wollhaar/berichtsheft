@@ -1,11 +1,18 @@
 <?php
 require_once 'Resources/PHP/model/config.php';
 
-$request = $_REQUEST;
-if (empty($request['request'])) {
-    $request['request'] = $_SESSION['request'];
+if(isset($_POST['username']) && !isset($request['username']) && !isset($request['request'])) {
+    $request = $_REQUEST;
+//    echo 'post';
 }
-//? isset($_POST['case']) : array('case' => '');
+elseif (!empty($request) && empty($request['request']) && !isset($_POST)) {
+    $request = array('request' => $_SESSION);
+//    echo 'session';
+}
+else {
+    $request = array('case' => '');
+//    echo 'default';
+}
 //var_dump($request);
 
 switch ($request['case']) {
@@ -27,7 +34,8 @@ switch ($request['case']) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
                     $_SESSION['user'] = $login;
-                    header('location: Resources/Private/layouts/dashboard.html');
+//                    $_SESSION['case'] = 'case';
+                    header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.html');
                 }
             }
         }
@@ -36,7 +44,7 @@ switch ($request['case']) {
     case 'register':
         if (empty($_SESSION['request'])) {
             $_SESSION['request'] = $request;
-            header('location: /Resources/Private/layout/register.html');
+            header('location: Berichtsheft/Resources/Private/Layouts/register.html');
         }
 
         if (isset($request['request']) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -58,6 +66,15 @@ switch ($request['case']) {
             echo 'please set all fields';
         }
 
+        break;
+
+    case 'logged':
+        header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.html');
+
+        break;
+
+    case 'profile':
+        header('location: /Berichtsheft/Resources/Private/Layouts/account.html');
         break;
 
     default:
