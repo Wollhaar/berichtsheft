@@ -21,7 +21,7 @@ class DB_User
             $this->dbc = $this->dbc->getConnection();
         }
 
-        $pw = sha1($password);
+        $pw = sha1($password, true);
         $sql = 'SELECT username, password FROM User WHERE username = ?';
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user));
@@ -54,13 +54,13 @@ class DB_User
             $this->dbc = $this->dbc->getConnection();
         }
 
-        $pw = sha1($user['password']);
+        $pw = sha1($user['password'], true);
         $status = 1;
-        $sql = 'INSERT INTO User (username, password, status, email, first_name, last_name, adress, PLZ, place, birthday)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO User (username, password, status, email, first_name, last_name, adress, PLZ, country, place, birthday)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user['username'], $pw, $status, $user['email'], $user['first_name'], $user['last_name'],
-                            $user['adress'], $user['PLZ'], $user['place'], $user['birthday']));
+                            $user['adress'], $user['PLZ'], $user['place'], $user['country'], $user['birthday']));
         $fb = $stmt->fetch();
         var_dump($fb);
 
