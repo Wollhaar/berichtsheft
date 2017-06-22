@@ -1,5 +1,5 @@
 <?php
-
+require_once ('DB_Connection.php');
 
 class DB_Record
 {
@@ -46,7 +46,9 @@ class DB_Record
 
     public function restoreTabels(){
         $this->dbc = new DB_Connection();
+
         if(isset($this->dbc) || is_a($this->dbc, 'PDO')){
+
             $this->dbc = $this->dbc->getConnection();
 
             try{
@@ -63,6 +65,7 @@ class DB_Record
 
                 $sth->execute();
 
+
                 $sth = $this->dbc->prepare('CREATE TABLE recordbook.record (
                 id_record INT NOT NULL AUTO_INCREMENT,
                 torecordday INT,
@@ -74,15 +77,56 @@ class DB_Record
 
                 $sth = $this->dbc->prepare('CREATE TABLE recordbook.attachment(
                 id_attachment INT NOT NULL AUTO_INCREMENT,
-                filename VARCHAR(100,
-                filepath VARCHA(200),
+                filename VARCHAR(100),
+                filepath VARCHAR(200),
                 torecordday INT,
-                PRIMARY KEY(id_attachment)))');
+                PRIMARY KEY(id_attachment))');
 
                 $sth->execute();
                 $this->dbc->commit();
 
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
 
+    public function dropTabels(){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.recordday');
+                $sth->execute();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.record');
+                $sth->execute();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.attachment');
+                $sth->execute();
+
+                $this->dbc->commit();
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+}
+
+    }
+
+    public function writeRecord($recDayId, $record, $comment){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+            try{
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('INSERT INTO   record (torecordday, record, comment) VALUES ('. $recDayId .', "' . $record . '",  "' . $comment . '")');
+                $sth->execute();
+
+
+                $this->dbc->commit();
 
 
             }catch(PDOException $exception){
@@ -92,7 +136,111 @@ class DB_Record
         }
     }
 
+
+    public function writeRecordDay(){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+
+    public function createRecordMonth($month, $year){
+
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+
+                $this->dbc->beginTransaction();
+                if(checkdate($month, 31, $year) == true){
+                    echo 'Checkdate 31 true';
+                    $sth = new DateTime();
+                    $sth->format('Y-M-D');
+
+                    $day = 31;
+                    for($i=0; $i<$day; $i++){
+
+                        $sth->setDate($year, $month, $i);
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(date) VALUES ('. $sth->format('Y-M-D') .')');
+
+                        //$sth-
+
+
+                    }
+                }
+                if(checkdate($month, 30, $year) == true){
+                    echo 'checkdate 30 true';
+                    $sth = new DateTime();
+                    $sth->setDate($year, $month, 30 );
+                    $sth->format('Y-M-D');
+                    var_dump($sth);
+
+
+                    $day = 30;
+                    for($i=0; $i<$day; $i++){
+                        $sth = new DateTime();
+                        $sth->setDate($year, $month, $i);
+                        $sth->format('Y-M-D');
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(date) VALUES ('. $sth->format('Y-m-d') .')');
+                        echo '<pre>' . $sth->queryString;
+
+                        $sth->execute();
+
+                    }
+                }
+
+                $this->dbc->commit();
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+
+    public function recordOut(){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
+                $sth->execute();
+
+                echo '<pre>';
+                var_dump($sth->fetchAll());
+
+                $this->dbc->commit();
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+}
+    }
+
     /*
+     *
+     * INSERT INTO   record (torecordday, record, comment) VALUES (' . $recDayId . ', ' . $record . ', ' . $comment .')'
+     *
+     *
+     *
   public function restoreTabels()
     {
         $this->dbc = new DB_Connection();
