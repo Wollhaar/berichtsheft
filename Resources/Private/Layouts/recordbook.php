@@ -6,9 +6,13 @@
  * Time: 11:56
  */
 
+require_once ('../../PHP/model/DBManager/DB_Record.php');
 
-$timestamp = time();
-$currentDate = date('Y-m-D', $timestamp);
+$db = new DB_Record();
+$sth = $db->getRecordPage();
+
+
+$currentDate = $sth[0];
 
 
 
@@ -78,7 +82,7 @@ $navigation = '
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
           </form>
-        </div><!--/.navbar-collapse -->
+        </div>
       </div>
     </nav>';
 
