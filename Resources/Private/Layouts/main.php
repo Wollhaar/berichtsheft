@@ -60,7 +60,7 @@
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
-      <button href="?case=register">Registrieren</button>
+      <a href="/Berichtsheft/index.php?case=register" class="btn btn-link">Registrieren</a>
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
@@ -72,13 +72,6 @@
     <button value="Reset Box" class="btn-default" data-toggle="collapse" data-target="#jumbo">Collapse Information</button>
     <div id="jumbo">
       <div>
-        <?php if(is_a($record, 'DB_Record'){
-         $record->restoreTabels('recordbook');
-         } else {
-         $record = new DB_Record();
-         $record->restoreTabels('recordbook');
-         }
-          ?>
       </div>
 
 
