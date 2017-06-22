@@ -14,6 +14,7 @@
     <!-- Bootstrap core CSS -->
     <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
     <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
@@ -45,10 +46,27 @@
                 </li>
             </ul>
             <div class="user-field">
-                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=profile"><?php echo $_SESSION['user']['username']; var_dump($_SESSION); ?></a></span>
+                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=profile"><?php echo $_SESSION['user']['username']; ?></a></span>
             </div>
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
+
+<div class="main">
+    <div class="board">
+        <?php if($_SESSION['user']['check'] === true): ?>
+        <div class="welcome">
+            <h2 style="color: #00ff00">Sie wurden erfolgreich registriert.<br/>Willkommen im Berichtstoolheft!</h2>
+            <p style="color: lime">Wir wünschen eine erfolgreiche Ausbildung.</p>
+        </div>
+        <?php endif; ?>
+        <?php var_dump($_SESSION); ?>
+        <div class="dashboard">
+            <h3>Dein Dashboard</h3>
+            <p>Alle relevanten Dinge sind, hier für dich notiert.</p>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
