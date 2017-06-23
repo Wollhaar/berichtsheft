@@ -45,7 +45,7 @@
                 </li>
             </ul>
             <div class="user-field">
-                <span class="username">Eingeloggt als <a href="<?php header('location: Resources/Private/layouts/account.html'); ?>"><?php echo $login['username]; ?></a></span>
+                <span class="username">Eingeloggt als <a href="<?php header('location: Resources/Private/layouts/account.html'); ?>"><?php echo $login['username']; ?></a></span>
             </div>
         </div><!--/.navbar-collapse -->
     </div>
