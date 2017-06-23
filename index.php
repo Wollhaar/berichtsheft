@@ -21,7 +21,7 @@ switch ($request['case']) {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $login = array( 'username' => $request['username'], 'password' => $request['password']);
-            if (isset($login)) {
+            if (isset($login) && empty($user)) {
                 $user = new DB_User();
                 $check = $user->login($login['username'], $login['password']);
             }
@@ -76,14 +76,18 @@ switch ($request['case']) {
 
         break;
 
+    case 'profile':
+        header('location: /Berichtsheft/Resources/Private/Layouts/account.php');
+        break;
+
     case 'logged':
+        unset($_SESSION['user']['check']);
         header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
 
         break;
 
-    case 'profile':
-        header('location: /Berichtsheft/Resources/Private/Layouts/account.php');
-        break;
+    case 'logout':
+        session_destroy();
 
     default:
         header('location: Resources/Private/Layouts/main.php');
