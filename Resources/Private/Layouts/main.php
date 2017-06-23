@@ -1,3 +1,16 @@
+<?php
+if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+    if (isset($_REQUEST['PHPSESSID'])) {
+        $session_id = $_REQUEST['PHPSESSID'];
+    } elseif (isset($_SESSION['session_id'])) {
+        $session_id = $_SESSION['session_id'];
+    }
+    session_start($session_id);
+} else {
+    session_start();
+}
+$_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
