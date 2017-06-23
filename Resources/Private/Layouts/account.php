@@ -1,3 +1,16 @@
+<?php
+if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+    if (isset($_REQUEST['PHPSESSID'])) {
+        $session_id = $_REQUEST['PHPSESSID'];
+    } elseif (isset($_SESSION['session_id'])) {
+        $session_id = $_SESSION['session_id'];
+    }
+    session_start($session_id);
+} else {
+    session_start();
+}
+$_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,11 +25,12 @@
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../Public/css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/Berichtsheft/Resources/Public/css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -45,7 +59,12 @@
                 </li>
             </ul>
             <div class="user-field">
-                <span class="username">Eingeloggt als <a href="<?php header('location: Resources/Private/layouts/account.html'); ?>"><?php echo $login['username']; ?></a></span>
+                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=logged" class="dropdown-toggle" data-toggle="dropdown"><?php echo $_SESSION['user']['username']; ?></a></span>
+                <ul class="dropdown-menu">
+                    <li><a href="/Berichtsheft/index.php?case=profile"></a>Profil</li>
+                    <li><a href="/Berichtsheft/index.php?case=status">Status</a></li>
+                    <li><a href="/Berichtsheft/index.php?case=settings">Einstellungen</a></li>
+                </ul>
             </div>
         </div><!--/.navbar-collapse -->
     </div>
