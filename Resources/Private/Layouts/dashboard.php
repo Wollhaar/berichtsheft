@@ -46,7 +46,12 @@
                 </li>
             </ul>
             <div class="user-field">
-                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=profile"><?php echo $_SESSION['user']['username']; ?></a></span>
+                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=logged" class="dropdown-toggle" data-toggle="dropdown"><?php echo $login['username']; ?></a></span>
+                <ul class="dropdown-menu">
+                    <li><a href="/Berichtsheft/index.php?case=profile"></a>Profil</li>
+                    <li><a href="/Berichtsheft/index.php?case=status">Status</a></li>
+                    <li><a href="/Berichtsheft/index.php?case=settings">Einstellungen</a></li>
+                </ul>
             </div>
         </div><!--/.navbar-collapse -->
     </div>
