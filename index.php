@@ -1,12 +1,20 @@
 <?php
 require_once 'Resources/PHP/model/config.php';
 
-$request = $_REQUEST;
-if (empty($request['request'])) {
-    $request['request'] = $_SESSION['request'];
+$request = array('case' => '');
+if(isset($_POST['username']) || isset($_GET['case'])) {
+    $request = $_REQUEST;
+//    echo 'post';
 }
-//? isset($_POST['case']) : array('case' => '');
+elseif (empty($session) && !isset($_POST)) {
+    $session = $_SESSION;
+//    echo 'session';
+}
 //var_dump($request);
+/*
+if ((isset($_SESSION['request']) || isset($_SESSION['user'])) && false) {
+    var_dump($_SESSION);
+}*/
 
 switch ($request['case']) {
     case 'login':
@@ -27,19 +35,20 @@ switch ($request['case']) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
                     $_SESSION['user'] = $login;
-                    header('location: Resources/Private/layouts/dashboard.html');
+//                    $_SESSION['case'] = 'case';
+                    header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
                 }
             }
         }
         break;
 
     case 'register':
-        if (empty($_SESSION['request'])) {
+        if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
-            header('location: /Resources/Private/layout/register.html');
+            header('location: /Berichtsheft/Resources/Private/Layouts/register.php');
         }
 
-        if (isset($request['request']) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
+        if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
             $request = $_SESSION['request'];
         }
 
@@ -47,11 +56,18 @@ switch ($request['case']) {
             $regist = array('username' => $request['username'], 'password' => $request['password'], 'email' => $request['email'],
                 'first_name' => $request['first_name'], 'last_name' => $request['last_name'], 'adress' => $request['adress'],
                 'PLZ' => $request['PLZ'], 'place' => $request['place'], 'birthday' => $request['birthday']);
-            if (is_object($user)) {
-                $fb = $user->registUser($regist);
-            } else {
+            if (empty($user)) {
                 $user = new DB_User();
                 $fb = $user->registUser($regist);
+            } else {
+                $fb = $user->registUser($regist);
+            }
+            if ($fb['check'] === true) {
+                $_SESSION['user'] = $fb;
+                header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
+            }
+            else {
+                die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
             }
         }
         else {
@@ -60,8 +76,17 @@ switch ($request['case']) {
 
         break;
 
+    case 'logged':
+        header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
+
+        break;
+
+    case 'profile':
+        header('location: /Berichtsheft/Resources/Private/Layouts/account.php');
+        break;
+
     default:
-        header('location: Resources/Private/Layouts/main.html');
+        header('location: Resources/Private/Layouts/main.php');
 }
 
 

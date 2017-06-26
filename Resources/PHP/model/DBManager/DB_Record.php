@@ -42,8 +42,6 @@ class DB_Record
         }
     }
 
-
-
     public function restoreTabels(){
         $this->dbc = new DB_Connection();
 
@@ -60,7 +58,7 @@ class DB_Record
                 place VARCHAR(200),
                 attachment INT,
                 record INT,
-                date DATE,
+                recordDate DATE,
                 PRIMARY KEY(id_recordday))');
 
                 $sth->execute();
@@ -112,7 +110,7 @@ class DB_Record
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
             }
-}
+        }
 
     }
 
@@ -136,6 +134,67 @@ class DB_Record
         }
     }
 
+    public function getRecordPage(){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+                //$timestamp = time(); // - (21 * 24 * 60 * 60);
+                //$currentDate = date('Y-m-d', $timestamp);
+                $output = array(['recordDate']['status']['place']['record']);
+
+                $endtime = time()+(5 * 24 * 60 * 60);
+
+
+                $this->dbc->beginTransaction();
+                for($timestamp = time(); $timestamp<$endtime; $timestamp+=(1 * 24 * 60 * 60)){
+                    $currentDate = date('Y-m-d', $timestamp);
+
+                    $sth = $this->dbc->prepare
+                    ('SELECT 
+                            recordday.recordDate, 
+                            recordday.status, 
+                            recordday.place,
+                            record.record
+                        FROM recordbook.recordday JOIN recordbook.record
+                        WHERE recordday.recordDate = "' . $currentDate .'"
+                        AND recordday.record = record.torecordday'
+                    );  //' . $currentDate .'
+
+                    $sth->execute();
+                    $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                    $output += $record;
+
+                    if(empty($record)==true){
+                        $sth = $this->dbc->prepare
+                        ('SELECT 
+                                recordday.recordDate, 
+                                recordday.status, 
+                                recordday.place 
+                            FROM recordbook.recordday  
+                            WHERE recordday.recordDate = "' . $currentDate .'"'
+                        );
+                        $sth->execute();
+                        $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                        $output += $record;
+                    }
+                }
+
+                $this->dbc->commit();
+
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+
+        return $output;
+    }
+
+
 
     public function writeRecordDay(){
         $this->dbc = new DB_Connection();
@@ -156,6 +215,13 @@ class DB_Record
 
 
     public function createRecordMonth($month, $year){
+        /*
+         * To Do
+         * Prüfung ob Monat schon einmal erzeugt wurde
+         * Februar muss noch eingebaut werden
+         * umbau der prepare statments:
+         *  ->Datenübergabe in die executes verschieben andernfalls ist das prepare statment witzlos
+         */
 
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
@@ -165,35 +231,29 @@ class DB_Record
 
                 $this->dbc->beginTransaction();
                 if(checkdate($month, 31, $year) == true){
-                    echo 'Checkdate 31 true';
-                    $sth = new DateTime();
-                    $sth->format('Y-M-D');
 
                     $day = 31;
                     for($i=0; $i<$day; $i++){
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
 
-                        $sth->setDate($year, $month, $i);
-                        $sth = $this->dbc->prepare('INSERT INTO recordday(date) VALUES ('. $sth->format('Y-M-D') .')');
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ('. $dateSth->format('Y-m-d') .')');
 
-                        //$sth-
+                        $sth->execute();
 
 
                     }
                 }
                 if(checkdate($month, 30, $year) == true){
-                    echo 'checkdate 30 true';
-                    $sth = new DateTime();
-                    $sth->setDate($year, $month, 30 );
-                    $sth->format('Y-M-D');
-                    var_dump($sth);
-
 
                     $day = 30;
                     for($i=0; $i<$day; $i++){
-                        $sth = new DateTime();
-                        $sth->setDate($year, $month, $i);
-                        $sth->format('Y-M-D');
-                        $sth = $this->dbc->prepare('INSERT INTO recordday(date) VALUES ('. $sth->format('Y-m-d') .')');
+
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ("'. $dateSth->format('Y-m-d') .'")');
+
                         echo '<pre>' . $sth->queryString;
 
                         $sth->execute();
@@ -232,104 +292,47 @@ class DB_Record
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
             }
-}
+        }
     }
-
-    /*
-     *
-     * INSERT INTO   record (torecordday, record, comment) VALUES (' . $recDayId . ', ' . $record . ', ' . $comment .')'
-     *
-     *
-     *
-  public function restoreTabels()
-    {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
+}
 
 
-            try {
 
-                $this->dbc->beginTransaction();
-                echo '<pre>Beginn Transaction</pre>';
-                $sth1 = $this->dbc->prepare('CREATE TABLE recordbook.status (
-            id_status INT NOT NULL AUTO_INCREMENT,
-            status VARCHAR(45) NULL,
-            PRIMARY KEY(id_status))');
-                if ($sth1->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth1</pre>';
-                }
-                $sth1->execute();
 
-                $sth2 = $this->dbc->prepare('CREATE TABLE recordbook.place (
-            id_ort INT NOT NULL AUTO_INCREMENT,
-            ort VARCHAR(45) NULL,
-            PRIMARY KEY(id_ort))');
-                if ($sth2->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth2</pre>';
-                } else {
-                    $sth2->execute();
-                }
+/*
+                 * Diese Abfrage wenn es Berichtheft Eintäge gibt
+                 * Andernfals gibt dieses Query NULL zurück
 
-                $sth3 = $this->dbc->prepare('CREATE TABLE recordbook.recordday (
-            id_recordday INT NOT NULL AUTO_INCREMENT,
-            status INT NULL,
-            place INT NULL,
-            container_data INT NULL,
-            container_report INT NULL,
-            PRIMARY KEY(id_recordday))');
-                if ($sth3->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth3</pre>';
-                } else {
-                    $sth3->execute();
+                $sth = $this->dbc->prepare
+                ('SELECT
+                            recordday.recordDate,
+                            recordday.status,
+                            recordday.place,
+                            record.record
+                        FROM recordbook.recordday JOIN recordbook.record
+                        WHERE recordday.recordDate = "' . $currentDate .'"
+                        AND recordday.record = record.torecordday'
+                );  //' . $currentDate .'
+
+                $sth->execute();
+                $output = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+                if(empty($output)==true){
+                    $sth = $this->dbc->prepare
+                    ('SELECT
+                                recordday.recordDate,
+                                recordday.status,
+                                recordday.place
+                            FROM recordbook.recordday
+                            WHERE recordday.recordDate = "' . $currentDate .'"'
+                    );
+                    $sth->execute();
+                    $output = $sth->fetchAll(PDO::FETCH_ASSOC);
                 }
 
-                $sth4 = $this->dbc->prepare('CREATE TABLE recordbook.data (
-            id_data INT NOT NULL AUTO_INCREMENT,
-            dataname VARCHAR(500),
-            path VARCHAR(500),
-            datasize DOUBLE,
-            PRIMARY KEY(id_data))');
-                if ($sth4->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth4</pre>';
-                } else {
-                    $sth4->execute();
-                }
-
-                $sth5 = $this->dbc->prepare('CREATE TABLE recordbook.recordcontainer (
-            id_container_record INT NULL,
-            id_record INT NULL)');
-                if ($sth5->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth5</pre>';
-                } else {
-                    $sth5->execute();
-                }
-
-                $sth6 = $this->dbc->prepare('CREATE TABLE recordbook.datacontainer (
-            id_container_data INT NOT NULL AUTO_INCREMENT,
-            id_data INT NULL,
-            PRIMARY KEY(id_container_data))');
-                if ($sth6->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth6</pre>';
-                } else {
-                    $sth6->execute();
-                }
-
-                $sth7 = $this->dbc->prepare('CREATE TABLE recordbook.recordbook(
-            id_recordbook INT NOT NULL AUTO_INCREMENT,
-            container_recordday INT,
-            PRIMARY KEY(id_recordbook))');
-                if ($sth7->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth7</pre>';
-                } else {
-                    $sth7->execute();
-                }
 
                 $this->dbc->commit();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }*/
-}
+
+                */

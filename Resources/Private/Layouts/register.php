@@ -1,3 +1,16 @@
+<?php
+if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+        if (isset($_REQUEST['PHPSESSID'])) {
+        $session_id = $_REQUEST['PHPSESSID'];
+        } elseif (isset($_SESSION['session_id'])) {
+        $session_id = $_SESSION['session_id'];
+    }
+    session_start($session_id);
+} else {
+    session_start();
+}
+$_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -66,8 +79,7 @@
 
     <div class="register container">
 
-        <?php if(empty($fb)): ?>
-        <form method="post" action="/Berichtsheft/index.php?case=register">
+        <form method="post" action="/Berichtsheft/index.php?case=register&ready=true">
 
             <div class="form-group">
                 <div class="form-block">
@@ -125,7 +137,7 @@
                 </div>
                 <div class="form-block">
                     <label for="country">Land</label>
-                    <input type="text" name="country" class="form-control" id="country" placeholder="Ort" />
+                    <input type="text" name="country" class="form-control" id="country" placeholder="Land" />
                 </div>
             </div>
 
@@ -133,10 +145,7 @@
 
         </form>
 
-        <?php elseif($fb === true): ?>
-        <h2 style="color: #00ff00">Sie wurden erfolgreich registriert.<br/>Willkommen im Berichtstoolheft!</h2>
-        <p style="color: lime">Wir wünschen eine erfolgreiche Ausbildung.</p>
-        <?php endif; ?>
+
     </div>
 </div>
 </body>
