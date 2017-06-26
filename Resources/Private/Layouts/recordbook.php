@@ -6,167 +6,110 @@
  * Time: 11:56
  */
 
+error_reporting (E_ALL | E_STRICT);
+ini_set ('display_errors', 'On');
+
+
 require_once ('../../PHP/model/DBManager/DB_Record.php');
+$recordDBConection = new DB_Record();
 
-$db = new DB_Record();
-$sth = $db->getRecordPage();
-
-
-$currentDate = $sth[0];
+session_start();
 
 
-
-$header = '
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
 
-    <title>Berichtsheft-Tool</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="Resources/Public/js/bootstrap.min.js"></script>
+include ('html/recordbook.html');
 
 
-    <!-- Eigene Scripts-->
-    <script src="Resources/Public/js/recordbook.js"></script>
-
-
-  </head>
-';
-
-
-$navigation = ' 
-  <body>   
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Berichtsheft-Tool</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#overview">Übersicht</a></li>
-            <li><a href="#settings">Einstellungen</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Editieren</a></li>
-                <li><a href="#">Drucken</a></li>
-                <li><a href="#">Kalender übersicht</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Benutzer" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div>
-      </div>
-    </nav>';
-
-
-$jumbotron = '
-    <div class="jumbotron">
-
-    </div>
-';
-
-
-$form = '
-<div class="container well">
-
-      <div>
-          <form  action="Resources/PHP/view/record.php" method="post">
-            <div class="row">
-              <div class="col-md-1 col-md-offset-1">' . $currentDate . '</div>
-              <div class="col-md-2">
-                <label for="status" class="sr-only"></label>
-                <select class="form-control" id="status" name="status">
-                  <option value="1">Anwesend</option>
-                  <option value="2">Urlaub</option>
-                  <option value="3">Sonderurlaub</option>
-                  <option value="4">Feiertag</option>
-                  <option value="5">Krank</option>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <label class="sr-only"></label>
-                <select class="form-control" name="ort">
-                  <option value="1">Schule</option>
-                  <option value="2">Betrieb</option>
-                  <option value="3">Überbetrieblich</option>
-                </select>
-              </div>
-              <div class="col-md-1">
-                <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-              </div>
-            </div>
-            <div class="row" id="newRecordDiv">
-              <div class="col-md-1 col-md-offset-1">
-                <button id="addRecordButton" class="form-control" value="+" type="button" onclick="addRecord();">+</button>
-              </div>
-              <div class="col-md-3">
-                <label class="sr-only"></label>
-                <input class="form-control" id="record" name="record" type="text" value="Berichtshefteintrag">
-              </div>
-              <div class="col-md-1">
-                <input class="form-control" id="time" name="time" type="text" value="00:h 00:m">
-              </div>
-              <div class="col-md-4" >
-                <label class="sr-only"></label>
-                <input class="form-control" id="comment" name="comment" type="text" value="Kommentare zum Eintrag">
-              </div>
-            </div>
-            <div id="end"></div>
-            <div class="row">
-              <div class="col-md-12">
-                <input type="submit" value="Save">
-              </div>
-            </div>
-          </form>
-      </div>
-
-    </div>
-';
-
-
-$end = '    </div>
-  </body>
-</html>';
-
-
-
-
-
-
-echo  $header . $navigation . $jumbotron . $form . $end;
 
 ?>
 
+<div class="jumbotron">
+
+    <div class="row">
+            <?php //echo '<pre>' . var_dump($_SESSION['recordMonth']) . '</pre>';
+
+            $counter = 0;
 
 
+                for($i=0; $i<count($_SESSION['recordMonth']); $i++){
+
+                    if($counter==0)
+                        echo '<div class="list-group">';
+                    if($counter==7){
+                        echo '</div>';
+                        $counter = 0;
+                    }
+                    echo '
+                                <button type="button" class="list-group-item">'. $_SESSION['recordMonth'][$i]['recordDate'] .'</button>
+                        ';
+                    $counter++;
+                }
+
+
+            ?>
+    </div>
+
+</div>
+
+
+
+<div class="container well">
+    <div>
+        <form  action="" method="post">
+            <div class="row">
+                <div class="col-md-1 col-md-offset-1">Datum</div>
+                <div class="col-md-2">
+                    <label for="status" class="sr-only"></label>
+                    <select class="form-control" id="status" name="status">
+                        <option id="statusOption1" value="1">Anwesend</option>
+                        <option id="statusOption2" value="2">Urlaub</option>
+                        <option id="statusOption3" value="3">Sonderurlaub</option>
+                        <option id="statusOption4" value="4">Feiertag</option>
+                        <option id="statusOption5" value="5">Krank</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="sr-only"></label>
+                    <select class="form-control" name="ort">
+                        <option id="placeOption1" value="1">Schule</option>
+                        <option id="placeOption2" value="2">Betrieb</option>
+                        <option id="placeOption3" value="3">Überbetrieblich</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="row" id="newRecordDiv">
+                <div class="col-md-1 col-md-offset-1">
+                    <button id="addRecordButton" class="form-control" value="+" type="button" onclick="addRecord();">+</button>
+                </div>
+                <div class="col-md-3">
+                    <label class="sr-only"></label>
+                    <input class="form-control" id="record" name="record" type="text" value="Berichtshefteintrag">
+                </div>
+                <div class="col-md-1">
+                    <input class="form-control" id="time" name="time" type="text" value="00:h 00:m">
+                </div>
+                <div class="col-md-4" >
+                    <label class="sr-only"></label>
+                    <input class="form-control" id="comment" name="comment" type="text" value="Kommentare zum Eintrag">
+                </div>
+            </div>
+            <div id="end"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Save">
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>
 
 
 
