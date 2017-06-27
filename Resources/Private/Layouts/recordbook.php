@@ -12,9 +12,11 @@ ini_set('display_errors', 'On');
 require_once('../../PHP/model/DBManager/DB_Record.php');
 $recordDBConection = new DB_Record();
 
+$recordDBConection->writeRecordbookDummy();
+
 session_start();
 
-$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
+//$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
 include('html/recordbook.html');
 
