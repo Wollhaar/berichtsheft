@@ -115,37 +115,44 @@ class DB_Record
 
     public function writeRecordbookDummy()
     {
+        /*
+         * Erzeugt in der DB Recordbook in der Tabelle record
+         * für die unten angegebenen Zeiträume hier 1 Moonat Dummy Datensätze
+         * mit Blindtexten
+         */
+
         $timestamp = new DateTime();
         $schoolTime = new DateTime();
         $schoolTime->setDate(2017, 06, 30);
         $checkTime = new DateTime();
         $checkTime->setDate(2017, 06, 18);
 
+        echo '<pre>';
+
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
             try {
                 $this->dbc->beginTransaction();
-                for ($timestamp->setDate(2017, 06,01); $timestamp < $schoolTime; $timestamp->add(new DateInterval('P1D'))) {
+                for ($timestamp->setDate(2017, 06,
+                    01); $timestamp <= $schoolTime; $timestamp->add(new DateInterval('P1D'))) {
 
-                    $status = "Anwesend";
-                    $place = "Schule";
-                    $comment = "Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße. Ich bin allein und freue mich meines Lebens in dieser Gegend, die für solche Seelen geschaffen ist wie die meine. Ich bin so glücklich, mein Bester, so ganz in dem Gefühle von ruhigem Dasein versunken, daß meine Kunst darunter leidet.";
-                    $record = "Lorem ipsum dolor sit amet  consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes  nascetur ridiculus mus. Donec quam felis  ultricies nec  pellentesque eu  pretium quis  sem. Nulla consequat massa quis enim. Donec pede justo  fringilla vel  aliquet nec  vulputate eget  arcu. In enim justo  rhoncus ut  imperdiet a  venenatis vitae  justo. Nullam dictum felis eu pede mollis pretium.";
+                    $status = "'Anwesend'";
+                    $place = "'Schule'";
+                    $comment = "'Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße. Ich bin allein und freue mich meines Lebens in dieser Gegend, die für solche Seelen geschaffen ist wie die meine. Ich bin so glücklich, mein Bester, so ganz in dem Gefühle von ruhigem Dasein versunken, daß meine Kunst darunter leidet.'";
+                    $record = "'Lorem ipsum dolor sit amet  consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes  nascetur ridiculus mus. Donec quam felis  ultricies nec  pellentesque eu  pretium quis  sem. Nulla consequat massa quis enim. Donec pede justo  fringilla vel  aliquet nec  vulputate eget  arcu. In enim justo  rhoncus ut  imperdiet a  venenatis vitae  justo. Nullam dictum felis eu pede mollis pretium.'";
                     $recorddate = $timestamp;
                     $recorddate = $recorddate->format('Y-m-d G:i:s');
-                    $attachment_id = 0;
+                    $attachment_id = 1;
 
-
-                    $sth = $this->dbc->prepare('INSERT INTO record(status, place, record, comment,  recorddate, attachment_id) VALUES (' . $status . ', ' . $place . ', ' . $record . ', ' . $comment . ', ' . $recorddate . ', ' . $attachment_id . ')');
+                    $sth = $this->dbc->prepare
+                    ('INSERT INTO recordbook.record(status, place, record, comment,  recorddate, attachment_id) VALUE (' . $status . ', ' . $place . ', ' . $record . ', ' . $comment . ', "' . $recorddate . '", ' . $attachment_id . ')');
 
                     $sth->execute();
-                    }
-                var_dump($sth);
-
-                    //---------------- Ende des record Dummy Eintrag -------------------------------
+                }
 
 
+                //---------------- Ende des record Dummy Eintrag -------------------------------
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
