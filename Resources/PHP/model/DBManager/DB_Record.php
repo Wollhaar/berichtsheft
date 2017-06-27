@@ -284,15 +284,79 @@ class DB_Record
         }
     }
 
-    public function writeRecordDay()
-    {
+
+    public function createRecordMonth($month, $year){
+        /*
+         * To Do
+         * Prüfung ob Monat schon einmal erzeugt wurde
+         * Februar muss noch eingebaut werden
+         * umbau der prepare statments:
+         *  ->Datenübergabe in die executes verschieben andernfalls ist das prepare statment witzlos
+         */
+
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+
+                $this->dbc->beginTransaction();
+                if(checkdate($month, 31, $year) == true){
+
+                    $day = 31;
+                    for($i=0; $i<$day; $i++){
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ('. $dateSth->format('Y-m-d') .')');
+
+                        $sth->execute();
+
+
+                    }
+                }
+                if(checkdate($month, 30, $year) == true){
+
+                    $day = 30;
+                    for($i=0; $i<$day; $i++){
+
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ("'. $dateSth->format('Y-m-d') .'")');
+
+                        echo '<pre>' . $sth->queryString;
+
+                        $sth->execute();
+
+                    }
+                }
+
+                $this->dbc->commit();
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+
+    public function recordOut(){
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try {
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
+                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
+                $sth->execute();
+
+                echo '<pre>';
+                var_dump($sth->fetchAll());
+
+                $this->dbc->commit();
             } catch (PDOException $exception) {
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
@@ -314,25 +378,23 @@ class DB_Record
         }
     }
 
-    public function recordOut()
-    {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
 
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
-                $sth->execute();
 
-                echo '<pre>';
-                var_dump($sth->fetchAll());
+    public function startSession() {
 
-                $this->dbc->commit();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
+        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+//            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
+            if (isset($_REQUEST['PHPSESSID'])) {
+                $session_id = array($_REQUEST['PHPSESSID']);
+            } elseif (isset($_SESSION['session_id'])) {
+                $session_id = array($_SESSION['session_id']);
             }
+            session_start($session_id);
+        } else {
+            session_start();
+            header('location: /index.php');
         }
+        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
     }
+
 }
