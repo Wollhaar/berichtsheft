@@ -22,7 +22,7 @@ class DB_User
         }
 
         $pw = sha1($password, true);
-        $sql = 'SELECT username, password FROM User WHERE username = ?';
+        $sql = 'SELECT * FROM User WHERE username = ?';
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user));
         $data = $stmt->fetch();

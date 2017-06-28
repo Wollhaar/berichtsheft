@@ -58,12 +58,15 @@ $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
                     </ul>
                 </li>
             </ul>
-            <div class="user-field">
-                <span class="username">Eingeloggt als <a href="/Berichtsheft/index.php?case=logged" class="dropdown-toggle" data-toggle="dropdown"><?php echo $_SESSION['user']['username']; ?></a></span>
+            <div class="user-field dropdown">
+                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="/Berichtsheft/index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
                 <ul class="dropdown-menu">
-                    <li><a href="/Berichtsheft/index.php?case=profile"></a>Profil</li>
+                    <li><a href="/Berichtsheft/index.php?case=logged">home</a>/li>
+                    <li><a href="/Berichtsheft/index.php?case=profile">Profil</a>/li>
                     <li><a href="/Berichtsheft/index.php?case=status">Status</a></li>
                     <li><a href="/Berichtsheft/index.php?case=settings">Einstellungen</a></li>
+                    <li><hr/></li>
+                    <li><a href="/Berichtsheft/index.php?case=logout">Logout</a></li>
                 </ul>
             </div>
         </div><!--/.navbar-collapse -->

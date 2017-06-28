@@ -1,15 +1,8 @@
 <?php
-if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
-        if (isset($_REQUEST['PHPSESSID'])) {
-        $session_id = $_REQUEST['PHPSESSID'];
-        } elseif (isset($_SESSION['session_id'])) {
-        $session_id = $_SESSION['session_id'];
-    }
-    session_start($session_id);
-} else {
-    session_start();
-}
-$_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+
+$session = new DB_Record();
+$session->startSession();
+
 ?>
 <!DOCTYPE html>
 <html lang="de">
