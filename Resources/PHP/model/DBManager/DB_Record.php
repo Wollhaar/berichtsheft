@@ -392,7 +392,7 @@ class DB_Record
             session_start($session_id);
         } else {
             session_start();
-            header('location: /index.php');
+            header('location: '.RP.'index.php');
         }
         $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
     }
