@@ -1,15 +1,6 @@
 <?php
-if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
-    if (isset($_REQUEST['PHPSESSID'])) {
-        $session_id = $_REQUEST['PHPSESSID'];
-    } elseif (isset($_SESSION['session_id'])) {
-        $session_id = $_SESSION['session_id'];
-    }
-    session_start($session_id);
-} else {
-    session_start();
-}
-$_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+require_once '../../PHP/model/config.php';
+//require_once('config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +16,12 @@ $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
-    <link href="/Berichtsheft/Resources/Public/css/main.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
+    <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -59,14 +50,14 @@ $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
                 </li>
             </ul>
             <div class="user-field dropdown">
-                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="/Berichtsheft/index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
+                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
                 <ul class="dropdown-menu">
-                    <li><a href="/Berichtsheft/index.php?case=logged">home</a>/li>
-                    <li><a href="/Berichtsheft/index.php?case=profile">Profil</a>/li>
-                    <li><a href="/Berichtsheft/index.php?case=status">Status</a></li>
-                    <li><a href="/Berichtsheft/index.php?case=settings">Einstellungen</a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a>/li>
+                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a>/li>
+                    <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
                     <li><hr/></li>
-                    <li><a href="/Berichtsheft/index.php?case=logout">Logout</a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
                 </ul>
             </div>
         </div><!--/.navbar-collapse -->
