@@ -1,2 +1,3 @@
 .idea
 Resources/PHP/model/DBManager/DB_Connection.php
+Resources/PHP/model/DBManager/DB_Record.php
