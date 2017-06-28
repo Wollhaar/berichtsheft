@@ -1,8 +1,6 @@
 <?php
 
-$session = new DB_Record();
-$session->startSession();
-
+require_once '../../PHP/model/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -18,12 +16,12 @@ $session->startSession();
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
-    <link href="/Berichtsheft/Resources/Public/css/main.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
+    <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 
 
@@ -55,7 +53,7 @@ $session->startSession();
                     </ul>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right" role="form" method="post" action="/Berichtsheft/index.php?case=login">
+            <form class="navbar-form navbar-right" role="form" method="post" action="<?php echo RP; ?>index.php?case=login">
                 <div class="form-group">
                     <input type="text" placeholder="Benutzer" class="form-control" name="username">
                 </div>
@@ -72,7 +70,7 @@ $session->startSession();
 
     <div class="register container">
 
-        <form method="post" action="/Berichtsheft/index.php?case=register&ready=true">
+        <form method="post" action="<?php echo RP; ?>index.php?case=register&ready=true">
 
             <div class="form-group">
                 <div class="form-block">
