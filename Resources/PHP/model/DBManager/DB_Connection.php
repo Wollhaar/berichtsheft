@@ -1,7 +1,5 @@
 <?php
 
-//test
-
 class DB_Connection extends PDO
 {
     protected $host = 'localhost';
