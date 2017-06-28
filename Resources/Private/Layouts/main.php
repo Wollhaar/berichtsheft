@@ -18,11 +18,11 @@ $session->startSession();
   <title>Berichtsheft-Tool</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
-  <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
+  <link href="/Resources/Public/css/bootstrap.css" rel="stylesheet">
+  <link href="/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
+  <script src="/Resources/Public/js/bootstrap.min.js"></script>
 </head>
 
 
@@ -54,7 +54,7 @@ $session->startSession();
           </ul>
         </li>
       </ul>
-      <form class="navbar-form navbar-right" role="form" method="post" action="/Berichtsheft/index.php?case=login">
+      <form class="navbar-form navbar-right" role="form" method="post" action="/index.php?case=login">
         <div class="form-group">
           <?php if(is_array($access) && !empty($access)): ?>
           <span class="wrong"><?php echo($access[0]); ?></span>
@@ -66,7 +66,7 @@ $session->startSession();
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
-      <a href="/Berichtsheft/index.php?case=register" class="btn btn-link">Registrieren</a>
+      <a href="/index.php?case=register" class="btn btn-link">Registrieren</a>
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
