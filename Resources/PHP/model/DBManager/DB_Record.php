@@ -364,7 +364,7 @@ class DB_Record
         }
     }
 
-    public function createRecordMonth($month, $year)
+   /* public function createRecordMonth($month, $year)
     {
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
@@ -376,7 +376,7 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
-    }
+    }*/
 
 
 
