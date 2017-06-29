@@ -222,9 +222,6 @@ class DB_Record
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
-            //$output = [['recordDate']['status']['place']['record']];
-            $output = [];
-
             if (checkdate($month, 28, $yeahr) == true) {
                 $lastDayOfMonth = new DateTime();
                 $lastDayOfMonth->setDate($yeahr, $month, 28);
@@ -249,90 +246,103 @@ class DB_Record
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare
                 ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place,
-                            record.record
-                        FROM recordbook.recordday JOIN recordbook.record
-                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"
-                        AND recordday.record = record.torecordday'
-                );
+                            recorddate
+                        FROM recordbook.record 
+                        WHERE record.recorddate <= "' . $lastDayOfMonth . '"
+                        
+                ');
 
                 $sth->execute();
 
                 $record = $sth->fetchAll(PDO::FETCH_ASSOC);
-                $output += $record;
-
-                $sth = $this->dbc->prepare
-                ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place 
-                        FROM recordbook.recordday  
-                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"'
-                );
-
-                $sth->execute();
-                $record = $sth->fetchAll(PDO::FETCH_ASSOC);
-                $output += $record;
-                $this->dbc->commit();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-            return $output;
-        }
-    }
-
-    public function writeRecordDay()
-    {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }
-
-    public function createRecordMonth($month, $year)
-    {
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaktion();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }
-
-    public function recordOut()
-    {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
-                $sth->execute();
-
-                echo '<pre>';
-                var_dump($sth->fetchAll());
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
             }
+            return $record;
         }
     }
+
+
+    public function createRecordMonth($month, $year){
+        /*
+         * To Do
+         * Prüfung ob Monat schon einmal erzeugt wurde
+         * Februar muss noch eingebaut werden
+         * umbau der prepare statments:
+         *  ->Datenübergabe in die executes verschieben andernfalls ist das prepare statment witzlos
+         */
+
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try{
+
+                $this->dbc->beginTransaction();
+                if(checkdate($month, 31, $year) == true){
+
+                    $day = 31;
+                    for($i=0; $i<$day; $i++){
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ('. $dateSth->format('Y-m-d') .')');
+
+                        $sth->execute();
+
+
+                    }
+                }
+                if(checkdate($month, 30, $year) == true){
+
+                    $day = 30;
+                    for($i=0; $i<$day; $i++){
+
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ("'. $dateSth->format('Y-m-d') .'")');
+
+                        echo '<pre>' . $sth->queryString;
+
+                        $sth->execute();
+
+                    }
+                }
+
+                $this->dbc->commit();
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+
+
+
+
+
+    public function startSession() {
+
+        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+//            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
+            if (isset($_REQUEST['PHPSESSID'])) {
+                $session_id = array($_REQUEST['PHPSESSID']);
+            } elseif (isset($_SESSION['session_id'])) {
+                $session_id = array($_SESSION['session_id']);
+            }
+            session_start($session_id);
+        } else {
+            session_start();
+            header('location: /index.php');
+        }
+        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+    }
+
 }
