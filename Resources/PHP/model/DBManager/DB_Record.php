@@ -249,14 +249,11 @@ class DB_Record
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare
                 ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place,
-                            record.record
-                        FROM recordbook.recordday JOIN recordbook.record
-                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"
-                        AND recordday.record = record.torecordday'
-                );
+                            recorddate
+                        FROM recordbook.record 
+                        WHERE record.recorddate <= "' . $lastDayOfMonth . '"
+                        
+                ');
 
                 $sth->execute();
 
@@ -280,20 +277,12 @@ class DB_Record
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
             }
-            return $output;
+            return $record;
         }
     }
 
-
-    public function createRecordMonth($month, $year){
-        /*
-         * To Do
-         * Prüfung ob Monat schon einmal erzeugt wurde
-         * Februar muss noch eingebaut werden
-         * umbau der prepare statments:
-         *  ->Datenübergabe in die executes verschieben andernfalls ist das prepare statment witzlos
-         */
-
+    public function writeRecordDay()
+    {
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
@@ -301,16 +290,38 @@ class DB_Record
             try{
 
                 $this->dbc->beginTransaction();
-                if(checkdate($month, 31, $year) == true){
+                $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
 
-                    $day = 31;
-                    for($i=0; $i<$day; $i++){
-                        $dateSth = new DateTime();
-                        $dateSth->setDate($year, $month, ($i+1));
+    public function createRecordMonth($month, $year)
+    {
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
 
-                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ('. $dateSth->format('Y-m-d') .')');
+            try {
+                $this->dbc->beginTransaktion();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
 
-                        $sth->execute();
+    public function recordOut()
+    {
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
+                $sth->execute();
 
 
                     }
@@ -343,40 +354,7 @@ class DB_Record
     }
 
 
-    public function recordOut(){
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
 
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
-                $sth->execute();
-
-                echo '<pre>';
-                var_dump($sth->fetchAll());
-
-                $this->dbc->commit();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }
-
-   /* public function createRecordMonth($month, $year)
-    {
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaktion();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }*/
 
 
 
@@ -392,7 +370,7 @@ class DB_Record
             session_start($session_id);
         } else {
             session_start();
-            header('location: '.RP.'index.php');
+            header('location: /index.php');
         }
         $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
     }

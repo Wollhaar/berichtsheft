@@ -5,6 +5,28 @@
 var recordCount = 0;
 
 
+function displaySelectedButton()
+{
+  var xhttp = new XMLHttpRequest();
+  xhttp.open("POST", "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("methode=getCurrentMonth");
+
+
+
+  //document.getElementById("jumb").innerHTML = xhttp.responseText;
+
+}
+
+
+
+
+
+
+
+
+
+
 
 function setSelectField(place, status){
 
@@ -46,11 +68,6 @@ function setSelectField(place, status){
       }
     }
   }
-
-
-
-
-
 
 
 function addRecord(){

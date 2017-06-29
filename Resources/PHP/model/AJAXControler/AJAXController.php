@@ -6,19 +6,50 @@
  * Time: 17:07
  */
 
-require_once ('../DBManager/DB_Record.php');
+//require_once ('../DBManager/DB_Record.php');
+
+
+if(isset($_POST['methode'])){
+    echo '<pre> post methode an controller übergeben </pre>';
+}
+$request = $_POST['methode'];
+
+switch($request){
+    case 'getCurrentMonth': {
+        echo 'Do something';
+        return '<p>Do something </p>';
+
+//        $req = new AJAXController();
+//        $req->getCurrentMonth();
+        break;
+    }default: echo var_dump($request);
+}
 
 
 class AJAXController
 {
-    private $db_record;
+
 
     public function __construct()
     {
-        $db_record = new DB_Record();
+
     }
 
-    public function execute(){
+    public function getCurrentMonth(){
+        $dbr = new DB_Record();
+
+        $currentTimestamp = time();
+        $currentYear = date('Y', $currentTimestamp);
+        $currentMonth = date('m', $currentTimestamp);
+
+        $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
+
+        return $resultObject;
+
+    }
+
+
+    function execute(){
         /*
          * Benötigte variablen für den Aufruf
          * über JQuery
@@ -46,8 +77,14 @@ class AJAXController
 
         switch($methode){
             case 'getMonthrecords':{
-
                 break;
+            }
+            case 'getCurrentMonth':{
+                getCurrentMonth();  //return eines JSONObjektes -> Array mit allen record.recorddate einträgen des aktuellen Monats
+                break;
+            }
+            default:{
+                return 'Keine Methode ausgefürht';
             }
         }
 
