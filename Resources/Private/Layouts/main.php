@@ -41,9 +41,9 @@ require_once '../../PHP/model/config.php';
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#overview">Übersicht</a></li>
-        <li><a href="#settings">Einstellungen</a></li>
+          <li class="active"><a href="<?php echo RP; ?>index.php">Home</a></li> <!-- falls man eingeloggt ist soll der homelink auf den dashboard lenken -->
+          <li><a href="<?php echo RP; ?>index.php?case=logged">Übersicht</a></li> <!-- Im Falle: 'ausgeloggt' soll der link zur Loginseite führen.  -->
+          <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
           <ul class="dropdown-menu">
