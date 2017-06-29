@@ -63,8 +63,8 @@ require_once '../../PHP/model/config.php';
     <div class="container"
         <form class="form-horizontal" role="form" method="post" action="<?php echo RP; ?>index.php?case=login">
             <div class="form-group">
-                <?php if(is_array($access) && !empty($access)): ?>
-                    <span class="wrong"><?php echo($access[0]); ?></span>
+                <?php if(!empty($_SESSION['access'])): ?>
+                    <span class="wrong"><?php echo($_SESSION['access']); ?></span>
                 <?php endif; ?>
                 <input type="text" placeholder="Benutzer" class="form-control" name="username">
             </div>
