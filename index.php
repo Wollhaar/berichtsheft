@@ -36,7 +36,7 @@ switch ($request['case']) {
                 if ($access === TRUE) {
                     $_SESSION['user'] = $login;
 //                    $_SESSION['case'] = 'case';
-                    header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
+                    header('location: '.RP.PRI_PATH.'dashboard.php');
                 }
             }
         }
@@ -45,7 +45,7 @@ switch ($request['case']) {
     case 'register':
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
-            header('location: /Berichtsheft/Resources/Private/Layouts/register.php');
+            header('location: '.RP.PRI_PATH.'register.php');
         }
 
         if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -64,7 +64,7 @@ switch ($request['case']) {
             }
             if ($fb['check'] === true) {
                 $_SESSION['user'] = $fb;
-                header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
+                header('location: '.RP.PRI_PATH.'dashboard.php');
             }
             else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
@@ -77,12 +77,12 @@ switch ($request['case']) {
         break;
 
     case 'profile':
-        header('location: /Berichtsheft/Resources/Private/Layouts/account.php');
+        header('location: '.RP.PRI_PATH.'account.php');
         break;
 
     case 'logged':
         unset($_SESSION['user']['check']);
-        header('location: /Berichtsheft/Resources/Private/Layouts/dashboard.php');
+        header('location: '.RP.PRI_PATH.'dashboard.php');
 
         break;
 
@@ -90,7 +90,7 @@ switch ($request['case']) {
         session_destroy();
 
     default:
-        header('location: Resources/Private/Layouts/main.php');
+        header('location: '.RP.PRI_PATH.'main.php');
 }
 
 

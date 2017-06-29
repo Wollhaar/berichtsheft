@@ -1,6 +1,5 @@
 <?php
 require_once '../../PHP/model/config.php';
-//require_once('config.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,8 +51,8 @@ require_once '../../PHP/model/config.php';
             <div class="user-field dropdown">
                 <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a>/li>
-                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a>/li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a></li>
                     <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
                     <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
                     <li><hr/></li>
@@ -63,5 +62,18 @@ require_once '../../PHP/model/config.php';
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
+
+<div class="main">
+    <div class="board">
+        <?php if($_SESSION['user']['check'] === true): ?>
+            <?php include_once RP.PRI_PATH.'Partials/welcome.html'; ?>
+        <?php endif; ?>
+<!--        --><?php //var_dump($_SESSION); ?>
+        <div class="dashboard">
+            <h3>Dein Dashboard</h3>
+            <p>Alle relevanten Dinge sind, hier für dich notiert.</p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
