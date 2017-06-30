@@ -1,8 +1,9 @@
 <?php
-
+require_once('DB_Connection.php');
 
 class DB_Record
 {
+
     private $dbc;
 
     public function deleteDatabase($db)
@@ -10,7 +11,6 @@ class DB_Record
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
-
 
             try {
                 $this->dbc->beginTransaction();
@@ -30,7 +30,6 @@ class DB_Record
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
-
             try {
                 $sth = $this->dbc->prepare('CREATE DATABASE ' . $db);
                 $sth->bindParam(':db', $db);
@@ -42,47 +41,298 @@ class DB_Record
         }
     }
 
-
-
-    public function restoreTabels(){
+    public function restoreTabels()
+    {
         $this->dbc = new DB_Connection();
-        if(isset($this->dbc) || is_a($this->dbc, 'PDO')){
+
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('CREATE TABLE recordday ( 
+                user INT UNSIGNED ZEROFILL NOT NULL , 
+                record INT NOT NULL 
+                )
+                CHARACTER SET utf8_general_ci');
+
+                $sth->execute();
+
+                $sth = $this->dbc->prepare('CREATE TABLE record (
+                record_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                status VARCHAR(200) NULL,
+                place VARCHAR(200) NULL,
+                record LONGTEXT NULL, 
+                comment LONGTEXT NULL,
+                attachment_id INT UNSIGNED NULL,
+                recorddate timestamp NOT NULL,
+                PRIMARY KEY(record_id))
+                CHARACTER SET utf8_general_ci');
+
+                $sth->execute();
+
+                $sth = $this->dbc->prepare('CREATE TABLE attachment(
+                attachment_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                filename VARCHAR(100)NULL,
+                filepath VARCHAR(200)NULL,
+                format VARCHAR(10) NULL,
+                PRIMARY KEY(attachment_id))
+                CHARACTER SET utf8_general_ci');
+
+                $sth->execute();
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+    public function dropTabels()
+    {
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.recordday');
+                $sth->execute();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.record');
+                $sth->execute();
+                $sth = $this->dbc->prepare('DROP TABLE recordbook.attachment');
+                $sth->execute();
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+    public function writeRecordbookDummy()
+    {
+        /*
+         * Erzeugt in der DB Recordbook in der Tabelle record
+         * für die unten angegebenen Zeiträume hier 1 Moonat Dummy Datensätze
+         * mit Blindtexten
+         */
+
+        $timestamp = new DateTime();
+        $schoolTime = new DateTime();
+        $schoolTime->setDate(2017, 06, 30);
+        $checkTime = new DateTime();
+        $checkTime->setDate(2017, 06, 18);
+
+        echo '<pre>';
+
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+            try {
+                $this->dbc->beginTransaction();
+                for ($timestamp->setDate(2017, 06,
+                    01); $timestamp <= $schoolTime; $timestamp->add(new DateInterval('P1D'))) {
+
+                    $status = "'Anwesend'";
+                    $place = "'Schule'";
+                    $comment = "'Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße. Ich bin allein und freue mich meines Lebens in dieser Gegend, die für solche Seelen geschaffen ist wie die meine. Ich bin so glücklich, mein Bester, so ganz in dem Gefühle von ruhigem Dasein versunken, daß meine Kunst darunter leidet.'";
+                    $record = "'Lorem ipsum dolor sit amet  consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes  nascetur ridiculus mus. Donec quam felis  ultricies nec  pellentesque eu  pretium quis  sem. Nulla consequat massa quis enim. Donec pede justo  fringilla vel  aliquet nec  vulputate eget  arcu. In enim justo  rhoncus ut  imperdiet a  venenatis vitae  justo. Nullam dictum felis eu pede mollis pretium.'";
+                    $recorddate = $timestamp;
+                    $recorddate = $recorddate->format('Y-m-d G:i:s');
+                    $attachment_id = 1;
+
+                    $sth = $this->dbc->prepare
+                    ('INSERT INTO recordbook.record(status, place, record, comment,  recorddate, attachment_id) VALUE (' . $status . ', ' . $place . ', ' . $record . ', ' . $comment . ', "' . $recorddate . '", ' . $attachment_id . ')');
+
+                    $sth->execute();
+                }
+
+
+                //---------------- Ende des record Dummy Eintrag -------------------------------
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }
+
+    public function getRecordPageWeek()
+    {
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $output = [['recordDate']['status']['place']['record']];
+                $endtime = time() + (5 * 24 * 60 * 60);
+
+                $this->dbc->beginTransaction();
+                for ($timestamp = time(); $timestamp < $endtime; $timestamp += (1 * 24 * 60 * 60)) {
+                    $currentDate = date('Y-m-d', $timestamp);
+
+                    $sth = $this->dbc->prepare
+                    ('SELECT 
+                            recordday.recordDate, 
+                            recordday.status, 
+                            recordday.place,
+                            record.record
+                        FROM recordbook.recordday JOIN recordbook.record
+                        WHERE recordday.recordDate = "' . $currentDate . '"
+                        AND recordday.record = record.torecordday'
+                    );
+
+                    $sth->execute();
+                    $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                    $output += $record;
+
+                    if (empty($record) == true) {
+                        $sth = $this->dbc->prepare
+                        ('SELECT 
+                                recordday.recordDate, 
+                                recordday.status, 
+                                recordday.place 
+                            FROM recordbook.recordday  
+                            WHERE recordday.recordDate = "' . $currentDate . '"'
+                        );
+                        $sth->execute();
+                        $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                        $output += $record;
+                    }
+                }
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+
+        return $output;
+    }
+
+    public function getRecordMonth($yeahr, $month)
+    {
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            //$output = [['recordDate']['status']['place']['record']];
+            $output = [];
+
+            if (checkdate($month, 28, $yeahr) == true) {
+                $lastDayOfMonth = new DateTime();
+                $lastDayOfMonth->setDate($yeahr, $month, 28);
+                $lastDayOfMonth = date('Y-m-d',
+                    $lastDayOfMonth->getTimestamp());
+            }
+            if (checkdate($month, 31, $yeahr) == true) {
+                $lastDayOfMonth = new DateTime();
+                $lastDayOfMonth->setDate($yeahr, $month, 31);
+                $lastDayOfMonth = date('Y-m-d',
+                    $lastDayOfMonth->getTimestamp());
+            }
+            if (checkdate($month, 30, $yeahr) == true) {
+                $lastDayOfMonth = new DateTime();
+                $lastDayOfMonth->setDate($yeahr, $month, 30);
+                $lastDayOfMonth = date('Y-m-d',
+                    $lastDayOfMonth->getTimestamp());
+            }
+
+            try {
+
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare
+                ('SELECT 
+                            recordday.recordDate, 
+                            recordday.status, 
+                            recordday.place,
+                            record.record
+                        FROM recordbook.recordday JOIN recordbook.record
+                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"
+                        AND recordday.record = record.torecordday'
+                );
+
+                $sth->execute();
+
+                $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                $output += $record;
+
+                $sth = $this->dbc->prepare
+                ('SELECT 
+                            recordday.recordDate, 
+                            recordday.status, 
+                            recordday.place 
+                        FROM recordbook.recordday  
+                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"'
+                );
+
+                $sth->execute();
+                $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+                $output += $record;
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+            return $output;
+        }
+    }
+
+
+    public function createRecordMonth($month, $year){
+        /*
+         * To Do
+         * Prüfung ob Monat schon einmal erzeugt wurde
+         * Februar muss noch eingebaut werden
+         * umbau der prepare statments:
+         *  ->Datenübergabe in die executes verschieben andernfalls ist das prepare statment witzlos
+         */
+
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try{
 
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('CREATE TABLE recordbook.recordday (
-                id_recordday INT NOT NULL AUTO_INCREMENT,
-                status VARCHAR(200),
-                place VARCHAR(200),
-                attachment INT,
-                record INT,
-                date DATE,
-                PRIMARY KEY(id_recordday))');
+                if(checkdate($month, 31, $year) == true){
 
-                $sth->execute();
+                    $day = 31;
+                    for($i=0; $i<$day; $i++){
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
 
-                $sth = $this->dbc->prepare('CREATE TABLE recordbook.record (
-                id_record INT NOT NULL AUTO_INCREMENT,
-                torecordday INT,
-                record LONGTEXT,
-                comment LONGTEXT,
-                PRIMARY KEY(id_record))');
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ('. $dateSth->format('Y-m-d') .')');
 
-                $sth->execute();
+                        $sth->execute();
 
-                $sth = $this->dbc->prepare('CREATE TABLE recordbook.attachment(
-                id_attachment INT NOT NULL AUTO_INCREMENT,
-                filename VARCHAR(100,
-                filepath VARCHA(200),
-                torecordday INT,
-                PRIMARY KEY(id_attachment)))');
 
-                $sth->execute();
+                    }
+                }
+                if(checkdate($month, 30, $year) == true){
+
+                    $day = 30;
+                    for($i=0; $i<$day; $i++){
+
+                        $dateSth = new DateTime();
+                        $dateSth->setDate($year, $month, ($i+1));
+
+                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ("'. $dateSth->format('Y-m-d') .'")');
+
+                        echo '<pre>' . $sth->queryString;
+
+                        $sth->execute();
+
+                    }
+                }
+
                 $this->dbc->commit();
-
-
 
 
             }catch(PDOException $exception){
@@ -92,90 +342,19 @@ class DB_Record
         }
     }
 
-    /*
-  public function restoreTabels()
-    {
+
+    public function recordOut(){
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
-
             try {
-
                 $this->dbc->beginTransaction();
-                echo '<pre>Beginn Transaction</pre>';
-                $sth1 = $this->dbc->prepare('CREATE TABLE recordbook.status (
-            id_status INT NOT NULL AUTO_INCREMENT,
-            status VARCHAR(45) NULL,
-            PRIMARY KEY(id_status))');
-                if ($sth1->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth1</pre>';
-                }
-                $sth1->execute();
+                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
+                $sth->execute();
 
-                $sth2 = $this->dbc->prepare('CREATE TABLE recordbook.place (
-            id_ort INT NOT NULL AUTO_INCREMENT,
-            ort VARCHAR(45) NULL,
-            PRIMARY KEY(id_ort))');
-                if ($sth2->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth2</pre>';
-                } else {
-                    $sth2->execute();
-                }
-
-                $sth3 = $this->dbc->prepare('CREATE TABLE recordbook.recordday (
-            id_recordday INT NOT NULL AUTO_INCREMENT,
-            status INT NULL,
-            place INT NULL,
-            container_data INT NULL,
-            container_report INT NULL,
-            PRIMARY KEY(id_recordday))');
-                if ($sth3->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth3</pre>';
-                } else {
-                    $sth3->execute();
-                }
-
-                $sth4 = $this->dbc->prepare('CREATE TABLE recordbook.data (
-            id_data INT NOT NULL AUTO_INCREMENT,
-            dataname VARCHAR(500),
-            path VARCHAR(500),
-            datasize DOUBLE,
-            PRIMARY KEY(id_data))');
-                if ($sth4->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth4</pre>';
-                } else {
-                    $sth4->execute();
-                }
-
-                $sth5 = $this->dbc->prepare('CREATE TABLE recordbook.recordcontainer (
-            id_container_record INT NULL,
-            id_record INT NULL)');
-                if ($sth5->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth5</pre>';
-                } else {
-                    $sth5->execute();
-                }
-
-                $sth6 = $this->dbc->prepare('CREATE TABLE recordbook.datacontainer (
-            id_container_data INT NOT NULL AUTO_INCREMENT,
-            id_data INT NULL,
-            PRIMARY KEY(id_container_data))');
-                if ($sth6->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth6</pre>';
-                } else {
-                    $sth6->execute();
-                }
-
-                $sth7 = $this->dbc->prepare('CREATE TABLE recordbook.recordbook(
-            id_recordbook INT NOT NULL AUTO_INCREMENT,
-            container_recordday INT,
-            PRIMARY KEY(id_recordbook))');
-                if ($sth7->execute() == false) {
-                    echo '<pre>SQL Statment fehlerfaht Sth7</pre>';
-                } else {
-                    $sth7->execute();
-                }
+                echo '<pre>';
+                var_dump($sth->fetchAll());
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
@@ -183,5 +362,39 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
-    }*/
+    }
+
+    /* public function createRecordMonth($month, $year)
+     {
+         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+             $this->dbc = $this->dbc->getConnection();
+
+             try {
+                 $this->dbc->beginTransaktion();
+             } catch (PDOException $exception) {
+                 $this->dbc->rollBack();
+                 print('Failed: ' . $exception->getMessage());
+             }
+         }
+     }*/
+
+
+
+    public function startSession() {
+
+        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+//            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
+            if (isset($_REQUEST['PHPSESSID'])) {
+                $session_id = array($_REQUEST['PHPSESSID']);
+            } elseif (isset($_SESSION['session_id'])) {
+                $session_id = array($_SESSION['session_id']);
+            }
+            session_start($session_id);
+        } else {
+            session_start();
+            header('location: '.RP.'index.php');
+        }
+        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+    }
+
 }

@@ -1,3 +1,7 @@
+<?php
+require_once '../../PHP/model/config.php';
+//require_once('config.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,11 +16,12 @@
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../Public/css/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -44,8 +49,16 @@
                     </ul>
                 </li>
             </ul>
-            <div class="user-field">
-                <span class="username">Eingeloggt als <a href="<?php header('location: Resources/Private/layouts/account.html'); ?>"><?php echo $login['username]; ?></a></span>
+            <div class="user-field dropdown">
+                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a>/li>
+                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a>/li>
+                    <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
+                    <li><hr/></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
+                </ul>
             </div>
         </div><!--/.navbar-collapse -->
     </div>

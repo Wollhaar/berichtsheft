@@ -1,15 +1,14 @@
 <?php
 
-
 class DB_Connection extends PDO
 {
     protected $host = 'localhost';
 
-    protected $user = 'frankb_7';
+    protected $user = 'davidz_5';
 
-    protected $password = 'eB7NBTH1Xkt7Tamc';
+    protected $password = 'FB9a1Kbxdpe99vCC';
 
-    protected $options = array('db_name' => 'recordbook');
+    protected $options = array('db_name' => 'davidz_report');
 
     private $dbc = NULL;
 

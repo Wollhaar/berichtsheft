@@ -22,7 +22,11 @@ class DB_User
         }
 
         $pw = sha1($password, true);
+<<<<<<< HEAD
         $sql = 'SELECT username, password FROM User WHERE username = ?';
+=======
+        $sql = 'SELECT * FROM User WHERE username = ?';
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user));
         $data = $stmt->fetch();
@@ -55,15 +59,34 @@ class DB_User
         }
 
         $pw = sha1($user['password'], true);
+<<<<<<< HEAD
         $status = 1;
         $sql = 'INSERT INTO User (username, password, status, email, first_name, last_name, adress, PLZ, country, place, birthday)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user['username'], $pw, $status, $user['email'], $user['first_name'], $user['last_name'],
                             $user['adress'], $user['PLZ'], $user['place'], $user['country'], $user['birthday']));
-        $fb = $stmt->fetch();
-        var_dump($fb);
+=======
+        $sql = 'INSERT INTO User (username, password, email, first_name, last_name, adress, PLZ, place, birthday)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $stmt = $this->dbc->prepare($sql);
+        $stmt->execute(array($user['username'], $pw, $user['email'], $user['first_name'], $user['last_name'],
+                            $user['adress'], $user['PLZ'], $user['place'], $user['birthday']));
 
-        return $fb;
+//        var_dump($this->dbc);
+        $sql = 'SELECT * FROM User WHERE username = "'.$user['username'].'"';
+        $stmt = $this->dbc->query($sql);
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
+        $fb = $stmt->fetch();
+//        var_dump($fb);
+
+        if($fb['username'] == $user['username']) {
+            $fb['check'] = true;
+            return $fb;
+        } else
+        {
+            $fb['check'] = false;
+            return $fb;
+        }
     }
 }

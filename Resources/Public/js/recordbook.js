@@ -6,6 +6,55 @@ var recordCount = 0;
 
 
 
+<<<<<<< HEAD
+=======
+function setSelectField(place, status){
+
+  switch(status) {
+    case 1: {
+      document.getElementById('statusOption1').selected = true;
+      break;
+    }
+    case 2: {
+      document.getElementById('statusOption2').selected = true;
+      break;
+    }
+    case 3: {
+      document.getElementById('statusOption3').selected = true;
+      break;
+    }
+    case 4: {
+      document.getElementById('statusOption4').selected = true;
+      break;
+    }
+    case 5: {
+      document.getElementById('statusOption5').selected = true;
+      break;
+    }
+  }
+
+    switch (place){
+      case 1:{
+        document.getElementById('placeOption1').selected = true;
+        break;
+      }
+      case 2:{
+        document.getElementById('placeOption2').selected = true;
+        break;
+      }
+      case 3:{
+        document.getElementById('placeOption3').selected = true;
+        break;
+      }
+    }
+  }
+
+
+
+
+
+
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 
 function addRecord(){
 
@@ -30,7 +79,11 @@ function addRecord(){
       '<div id="end' + recordCount +'"></div>';
 
 
+<<<<<<< HEAD
       //document.getElementById('addRecordButton').setAttribute('onclick', 'doNothing()');
+=======
+
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 
 
 
