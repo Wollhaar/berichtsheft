@@ -1,16 +1,6 @@
 <?php
 require_once 'Resources/PHP/model/config.php';
 
-<<<<<<< HEAD
-if (!empty($_REQUEST['case'])) {
-    $request = $_REQUEST;
-} elseif (empty($request['request']) && empty($_REQUEST)) {
-    $request['request'] = $_SESSION['request'];
-} else {
-    $request = array('case' => '');
-}
-//var_dump($request, ' | ', $_SESSION);
-=======
 $request = array('case' => '');
 if(isset($_POST['username']) || isset($_GET['case'])) {
     $request = $_REQUEST;
@@ -25,7 +15,6 @@ elseif (empty($session) && !isset($_POST)) {
 if ((isset($_SESSION['request']) || isset($_SESSION['user'])) && false) {
     var_dump($_SESSION);
 }*/
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 
 switch ($request['case']) {
     case 'login':
@@ -46,26 +35,17 @@ switch ($request['case']) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
                     $_SESSION['user'] = $login;
-<<<<<<< HEAD
-                    header('location: /Berichtsheft/Resources/Private/layouts/dashboard.html');
-=======
 //                    $_SESSION['case'] = 'case';
                     header('location: '.RP.PRI_PATH.'dashboard.php');
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
                 }
             }
         }
         break;
 
     case 'register':
-<<<<<<< HEAD
-        if (!isset($request['request'])) {
-            header('location: /Berichtsheft/Resources/Private/Layouts/register.html');
-=======
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
             header('location: '.RP.PRI_PATH.'register.php');
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
         }
 
         if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -82,9 +62,6 @@ switch ($request['case']) {
             } else {
                 $fb = $user->registUser($regist);
             }
-<<<<<<< HEAD
-            echo $fb;
-=======
             if ($fb['check'] === true) {
                 $_SESSION['user'] = $fb;
                 header('location: '.RP.PRI_PATH.'dashboard.php');
@@ -92,12 +69,10 @@ switch ($request['case']) {
             else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
             }
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
         }
         else {
             echo 'please set all fields';
         }
-        var_dump($fb);
 
         break;
 
@@ -115,11 +90,7 @@ switch ($request['case']) {
         session_destroy();
 
     default:
-<<<<<<< HEAD
-        header('Location: http://frankb.exinitdev.de/Berichtsheft/Resources/Private/Layouts/main.html');
-=======
         header('location: '.RP.PRI_PATH.'main.php');
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 }
 
 
