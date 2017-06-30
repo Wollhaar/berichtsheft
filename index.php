@@ -69,6 +69,7 @@ switch ($request['case']) {
             if ($fb['check'] === true) {
                 $_SESSION['user'] = $fb;
                 header('location: '.RP.PRI_PATH.'dashboard.php');
+                break;
             }
             else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
@@ -81,8 +82,10 @@ switch ($request['case']) {
         break;
 
     case 'profile':
+//        var_dump($_SESSION['user']);
         if (empty($_SESSION['user'])) {
             header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
         }
         header('location: '.RP.PRI_PATH.'account.php');
         break;
@@ -90,6 +93,7 @@ switch ($request['case']) {
     case 'record':
         if (empty($_SESSION['user'])) {
             header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
         }
         header('location: '.RP.PRI_PATH.'recordbook.php');
         break;
@@ -97,12 +101,14 @@ switch ($request['case']) {
     case 'logged':
         if (empty($_SESSION['user'])) {
             header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
         }
         unset($_SESSION['user']['check']);
         header('location: '.RP.PRI_PATH.'dashboard.php');
 
         break;
 
+    // immer an letzter Stelle lassen
     case 'logout':
         session_destroy();
 
