@@ -38,6 +38,10 @@ switch ($request['case']) {
 //                    $_SESSION['case'] = 'case';
                     header('location: '.RP.PRI_PATH.'dashboard.php');
                 }
+                elseif (is_array($access)) {
+                    $_SESSION['access'] = $access[0];
+                    header('location: '.RP.PRI_PATH.'login.php');
+                }
             }
         }
         break;
@@ -77,10 +81,23 @@ switch ($request['case']) {
         break;
 
     case 'profile':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+        }
         header('location: '.RP.PRI_PATH.'account.php');
         break;
 
+    case 'record':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+        }
+        header('location: '.RP.PRI_PATH.'recordbook.php');
+        break;
+
     case 'logged':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+        }
         unset($_SESSION['user']['check']);
         header('location: '.RP.PRI_PATH.'dashboard.php');
 

@@ -15,7 +15,7 @@ class AJAXController
 
     public function __construct()
     {
-        $db_record = new DB_Record();
+        $this->db_record = new DB_Record();
     }
 
     public function execute(){

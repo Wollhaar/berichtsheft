@@ -1,8 +1,10 @@
 <?php
+
 require_once '../../PHP/model/config.php';
 ?>
+<!-- im Falle eines funktionierenden Routings wird, das hier zum template -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +24,11 @@ require_once '../../PHP/model/config.php';
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
+
+
+
 <body>
+
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -36,44 +42,45 @@ require_once '../../PHP/model/config.php';
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li> <!-- falls man eingeloggt ist soll der homelink auf den dashboard lenken -->
+                <li class="active"><a href="<?php echo RP; ?>index.php">Home</a></li> <!-- falls man eingeloggt ist soll der homelink auf den dashboard lenken -->
                 <li><a href="<?php echo RP; ?>index.php?case=logged">Übersicht</a></li> <!-- Im Falle: 'ausgeloggt' soll der link zur Loginseite führen.  -->
                 <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<?php echo RP; ?>index.php?case=record">Editieren</a></li>
+                        <li><a href="#">Editieren</a></li>
                         <li><a href="#">Drucken</a></li>
                         <li><a href="#">Kalender übersicht</a></li>
                     </ul>
                 </li>
             </ul>
-            <div class="user-field dropdown">
-                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
-                    <li><hr/></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
-                </ul>
-            </div>
+
         </div><!--/.navbar-collapse -->
     </div>
 </nav>
 
 <div class="main">
-    <div class="board">
-        <?php if($_SESSION['user']['check'] === true): ?>
-            <?php include_once RP.PRI_PATH.'Partials/welcome.html'; ?>
-        <?php endif; ?>
-<!--        --><?php //var_dump($_SESSION); ?>
-        <div class="dashboard">
-            <h3>Dein Dashboard</h3>
-            <p>Alle relevanten Dinge sind, hier für dich notiert.</p>
-        </div>
+    <div class="container"
+        <form class="form-horizontal" role="form" method="post" action="<?php echo RP; ?>index.php?case=login">
+            <div class="form-group">
+                <?php if(!empty($_SESSION['access'])): ?>
+                    <span class="wrong"><?php echo($_SESSION['access']); ?></span>
+                <?php endif; ?>
+                <input type="text" placeholder="Benutzer" class="form-control" name="username">
+            </div>
+            <div class="form-group">
+                <input type="password" placeholder="Password" class="form-control" name="password">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+        </form>
+        <a href="<?php echo RP; ?>index.php?case=register" class="btn btn-link">Registrieren</a>
+
     </div>
 </div>
+
+
+
+
 </body>
+
 </html>

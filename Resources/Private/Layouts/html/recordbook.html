@@ -12,15 +12,15 @@
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/Resources/Public/css/bootstrap.css" rel="stylesheet">
-    <link href="/Resources//Public/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo RP.PUB_PATH; ?>bootstrap-theme.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/Resources//Public/js/bootstrap.min.js"></script>
+    <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
 
 
     <!-- Eigene Scripts-->
-    <script src="/Resources//Public/js/recordbook.js"></script>
+    <script src="<?php echo RP.PUB_PATH; ?>js/recordbook.js"></script>
 
 
   </head>
@@ -50,15 +50,17 @@
               </ul>
             </li>
           </ul>
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Benutzer" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+          <div class="user-field dropdown">
+            <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
+            <ul class="dropdown-menu">
+              <li><a href="<?php echo RP; ?>index.php?case=logged">home</a></li>
+              <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a></li>
+              <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
+              <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
+              <li><hr/></li>
+              <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
+            </ul>
+          </div>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
