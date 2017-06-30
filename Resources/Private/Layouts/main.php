@@ -16,20 +16,12 @@ require_once '../../PHP/model/config.php';
   <title>Berichtsheft-Tool</title>
 
   <!-- Bootstrap core CSS -->
-<<<<<<< HEAD:Resources/Private/Layouts/main.html
-  <link href="/Berichtsheft/Resources/Public/css/bootstrap.css" rel="stylesheet">
-  <link href="/Berichtsheft/Resources/Public/css/bootstrap-theme.css" rel="stylesheet">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="/Berichtsheft/Resources/Public/js/bootstrap.min.js"></script>
-=======
   <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
   <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
   <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef:Resources/Private/Layouts/main.php
 </head>
 
 
@@ -73,11 +65,7 @@ require_once '../../PHP/model/config.php';
         </div>
         <button type="submit" class="btn btn-success">Sign in</button>
       </form>
-<<<<<<< HEAD:Resources/Private/Layouts/main.html
-      <a href="/Berichtsheft/index.php?case=register" class="btn btn-default">Registrieren</a>
-=======
       <a href="<?php echo RP; ?>index.php?case=register" class="btn btn-link">Registrieren</a>
->>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef:Resources/Private/Layouts/main.php
     </div><!--/.navbar-collapse -->
   </div>
 </nav>
