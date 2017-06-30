@@ -222,18 +222,9 @@ class DB_Record
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
-            //$output = [['recordDate']['status']['place']['record']];
-            $output = [];
-
             if (checkdate($month, 28, $yeahr) == true) {
                 $lastDayOfMonth = new DateTime();
                 $lastDayOfMonth->setDate($yeahr, $month, 28);
-                $lastDayOfMonth = date('Y-m-d',
-                    $lastDayOfMonth->getTimestamp());
-            }
-            if (checkdate($month, 31, $yeahr) == true) {
-                $lastDayOfMonth = new DateTime();
-                $lastDayOfMonth->setDate($yeahr, $month, 31);
                 $lastDayOfMonth = date('Y-m-d',
                     $lastDayOfMonth->getTimestamp());
             }
@@ -243,7 +234,12 @@ class DB_Record
                 $lastDayOfMonth = date('Y-m-d',
                     $lastDayOfMonth->getTimestamp());
             }
-
+            if (checkdate($month, 31, $yeahr) == true) {
+                $lastDayOfMonth = new DateTime();
+                $lastDayOfMonth->setDate($yeahr, $month, 31);
+                $lastDayOfMonth = date('Y-m-d',
+                    $lastDayOfMonth->getTimestamp());
+            }
             try {
 
                 $this->dbc->beginTransaction();
@@ -255,24 +251,15 @@ class DB_Record
                         
                 ');
 
-                $sth->execute();
 
-                $record = $sth->fetchAll(PDO::FETCH_ASSOC);
-                $output += $record;
 
-                $sth = $this->dbc->prepare
-                ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place 
-                        FROM recordbook.recordday  
-                        WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"'
-                );
 
                 $sth->execute();
                 $record = $sth->fetchAll(PDO::FETCH_ASSOC);
-                $output += $record;
+
                 $this->dbc->commit();
+
+
             } catch (PDOException $exception) {
                 $this->dbc->rollBack();
                 print('Failed: ' . $exception->getMessage());
@@ -312,46 +299,7 @@ class DB_Record
         }
     }
 
-    public function recordOut()
-    {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
 
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
-                $sth->execute();
-
-
-                    }
-                }
-                if(checkdate($month, 30, $year) == true){
-
-                    $day = 30;
-                    for($i=0; $i<$day; $i++){
-
-                        $dateSth = new DateTime();
-                        $dateSth->setDate($year, $month, ($i+1));
-
-                        $sth = $this->dbc->prepare('INSERT INTO recordday(recordDate) VALUES ("'. $dateSth->format('Y-m-d') .'")');
-
-                        echo '<pre>' . $sth->queryString;
-
-                        $sth->execute();
-
-                    }
-                }
-
-                $this->dbc->commit();
-
-
-            }catch(PDOException $exception){
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }
 
 
 

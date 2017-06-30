@@ -10,11 +10,9 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
 require_once('../../PHP/model/DBManager/DB_Record.php');
+
 $recordDBConection = new DB_Record();
-
 $recordDBConection->startSession();
-
-//$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
 include('html/recordbook.html');
 
@@ -24,7 +22,7 @@ include('html/recordbook.html');
 <div class="container">
     <div class="jumbotron" >
       <div class="row" id="jumb">
-        <button class="bg-danger" onclick="displaySelectedButton();">Display</button>
+
 
 
 
@@ -40,9 +38,6 @@ include('html/recordbook.html');
 //
 //
 //        $_SESSION['recordMonth'] = $recordDBConection->getRecordMonth((string)$currentYear,(string)$currentMonth);
-//
-//
-//
 //
 //        $thursday = array();
 //        array_push($thursday, '<div class="col-md-2">');
@@ -177,6 +172,7 @@ include('html/recordbook.html');
   </div>
 </div>
 
+<button class="bg-danger" onclick="loadCurrentMonth();">Display</button>
 
 
 <div class="container well">

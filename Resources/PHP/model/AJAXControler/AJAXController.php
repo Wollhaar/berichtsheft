@@ -6,88 +6,59 @@
  * Time: 17:07
  */
 
-//require_once ('../DBManager/DB_Record.php');
+require_once ('../DBManager/DB_Record.php');
 
 
-if(isset($_POST['methode'])){
-    echo '<pre> post methode an controller übergeben </pre>';
-}
+//if(isset($_POST['methode']))
+//    echo 'methode ist gesetzt';
 $request = $_POST['methode'];
+
+//if(isset($_GET['getCurrentMonth']))
+//    echo 'Ist gesetzt';
+//else
+//    echo var_dump($_GET);
+
+
 
 switch($request){
     case 'getCurrentMonth': {
-        echo 'Do something';
-        return '<p>Do something </p>';
 
-//        $req = new AJAXController();
-//        $req->getCurrentMonth();
-        break;
-    }default: echo var_dump($request);
-}
-
-
-class AJAXController
-{
-
-
-    public function __construct()
-    {
-
-    }
-
-    public function getCurrentMonth(){
         $dbr = new DB_Record();
 
         $currentTimestamp = time();
         $currentYear = date('Y', $currentTimestamp);
         $currentMonth = date('m', $currentTimestamp);
 
-        $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
-
-        return $resultObject;
-
-    }
+        $resultObject = $dbr->getRecordMonth($currentYear, $currentMonth);
 
 
-    function execute(){
-        /*
-         * Benötigte variablen für den Aufruf
-         * über JQuery
-         */
-        $methode = "";
-        $jsonObject = NULL;
-        $resultObject = "";
-        $responseObjectJSON = false;
 
+        echo $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
 
-        //übernahme via $Session Variable möglich ??
-        if(isset($_SESSION['methode'])){
-            $methode = $_SESSION['methode'];
-        }
-
-        //übernahme via Post Variable
-        if(isset($_POST['methode'])){
-            $methode = $_POST['methode'];
-        }
-
-        if(isset($_POST['jsonObject'])){
-            $jsonObject = json_decode($_POST['jsonObject']);
-            $responseObjectJSON = true;
-        }
-
-        switch($methode){
-            case 'getMonthrecords':{
-                break;
-            }
-            case 'getCurrentMonth':{
-                getCurrentMonth();  //return eines JSONObjektes -> Array mit allen record.recorddate einträgen des aktuellen Monats
-                break;
-            }
-            default:{
-                return 'Keine Methode ausgefürht';
-            }
-        }
-
-    }
-
+        break;
+    }default: echo var_dump($request);
 }
+
+
+//class AJAXController
+//{
+//
+//
+//    public function __construct()
+//    {
+//
+//    }
+//
+//    public function getCurrentMonth(){
+//        $dbr = new DB_Record();
+//
+//        $currentTimestamp = time();
+//        $currentYear = date('Y', $currentTimestamp);
+//        $currentMonth = date('m', $currentTimestamp);
+//
+//        $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
+//
+//        return $resultObject;
+//
+//    }
+//}
