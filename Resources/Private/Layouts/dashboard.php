@@ -72,6 +72,23 @@ require_once '../../PHP/model/config.php';
         <div class="dashboard">
             <h3>Dein Dashboard</h3>
             <p>Alle relevanten Dinge sind, hier für dich notiert.</p>
+            <div class="records col-md-9">
+<!--          Ausgabe der berichte und Anzeige fehlender Berichte       -->
+                <?php
+                $records = new DB_Record();
+                // getting records for displaying
+                // $recordOutput = $records->
+                ?>
+            </div>
+            <div class="calendar col-md-3">
+<!--         ausgabe des Kalenders    -->
+                <ul class="calendar-list">
+                <?php $days = $records->getRecordMonth(2017, 6);
+                foreach ($days as $day) { ?>
+                    <li><?php echo $day; ?> </li>
+                <?php } ?>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
