@@ -345,16 +345,18 @@ class DB_Record
 
     public function recordOut(){
         $this->dbc = new DB_Connection();
+        $output = NULL;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try {
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
+                $sth = $this->dbc->prepare('SELECT * FROM record');
                 $sth->execute();
+                $output = $sth->fetchAll();
 
-                echo '<pre>';
-                var_dump($sth->fetchAll());
+/*                echo '<pre>';
+                var_dump($sth->fetchAll());*/
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
@@ -362,7 +364,65 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
+        return $output;
     }
+
+    public function getRecord($id){
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('SELECT * FROM record WHERE record_id = ?');
+                $sth->execute(array($id));
+                $output = $sth->fetch();
+
+//                var_dump($output);
+/*                echo '<pre>';
+                var_dump($sth->fetchAll());*/
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
+    public function saveRecord($id, $record, $comment){
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ? WHERE record_id = ?');
+                $sth->execute(array($record, $comment, $id));
+
+                $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
+                $sth->execute(array($id));
+                $control = $sth->fetch();
+//var_dump($id, ' id', $control);
+                if ($control['record'] == $record) {
+                    $output = TRUE;
+                }
+                else {
+                    $output = FALSE;
+                }
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
 
    /* public function createRecordMonth($month, $year)
     {
