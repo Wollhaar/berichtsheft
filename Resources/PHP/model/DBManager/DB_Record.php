@@ -251,9 +251,6 @@ class DB_Record
                         
                 ');
 
-
-
-
                 $sth->execute();
                 $record = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -265,6 +262,54 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
             return $record;
+        }
+    }
+
+    public function readRecordDay($yeahr, $month, $day){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            $recorDayBeginn = new DateTime();
+            $recorDayBeginn->setDate($yeahr, $month, $day);
+            $recorDayBeginn->setTime(00,00,00);
+            $recorDayBeginn->getTimestamp();
+
+            $recorddayEnd = new DateTime();
+            $recorddayEnd->setDate($yeahr, $month, $day);
+            $recorddayEnd->setTime(24,60,60);
+            $recorddayEnd->getTimestamp();
+
+
+
+
+
+//            $recordDayBeginn = DateTime::createFromFormat('Y-m-d', $recordDay);
+//            $recordDayBeginn->setTime(00,00,00);
+//
+//            $recorddayEnd = DateTime::createFromFormat('y-m-d', $recordDay);
+//            $recorddayEnd->setTime(24,60,60);
+
+
+            try{
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare
+                ('SELECT
+                            status,
+                            place,
+                            record,
+                            comment
+                        FROM record WHERE recorddate >= "' . $recorDayBeginn->getTimestamp() . '" AND recorddate <= "' . $recorddayEnd->getTimestamp() .'"
+                        ');
+
+                $sth->execute();
+                $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+
+            }catch(PDOException $exception){
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
         }
     }
 
