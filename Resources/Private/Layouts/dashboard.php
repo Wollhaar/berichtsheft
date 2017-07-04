@@ -82,7 +82,7 @@ require_once '../../PHP/model/config.php';
                 if($_SESSION['bool'] === TRUE){echo $_SESSION['bool'];}
                 $records = new DB_Record();
                 // getting records for displaying
-                $recordOutput = $records->recordOut();
+                $recordOutput = $records->recordOut($_SESSION['user']['username']);
                 foreach($recordOutput as $item => $value): ?>
                     <?php var_dump($item);?>
                     <div class="records">
