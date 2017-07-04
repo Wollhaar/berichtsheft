@@ -92,7 +92,7 @@ require_once '../../PHP/model/config.php';
                     <div class="records">
                     <span><?php echo $value['record_id']; ?></span>
                         <label class="">Bericht</label><span ><?php echo $value['recorddate']; ?></span>
-                    <div class="record"><?php echo $value[3]; ?></div>
+                    <div class="record"><?php echo $value['records']; ?></div>
                         <label>Kommentar</label>
                     <div class="comment"><?php echo $value['comment']; ?></div>
                         <span><a href="<?php echo RP; ?>index.php?case=edit&id=<?php echo $value['record_id']; ?>" class="btn btn-link" id="record-link-<?php echo $value['record_id']; ?>">Editieren</a></span>
