@@ -249,11 +249,12 @@ class DB_Record
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare
                 ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place,
+                            record.record_id,
+                            record.recordDate, 
+                            record.status, 
+                            record.place,
                             record.record
-                        FROM recordbook.recordday JOIN recordbook.record
+                        FROM record.recordday JOIN recordbook.record
                         WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"
                         AND recordday.record = record.torecordday'
                 );
@@ -342,19 +343,26 @@ class DB_Record
         }
     }
 
-
-    public function recordOut(){
+// getting all records from one user
+    public function recordOut($user){
         $this->dbc = new DB_Connection();
+        $output = NULL;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try {
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM recordbook.record');
-                $sth->execute();
+                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
+                $sth->execute(array($user));
+                $u_id = $sth->fetch();
 
-                echo '<pre>';
-                var_dump($sth->fetchAll());
+                $sth = $this->dbc->prepare('SELECT record_id, status, place, record.record AS records, comment, recorddate FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth->execute(array($u_id['user_id']));
+                $output = $sth->fetchAll();
+//var_dump($user, $u_id);
+                /*echo '<pre>';
+                var_dump($output);
+                echo '</pre>';*/
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
@@ -362,21 +370,96 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
+        return $output;
     }
 
-    /* public function createRecordMonth($month, $year)
-     {
-         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-             $this->dbc = $this->dbc->getConnection();
+    // getting single record
+    public function getRecord($id){
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
 
-             try {
-                 $this->dbc->beginTransaktion();
-             } catch (PDOException $exception) {
-                 $this->dbc->rollBack();
-                 print('Failed: ' . $exception->getMessage());
-             }
-         }
-     }*/
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('SELECT * FROM record WHERE record_id = ?');
+                $sth->execute(array($id));
+                $output = $sth->fetch();
+
+//                var_dump($output);
+/*                echo '<pre>';
+                var_dump($sth->fetchAll());*/
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
+// setting or update record
+    public function saveRecord($record, $comment = NULL, $id = NULL, $user = NULL){
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                if (empty($id)) {
+                    $this->dbc->beginTransaction();
+                    // getting user
+                    $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
+                    $sth->execute(array($user));
+                    $u_id = $sth->fetch();
+
+                    // setting records and parallel connection/relation with user
+                    $sth = $this->dbc->prepare('INSERT INTO record (record, comment) VALUES (?, ?); 
+                                                        INSERT INTO recordbook (record, user) VALUES (LAST_INSERT_ID(), ?)');
+                    $sth->execute(array($record, $comment, $u_id['user_id']));
+
+                }
+                elseif (isset($id)) {
+                    $this->dbc->beginTransaction();
+                    $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ? WHERE record_id = ?');
+                    $sth->execute(array($record, $comment, $id));
+                }
+                    $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
+                    $sth->execute(array($id));
+                    $control = $sth->fetch();
+
+//var_dump($id, ' id', $control);
+                if ($control['record'] == $record) {
+                    $output = TRUE;
+                }
+                else {
+                    $output = FALSE;
+                }
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
+
+   /* public function createRecordMonth($month, $year)
+    {
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaktion();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }*/
 
 
 

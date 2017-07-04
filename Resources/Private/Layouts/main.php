@@ -47,7 +47,7 @@ require_once '../../PHP/model/config.php';
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Editieren</a></li>
+            <li><a href="<?php echo RP; ?>index.php?case=record">Editieren</a></li>
             <li><a href="#">Drucken</a></li>
             <li><a href="#">Kalender übersicht</a></li>
           </ul>
