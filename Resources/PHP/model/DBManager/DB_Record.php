@@ -356,7 +356,7 @@ class DB_Record
                 $sth->execute(array($user));
                 $u_id = $sth->fetch();
 
-                $sth = $this->dbc->prepare('SELECT * FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth = $this->dbc->prepare('SELECT record_id, status, place, record.record AS records, comment, recorddate FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
                 $sth->execute(array($u_id['user_id']));
                 $output = $sth->fetchAll();
 //var_dump($user, $u_id);
