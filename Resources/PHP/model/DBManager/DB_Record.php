@@ -249,11 +249,12 @@ class DB_Record
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare
                 ('SELECT 
-                            recordday.recordDate, 
-                            recordday.status, 
-                            recordday.place,
+                            record.record_id,
+                            record.recordDate, 
+                            record.status, 
+                            record.place,
                             record.record
-                        FROM recordbook.recordday JOIN recordbook.record
+                        FROM record.recordday JOIN recordbook.record
                         WHERE recordday.recordDate <= "' . $lastDayOfMonth . '"
                         AND recordday.record = record.torecordday'
                 );
@@ -343,7 +344,7 @@ class DB_Record
     }
 
 
-    public function recordOut(){
+    public function recordOut($user){
         $this->dbc = new DB_Connection();
         $output = NULL;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
@@ -351,10 +352,14 @@ class DB_Record
 
             try {
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT * FROM record');
-                $sth->execute();
-                $output = $sth->fetchAll();
+                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
+                $sth->execute(array($user));
+                $u_id = $sth->fetch();
 
+                $sth = $this->dbc->prepare('SELECT * FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth->execute(array($u_id['user_id']));
+                $output = $sth->fetchAll();
+var_dump($user, $u_id);
 /*                echo '<pre>';
                 var_dump($sth->fetchAll());*/
 
