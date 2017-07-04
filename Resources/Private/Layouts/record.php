@@ -69,11 +69,10 @@ require_once '../../PHP/model/config.php';
         <div class="container">
             <div class="records col-md-9">
                 <!--          Ausgabe der berichte und Anzeige fehlender Berichte       -->
-                <?php
-                echo '<span>'.$_SESSION['record_id'].'</span>'; ?>
+                <span><?php echo $_SESSION['record_id']; ?></span>
                     <form class="form-group" action="<?php echo RP; ?>index.php?case=save&id=<?php echo $_SESSION['record_id']['record_id']; ?>" method="post">
                         <span><?php echo $_SESSION['record_id']['record_id']?></span>
-                        <label class="">Bericht</label><span ><?php echo $_SESSION['record_id']['recorddate']; ?></span>
+                        <label class="">Bericht</label><span><?php echo $_SESSION['record_id']['recorddate']; ?></span>
                         <textarea class="record" name="record"><?php echo $_SESSION['record_id']['record']; ?></textarea>
                         <label>Kommentar</label>
                         <textarea class="comment" name="comment"><?php echo $_SESSION['record_id']['comment']; ?></textarea>
