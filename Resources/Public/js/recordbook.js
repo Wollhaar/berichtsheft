@@ -3,25 +3,12 @@
  */
 
 
-var recordCount = 0;
 
 
-function displaySelectedButton()
+
+
+function loadCurrentMonth()
 {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
-    if (this.readyState == 4 && this.status == 200){
-      document.getElementById("jumb").innerHTML = xmlhttp.responseText;
-    }
-
-    xmlhttp.open("POST","http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php", true);
-    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send("methode=getCurrentMonth");
-  }
-}
-
-
-function loadCurrentMonth(){
   //url	Required. Specifies the URL you wish to load
   //data	Optional. Specifies data to send to the server along with the request
   //function(response,status,xhr)	Optional. Specifies a callback function to run when the load() method is completed.
@@ -31,15 +18,18 @@ function loadCurrentMonth(){
   //status - contains the status of the request ("success", "notmodified", "error", "timeout", or "parsererror")
   //xhr - contains the XMLHttpRequest object
 
-
   var URL = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
-  var data = "methode=getCurrentMonth";
+  var data = "method=getCurrentMonth";
   var dataType = "text";
 
-  $.post(URL,data,function(response,status,xhr){
+  $.post(URL, data, function (response, status, xhr)
+  {
 
+    if (status != 'success') {
+      document.getElementById(
+        'jumb').innerHTML = '<div>Fehler: ' + status + '<p>' + xhr + '</p></div>';
+    }
     var jsonObject = JSON.parse(response);
-
 
     var monArray = [];
     var tueArray = [];
@@ -67,40 +57,44 @@ function loadCurrentMonth(){
     friarray.push('<div class="list-group">');
     friarray.push('<button class="list-group-item">Freitag</button>');
 
-
-    for(var i=0; i<jsonObject.length; i++){
-      console.log(wedArray);
+    for (var i = 0; i < jsonObject.length; i++) {
 
       var newDate = new Date(jsonObject[i]['recorddate'])
       newDate.toDateString();
       var newDay = newDate.toString().slice(0, 3);
+      newDate = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
 
-
-      switch(newDay){
-        case 'Mon':{
-          monArray.push('<button class="list-group-item">'+ newDate + '</button>');
+      switch (newDay) {
+        case 'Mon': {
+          monArray.push(
+            '<button class="list-group-item" value="' + newDate + '" onclick="records(2017-06-05)">' + newDate + '</button>');
           break;
         }
-        case 'Tue':{
-          tueArray.push('<button class="list-group-item">'+ newDate + '</button>');
+        case 'Tue': {
+          tueArray.push(
+            '<button class="list-group-item">' + newDate + '</button>');
           break;
         }
-        case 'Wed':{
-          wedArray.push('<button class="list-group-item">'+ newDate + '</button>');
+        case 'Wed': {
+          wedArray.push(
+            '<button class="list-group-item">' + newDate + '</button>');
           break;
         }
-        case 'Thu':{
-          thuarray.push('<button class="list-group-item">'+ newDate + '</button>');
+        case 'Thu': {
+          thuarray.push(
+            '<button class="list-group-item">' + newDate + '</button>');
           break;
         }
-        case 'Fri':{
-          friarray.push('<button class="list-group-item">'+ newDate + '</button>');
+        case 'Fri': {
+          friarray.push(
+            '<button class="list-group-item">' + newDate + '</button>');
           break;
-        }default: ;
+        }
+        default:
+          ;
       }
-
-
     }
+
     monArray.push('</div>');
     monArray.push('</div>');
     tueArray.push('</div>');
@@ -117,46 +111,77 @@ function loadCurrentMonth(){
     var wendsday = "";
     var thursday = "";
     var friday = "";
+    var week;
 
-    for(var m=0; m<monArray.length; m++){
+    for (var m = 0; m < monArray.length; m++) {
       monday += monArray[m];
     }
-    document.getElementById('jumb').innerHTML += monday;
+    week = monday;
 
-    for(var m=0; m<tueArray.length; m++){
+    for (var m = 0; m < tueArray.length; m++) {
       tuesday += tueArray[m];
     }
-    document.getElementById('jumb').innerHTML += tuesday;
+    week += tuesday;
 
-    for(var m=0; m<wedArray.length; m++){
+    for (var m = 0; m < wedArray.length; m++) {
       wendsday += wedArray[m];
     }
-    document.getElementById('jumb').innerHTML += wendsday;
+    week += wendsday;
 
-    for(var m=0; m<thuarray.length; m++){
+    for (var m = 0; m < thuarray.length; m++) {
       thursday += thuarray[m];
     }
-    document.getElementById('jumb').innerHTML += thursday;
+    week += thursday;
 
-    for(var m=0; m<monArray.length; m++){
+    for (var m = 0; m < monArray.length; m++) {
       friday += friarray[m];
     }
-    document.getElementById('jumb').innerHTML += friday;
+    week += friday;
+    document.getElementById('jumb').innerHTML = week;
 
   }, dataType)
 }
 
+function records()
+{
+  //url	Required. Specifies the URL you wish to load
+  //data	Optional. Specifies data to send to the server along with the request
+  //function(response,status,xhr)	Optional. Specifies a callback function to run when the load() method is completed.
+  //
+  //  Additional parameters:
+  //  response - contains the result data from the request
+  //status - contains the status of the request ("success", "notmodified", "error", "timeout", or "parsererror")
+  //xhr - contains the XMLHttpRequest object
 
+  var URL = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
+  var data = "method=getRecord&selectRec=2017-06-05";
+  var dataType = "text";
 
+  $.post(URL, data, function (response, status, xhr)
+  {
 
+    if (status != 'success') {
+      document.getElementById(
+        'jumb').innerHTML = '<div>Fehler: ' + status + '<p>' + xhr + '</p></div>';
+    }
 
+    var jsonObject = JSON.parse(response);
 
+    var recordDat = [];
+    for (var i = 0; i < jsonObject.length; i++) {
+      recordDat.push(jsonObject[i]['status'], jsonObject[i]['place'],
+        jsonObject[i]['record'], jsonObject[i]['comment']);
+    }
 
+    console.log(recordDat);
 
+  }), dataType
+}
 
-function setSelectField(place, status){
+function setSelectField(place, status)
+{
 
-  switch(status) {
+  switch (status) {
     case 1: {
       document.getElementById('statusOption1').selected = true;
       break;
@@ -179,82 +204,77 @@ function setSelectField(place, status){
     }
   }
 
-    switch (place){
-      case 1:{
-        document.getElementById('placeOption1').selected = true;
-        break;
-      }
-      case 2:{
-        document.getElementById('placeOption2').selected = true;
-        break;
-      }
-      case 3:{
-        document.getElementById('placeOption3').selected = true;
-        break;
-      }
+  switch (place) {
+    case 1: {
+      document.getElementById('placeOption1').selected = true;
+      break;
+    }
+    case 2: {
+      document.getElementById('placeOption2').selected = true;
+      break;
+    }
+    case 3: {
+      document.getElementById('placeOption3').selected = true;
+      break;
     }
   }
+}
 
+var recordCount = 0;
 
-function addRecord(){
+function addRecord()
+{
 
-  if(recordCount == 0){
+  if (recordCount == 0) {
     document.getElementById('end').innerHTML =
-      '<div class="row" id="newRecordDiv'+ recordCount + '">' +
-        '<div class="row">' +
-          '<div class="col-md-1 col-md-offset-1">' +
-            '<button id="delRecordButton' + recordCount +'" class="form-control" value="-" type="button" onclick="delRecord(this.id);">-</button>' +
-          '</div>'+
-          '<div class="col-md-3">' +
-            '<input class="form-control" id="record' + recordCount +'" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
-          '</div> ' +
-          '<div class="col-md-1"> ' +
-            '<input class="form-control" id="time' + recordCount +'" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
-          '</div> ' +
-          '<div class="col-md-4">' +
-            '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
-          '</div>' +
-        '</div>' +
+      '<div class="row" id="newRecordDiv' + recordCount + '">' +
+      '<div class="row">' +
+      '<div class="col-md-1 col-md-offset-1">' +
+      '<button id="delRecordButton' + recordCount + '" class="form-control" value="-" type="button" onclick="delRecord(this.id);">-</button>' +
       '</div>' +
-      '<div id="end' + recordCount +'"></div>';
-
-
-
-
-
-
-  }
-  else{
-    document.getElementById('end'+ (recordCount-1)).innerHTML =
-      '<div class="row" id="newRecordDiv'+ recordCount + '">' +
-        '<div class="row">' +
-          '<div class="col-md-1 col-md-offset-1">' +
-            '<button id="delRecordButton' + recordCount +'" class="form-control" value="delRecordButton' + recordCount + '" type="button" onclick="delRecord(this.id);">-</button>' +
-          '</div>' +
       '<div class="col-md-3">' +
-      '<input class="form-control" id="record' + recordCount +'" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
+      '<input class="form-control" id="record' + recordCount + '" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
       '</div> ' +
       '<div class="col-md-1"> ' +
-      '<input class="form-control" id="time' + recordCount +'" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
+      '<input class="form-control" id="time' + recordCount + '" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
       '</div> ' +
       '<div class="col-md-4">' +
       '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
       '</div>' +
       '</div>' +
       '</div>' +
-      '<div id="end' + recordCount +'"></div>';
+      '<div id="end' + recordCount + '"></div>';
+  }
+  else {
+    document.getElementById('end' + (recordCount - 1)).innerHTML =
+      '<div class="row" id="newRecordDiv' + recordCount + '">' +
+      '<div class="row">' +
+      '<div class="col-md-1 col-md-offset-1">' +
+      '<button id="delRecordButton' + recordCount + '" class="form-control" value="delRecordButton' + recordCount + '" type="button" onclick="delRecord(this.id);">-</button>' +
+      '</div>' +
+      '<div class="col-md-3">' +
+      '<input class="form-control" id="record' + recordCount + '" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
+      '</div> ' +
+      '<div class="col-md-1"> ' +
+      '<input class="form-control" id="time' + recordCount + '" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
+      '</div> ' +
+      '<div class="col-md-4">' +
+      '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<div id="end' + recordCount + '"></div>';
   }
 
   return recordCount++;
 }
 
-
-function delRecord(clicked_id){
+function delRecord(clicked_id)
+{
   var id = document.getElementById(clicked_id).id;
   id = id.slice(15, 16);
-    var record = document.getElementById('newRecordDiv' + id);
-    record.parentNode.removeChild(record);
+  var record = document.getElementById('newRecordDiv' + id);
+  record.parentNode.removeChild(record);
 
-
-    return recordCount--;
+  return recordCount--;
 }

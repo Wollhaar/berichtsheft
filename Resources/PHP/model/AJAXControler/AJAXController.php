@@ -1,64 +1,55 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: exinit
- * Date: 28.06.2017
- * Time: 17:07
- */
-
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'On');
 require_once ('../DBManager/DB_Record.php');
 
 
-//if(isset($_POST['methode']))
-//    echo 'methode ist gesetzt';
-$request = $_POST['methode'];
 
-//if(isset($_GET['getCurrentMonth']))
-//    echo 'Ist gesetzt';
-//else
-//    echo var_dump($_GET);
+$dbr= new DB_Record();
 
+ if(isset($_POST['method']))
+   $request = $_POST['method'];
+ else
+     return '[Error] method Post Variable is not set';
+
+
+function debug_console($data){
+    if(is_array($data))
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: "  . $data . "' );</script>";
+
+    echo $output;
+}
 
 
 switch($request){
+
     case 'getCurrentMonth': {
-
-        $dbr = new DB_Record();
-
         $currentTimestamp = time();
         $currentYear = date('Y', $currentTimestamp);
         $currentMonth = date('m', $currentTimestamp);
 
-        $resultObject = $dbr->getRecordMonth($currentYear, $currentMonth);
-
-
 
         echo $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
-
         break;
-    }default: echo var_dump($request);
+    }
+    case 'getRecord': {
+        if(isset($_POST['selectRec'])){
+            $selectedDate = $_POST['selectRec'];
+            $date = explode('-', $selectedDate);
+
+            echo $resultObject = json_encode($dbr->readRecordDay($date[0], $date[1], $date[2]));
+
+        }else{
+            debug_console("[Error]case: getRecord");
+        }
+        break;
+
+    }
+    default: debug_console("[Error] methode Post variable: " . $request);
 }
 
 
-//class AJAXController
-//{
-//
-//
-//    public function __construct()
-//    {
-//
-//    }
-//
-//    public function getCurrentMonth(){
-//        $dbr = new DB_Record();
-//
-//        $currentTimestamp = time();
-//        $currentYear = date('Y', $currentTimestamp);
-//        $currentMonth = date('m', $currentTimestamp);
-//
-//        $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
-//
-//        return $resultObject;
-//
-//    }
-//}
+
+

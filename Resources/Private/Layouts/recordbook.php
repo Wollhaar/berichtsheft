@@ -12,6 +12,9 @@ ini_set('display_errors', 'On');
 require_once('../../PHP/model/DBManager/DB_Record.php');
 
 $recordDBConection = new DB_Record();
+
+
+
 $recordDBConection->startSession();
 
 include('html/recordbook.html');
@@ -26,7 +29,17 @@ include('html/recordbook.html');
 
 
 
+
+
     <?php
+
+//    $something = $recordDBConection->readRecordDay(2017,06,05);
+//    var_dump($something);
+
+
+
+
+
 //    function displayCurrentMonth(){
 //
 //        $recordDBConection = new DB_Record();
