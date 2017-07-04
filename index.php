@@ -111,14 +111,22 @@ switch ($request['case']) {
         header('location: '.RP.PRI_PATH.'record.php');
         break;
 
-        // for saving Recordchanges
+        // for saving recordchanges and adding records
     case 'save':
         if (empty($_SESSION['user'])) {
             header('location: ' . RP . PRI_PATH . 'login.php');
             break;
         }
-        $record = new DB_Record();
-        $_SESSION['bool'] = $record->saveRecord($request['id'], $request['record'], $request['comment']);
+        // update record
+        if(isset($request['id'])) {
+            $record = new DB_Record();
+            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], $request['id']);
+        }
+        // adding record
+        elseif (isset($request['user'])) {
+            $record = new DB_Record();
+            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], NULL, $request['user']);
+        }
         header('location: '.RP.PRI_PATH.'dashboard.php');
         break;
 
