@@ -6,6 +6,8 @@ var recordCount = 0;
 
 
 
+<<<<<<< HEAD
+=======
 function setSelectField(place, status){
 
   switch(status) {
@@ -52,6 +54,7 @@ function setSelectField(place, status){
 
 
 
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 
 function addRecord(){
 
@@ -76,7 +79,11 @@ function addRecord(){
       '<div id="end' + recordCount +'"></div>';
 
 
+<<<<<<< HEAD
+      //document.getElementById('addRecordButton').setAttribute('onclick', 'doNothing()');
+=======
 
+>>>>>>> 0787f1a72d73f465f3d6899013c03cd2d63982ef
 
 
 
