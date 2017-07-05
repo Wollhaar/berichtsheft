@@ -8,8 +8,10 @@ class DB_Record
 
     private $dbc;
 
+
+
     public function getConnection(){
-        $this->dbc = new DB_Connection();
+        $this->dbc =  new DB_Connection();;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO'))
             $this->dbc = $this->dbc->getConnection();
     }
@@ -25,12 +27,11 @@ class DB_Record
             $this->dbc->commit();
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo('[Error ] ' . $exception->getMessage());
+            echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
 
         return true;
-
     }
 
     public function createDatabase()
@@ -44,7 +45,7 @@ class DB_Record
             return '[Success] Database created';
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo '[Error] ' . $exception;
+            echo '[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
             return false;
         }
 
@@ -91,7 +92,7 @@ class DB_Record
             echo '[Success] Tabels restored';
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo'[Error] ' . $exception->getMessage();
+            echo'[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
             return false;
         }
 
@@ -116,7 +117,7 @@ class DB_Record
             echo '[Success] Tables all droped';
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo '[Error] ' . $exception->getMessage();
+            echo '[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
             return false;
         }
 
@@ -162,7 +163,7 @@ class DB_Record
             $this->dbc->commit();
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo 'Failed: ' . $exception->getMessage();
+            echo 'Failed: ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
             return false;
         }
 
@@ -215,7 +216,7 @@ class DB_Record
 
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo('[Error] ' . $exception->getMessage());
+            echo('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
         return $record;
@@ -255,7 +256,7 @@ class DB_Record
 
         }catch(PDOException $exception){
             $this->dbc->rollBack();
-            echo ('[Error] ' . $exception->getMessage());
+            echo ('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
         return $result;
@@ -271,7 +272,7 @@ class DB_Record
             $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo('Failed: ' . $exception->getMessage());
+            echo('Failed: ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
 
@@ -286,7 +287,7 @@ class DB_Record
             $this->dbc->beginTransaktion();
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo('Failed: ' . $exception->getMessage());
+            echo('Failed: ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
 
