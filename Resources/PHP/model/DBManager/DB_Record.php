@@ -344,7 +344,12 @@ class DB_Record
     }
 
 // getting all records from one user
-    public function recordOut($user){
+    public function recordOut($user, $amount = 0){
+
+
+//  SET  @start = 1, @finish = 10;
+//        SELECT @start := 1, @finish := 10;
+
         $this->dbc = new DB_Connection();
         $output = NULL;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
@@ -356,8 +361,25 @@ class DB_Record
                 $sth->execute(array($user));
                 $u_id = $sth->fetch();
 
-                $sth = $this->dbc->prepare('SELECT record_id, status, place, record.record AS records, comment, recorddate FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
-                $sth->execute(array($u_id['user_id']));
+                $sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth->execute($u_id['user_id']);
+                $last = $sth->fetch();
+
+                $amount['begin'] = $last['last_id'];
+                $amount['end'] = $last['last_id'] - 10;
+
+//                $sth = $this->dbc->prepare('SELECT record_id, status, place, record.record AS records, comment, recorddate FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth = $this->dbc->prepare('SELECT @r_id := record_id FROM record 
+                                                      LEFT JOIN recordbook ON record.record_id = recordbook.record 
+                                                      WHERE user = ?;
+                                                      
+                                                      SELECT record_id, status, place, 
+                                                      record.record AS records, comment, recorddate FROM record 
+                                                      WHERE @r_id := record_id BETWEEN ? AND ?');
+                $sth->execute(array($u_id['user_id']),
+                                    $amount['begin'],
+                                    $amount['end']);
+
                 $output = $sth->fetchAll();
 //var_dump($user, $u_id);
                 /*echo '<pre>';
