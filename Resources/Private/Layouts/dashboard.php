@@ -2,7 +2,7 @@
 require_once '../../PHP/model/config.php';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,8 +85,11 @@ require_once '../../PHP/model/config.php';
                 <?php
                 if($_SESSION['bool'] === TRUE){echo $_SESSION['bool'];}
                 $records = new DB_Record();
+
                 // getting records for displaying
                 $recordOutput = $records->recordOut($_SESSION['user']['username']);
+
+//                begin of output
                 foreach($recordOutput as $item => $value): ?>
 <!--                    --><?php //var_dump($value);?>
                     <div class="records">
@@ -98,6 +101,8 @@ require_once '../../PHP/model/config.php';
                         <span><a href="<?php echo RP; ?>index.php?case=edit&id=<?php echo $value['record_id']; ?>" class="btn btn-link" id="record-link-<?php echo $value['record_id']; ?>">Editieren</a></span>
                 </div>
                 <?php endforeach; ?>
+                <hr/>
+                <button onclick="loadRecords()">Zurück</button><button onclick="loadRecords()">Weiter</button>
 <!--        add new records        -->
                 <div class="add-record container">
                     <!-- form sendet zum speichern und hinzufügen der Berichte, die Daten            -->
@@ -110,8 +115,6 @@ require_once '../../PHP/model/config.php';
                         <label>Kommentar</label>
                         <textarea class="comment" name="comment"></textarea>
                         <button type="submit">Speichern</button>
-                        <!--                Abbruch und zurück zum Dashboard        -->
-                        <span><a href="<?php echo RP; ?>index.php?case=logged">Abbrechen</a></span>
                     </form>
                 </div>
             </div>
