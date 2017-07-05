@@ -1,56 +1,55 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: exinit
- * Date: 28.06.2017
- * Time: 17:07
- */
-
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'On');
 require_once ('../DBManager/DB_Record.php');
 
 
-class AJAXController
-{
-    private $db_record;
 
-    public function __construct()
-    {
-        $db_record = new DB_Record();
-    }
+$dbr= new DB_Record();
 
-    public function execute(){
-        /*
-         * Benötigte variablen für den Aufruf
-         * über JQuery
-         */
-        $methode = "";
-        $jsonObject = NULL;
-        $resultObject = "";
-        $responseObjectJSON = false;
+ if(isset($_POST['method']))
+   $request = $_POST['method'];
+ else
+     return '[Error] method Post Variable is not set';
 
 
-        //übernahme via $Session Variable möglich ??
-        if(isset($_SESSION['methode'])){
-            $methode = $_SESSION['methode'];
-        }
+function debug_console($data){
+    if(is_array($data))
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: "  . $data . "' );</script>";
 
-        //übernahme via Post Variable
-        if(isset($_POST['methode'])){
-            $methode = $_POST['methode'];
-        }
-
-        if(isset($_POST['jsonObject'])){
-            $jsonObject = json_decode($_POST['jsonObject']);
-            $responseObjectJSON = true;
-        }
-
-        switch($methode){
-            case 'getMonthrecords':{
-
-                break;
-            }
-        }
-
-    }
-
+    echo $output;
 }
+
+
+switch($request){
+
+    case 'getCurrentMonth': {
+        $currentTimestamp = time();
+        $currentYear = date('Y', $currentTimestamp);
+        $currentMonth = date('m', $currentTimestamp);
+
+
+        echo $resultObject = json_encode($dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
+        break;
+    }
+    case 'getRecord': {
+        if(isset($_POST['selectRec'])){
+            $selectedDate = $_POST['selectRec'];
+            $date = explode('-', $selectedDate);
+
+            echo $resultObject = json_encode($dbr->readRecordDay($date[0], $date[1], $date[2]));
+
+        }else{
+            debug_console("[Error]case: getRecord");
+        }
+        break;
+
+    }
+    default: debug_console("[Error] methode Post variable: " . $request);
+}
+
+
+
+
