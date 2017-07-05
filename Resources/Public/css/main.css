@@ -36,3 +36,17 @@ div.user-field > span.username > a {
     color: #d5d5d5;
 
 }
+
+div.board > div.container label {
+
+}
+
+div.board > div.container textarea {
+    height: 15rem;
+    width: 30rem;
+    margin: 2rem 1rem;
+    padding: 0.5rem;
+
+    border-radius: 1rem;
+    border: 0.2rem inset;
+}
