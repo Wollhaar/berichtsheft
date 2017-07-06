@@ -38,10 +38,15 @@ switch ($request['case']) {
 //                    $_SESSION['case'] = 'case';
                     header('location: '.RP.PRI_PATH.'dashboard.php');
                 }
+                elseif (is_array($access)) {
+                    $_SESSION['access'] = $access[0];
+                    header('location: '.RP.PRI_PATH.'login.php');
+                }
             }
         }
         break;
 
+        // register-script
     case 'register':
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
@@ -65,6 +70,7 @@ switch ($request['case']) {
             if ($fb['check'] === true) {
                 $_SESSION['user'] = $fb;
                 header('location: '.RP.PRI_PATH.'dashboard.php');
+                break;
             }
             else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
@@ -77,15 +83,64 @@ switch ($request['case']) {
         break;
 
     case 'profile':
+//        var_dump($_SESSION['user']);
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
+        }
         header('location: '.RP.PRI_PATH.'account.php');
         break;
 
+    case 'record':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
+        }
+        header('location: '.RP.PRI_PATH.'recordbook.php');
+        break;
+
+        // gets an single record to edit
+    case 'edit':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
+        }
+        $record =new DB_Record();
+        $single_record = $record->getRecord($request['id']);
+        $_SESSION['record_id'] = $single_record;
+        header('location: '.RP.PRI_PATH.'record.php');
+        break;
+
+        // for saving recordchanges and adding records
+    case 'save':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
+        }
+        // update record
+        if(isset($request['id'])) {
+            $record = new DB_Record();
+            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], $request['id']);
+        }
+        // adding record
+        elseif (isset($request['user'])) {
+            $record = new DB_Record();
+            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], NULL, $request['user']);
+        }
+        header('location: '.RP.PRI_PATH.'dashboard.php');
+        break;
+
     case 'logged':
+        if (empty($_SESSION['user'])) {
+            header('location: ' . RP . PRI_PATH . 'login.php');
+            break;
+        }
         unset($_SESSION['user']['check']);
         header('location: '.RP.PRI_PATH.'dashboard.php');
 
         break;
 
+    // immer an letzter Stelle lassen
     case 'logout':
         session_destroy();
 

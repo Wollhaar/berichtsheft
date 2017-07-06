@@ -10,12 +10,11 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
 require_once('../../PHP/model/DBManager/DB_Record.php');
-
+require_once('../../PHP/model/config.php');
 $recordDBConection = new DB_Record();
 
 
-
-$recordDBConection->startSession();
+//$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
 include('html/recordbook.html');
 
@@ -23,14 +22,8 @@ include('html/recordbook.html');
 
 
 <div class="container">
-    <div class="jumbotron" >
-      <div class="row" id="jumb">
-
-
-
-
-
-
+    <div class="jumbotron">
+      <div class="row">
     <?php
 
 //    $something = $recordDBConection->readRecordDay(2017,06,05);
