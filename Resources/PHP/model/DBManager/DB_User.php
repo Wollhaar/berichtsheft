@@ -61,11 +61,24 @@ class DB_User
         $stmt->execute(array($user['username'], $pw, $user['email'], $user['first_name'], $user['last_name'],
                             $user['adress'], $user['PLZ'], $user['place'], $user['birthday']));
 
-//        var_dump($this->dbc);
+
+//      var_dump($this->dbc);
         $sql = 'SELECT * FROM User WHERE username = "'.$user['username'].'"';
         $stmt = $this->dbc->query($sql);
-        $fb = $stmt->fetch();
-//        var_dump($fb);
+        $fb = $stmt->fetch(PDO::FETCH_ASSOC);
+//      var_dump($fb);
+
+        //--------------> Einschub anlegen des Profil Ordners <-----------------
+
+        $this->loginProfile($fb['username'], $fb['password']);
+
+
+
+
+
+        //----------------------------------------------------------------------
+
+
 
         if($fb['username'] == $user['username']) {
             $fb['check'] = true;
@@ -76,4 +89,40 @@ class DB_User
             return $fb;
         }
     }
+
+    public function loginProfile($user, $pass){
+        $this->dbc = new DB_Connection();
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+        }
+
+
+        $sql = 'SELECT username, user_id, password FROM User WHERE username = ?';
+        $stmt = $this->dbc->prepare($sql);
+        $stmt->execute($user);
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $pw = sha1($pass, true);
+        if($data['password']==$pw){
+
+            $pathname = "Resources/Profiles/" . $data['username'] . $data['user_id'];
+            $mode = 755; //Besitzer alle Rechte / Gruppe und ander ausführrechte
+            $recursive = false;
+
+            if(is_dir($pathname)==false){
+                mkdir($pathname, octdec($mode), $recursive);
+                return true;
+            }
+            else{
+                echo 'Folder already exists';
+                return false;
+            }
+
+
+
+        }
+    }
+
+
 }
