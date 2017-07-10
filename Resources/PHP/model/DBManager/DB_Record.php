@@ -344,7 +344,7 @@ class DB_Record
     }
 
 // getting all records from one user
-    public function recordOut($user, $amount = 0){
+    public function recordOut($user){
 
 
 //  SET  @start = 1, @finish = 10;
@@ -360,29 +360,36 @@ class DB_Record
                 $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
                 $sth->execute(array($user));
                 $u_id = $sth->fetch();
+                echo $user.' = '.$u_id['user_id'];
 
-                $sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                /*$sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
                 $sth->execute($u_id['user_id']);
-                $last = $sth->fetch();
+                $last = $sth->fetch(); */
 
-                $amount['begin'] = $last['last_id'];
-                $amount['end'] = $last['last_id'] - 10;
-
-//                $sth = $this->dbc->prepare('SELECT record_id, status, place, record.record AS records, comment, recorddate FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
-                $sth = $this->dbc->prepare('SELECT @r_id := record_id FROM record 
-                                                      LEFT JOIN recordbook ON record.record_id = recordbook.record 
-                                                      WHERE user = ?;
-                                                      
-                                                      SELECT record_id, status, place, 
-                                                      record.record AS records, comment, recorddate FROM record 
-                                                      WHERE @r_id := record_id BETWEEN ? AND ?');
-                $sth->execute(array($u_id['user_id']),
-                                    $amount['begin'],
-                                    $amount['end']);
+                if ( empty($_SESSION['counter']) || ($_SESSION['counter'] < 6 )) {
+                    $sql = 'SELECT count(record.record_id) AS counter FROM record 
+                            LEFT JOIN recordbook ON record.record_id = recordbook.record 
+                            WHERE user = ?';
+                    $sth = $this->dbc->prepare($sql);
+                    $sth->execute(array($u_id['user_id']));
+                    $count = $sth->fetch();
+                    $_SESSION['counter'] = $count['counter'];
+                    var_dump($_SESSION);
+                }
+                $_SESSION['counter'] = $_SESSION['counter'] - 5;
+echo $u_id['user_id'].'->'.$_SESSION['counter'];
+                $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
+                                                      FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record 
+                                                      WHERE user = ? ORDER BY record.record_id DESC LIMIT ?,5');
+                $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
+                $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
+                $sth->execute();
+              // var_dump(   $sth->debugDumpParams());
 
                 $output = $sth->fetchAll();
+                //while($data=$sth->fetch()){var_dump($data);}
 //var_dump($user, $u_id);
-                /*echo '<pre>';
+              /*  echo '<pre>';
                 var_dump($output);
                 echo '</pre>';*/
 
@@ -468,6 +475,17 @@ class DB_Record
         return $output;
     }
 
+
+
+/*    public function generateNextRecords($amount) {
+        if (empty($_SESSION['lowest_id'])) {
+            $_SESSION['lowest_id'] = $amount - 10;
+        }
+        elseif ($amount > $_SESSION['lowest_id']) {
+            $_SESSION['lowest_id'] = $amount - 10;
+        }
+
+    }*/
 
    /* public function createRecordMonth($month, $year)
     {
