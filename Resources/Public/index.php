@@ -1,12 +1,11 @@
 <?php
-require_once 'Resources/PHP/model/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Resources/PHP/model/config.php';
 
-$request = array('case' => '');
-if(isset($_POST['username']) || isset($_GET['case'])) {
+$request = ['case' => ''];
+if (isset($_POST['username']) || isset($_GET['case'])) {
     $request = $_REQUEST;
 //    echo 'post';
-}
-elseif (empty($session) && !isset($_POST)) {
+} elseif (empty($session) && !isset($_POST)) {
     $session = $_SESSION;
 //    echo 'session';
 }
@@ -20,47 +19,56 @@ switch ($request['case']) {
     case 'login':
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $login = array( 'username' => $request['username'], 'password' => $request['password']);
+            $login = [
+                'username' => $request['username'],
+                'password' => $request['password'],
+            ];
             if (isset($login) && empty($user)) {
                 $user = new DB_User();
                 $check = $user->login($login['username'], $login['password']);
-            }
-            elseif (isset($login) && is_object($user)) {
+            } elseif (isset($login) && is_object($user)) {
                 $check = $user->login($login['username'], $login['password']);
             }
-            if(is_string($check)) {
+            if (is_string($check)) {
                 die($check);
             }
             if (is_object($user)) {
                 $access = $user->checkLogin($check);
-                if ($access === TRUE) {
+                if ($access === true) {
                     $_SESSION['user'] = $login;
 //                    $_SESSION['case'] = 'case';
-                    header('location: '.RP.PRI_PATH.'dashboard.php');
-                }
-                elseif (is_array($access)) {
+                    header('location: ' .  '/Resources/Public/dashboard.php');
+                } elseif (is_array($access)) {
                     $_SESSION['access'] = $access[0];
-                    header('location: '.RP.PRI_PATH.'login.php');
+                    header('location: ' . '/Resources/Public/landingpage.php');
                 }
             }
         }
         break;
 
-        // register-script
+    // register-script
     case 'register':
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
-            header('location: '.RP.PRI_PATH.'register.php');
+            header('location: ' .  'register.php');
         }
 
         if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
             $request = $_SESSION['request'];
         }
 
-        if (isset($request['username'])&& $request['password'] && $request['email']) {
-            $regist = array('username' => $request['username'], 'password' => $request['password'], 'email' => $request['email'],
-                'first_name' => $request['first_name'], 'last_name' => $request['last_name'], 'adress' => $request['adress'],
-                'PLZ' => $request['PLZ'], 'place' => $request['place'], 'birthday' => $request['birthday']);
+        if (isset($request['username']) && $request['password'] && $request['email']) {
+            $regist = [
+                'username' => $request['username'],
+                'password' => $request['password'],
+                'email' => $request['email'],
+                'first_name' => $request['first_name'],
+                'last_name' => $request['last_name'],
+                'adress' => $request['adress'],
+                'PLZ' => $request['PLZ'],
+                'place' => $request['place'],
+                'birthday' => $request['birthday'],
+            ];
             if (empty($user)) {
                 $user = new DB_User();
                 $fb = $user->registUser($regist);
@@ -69,14 +77,12 @@ switch ($request['case']) {
             }
             if ($fb['check'] === true) {
                 $_SESSION['user'] = $fb;
-                header('location: '.RP.PRI_PATH.'dashboard.php');
+                header('location: ' . 'dashboard.php');
                 break;
-            }
-            else {
+            } else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
             }
-        }
-        else {
+        } else {
             echo 'please set all fields';
         }
 
@@ -85,58 +91,59 @@ switch ($request['case']) {
     case 'profile':
 //        var_dump($_SESSION['user']);
         if (empty($_SESSION['user'])) {
-            header('location: ' . RP . PRI_PATH . 'login.php');
+            header('location: ' . 'login.php');
             break;
         }
-        header('location: '.RP.PRI_PATH.'account.php');
+        header('location: ' . 'account.php');
         break;
 
     case 'record':
         if (empty($_SESSION['user'])) {
-            header('location: ' . RP . PRI_PATH . 'login.php');
+            header('location: ' . 'login.php');
             break;
         }
-        header('location: '.RP.PRI_PATH.'recordbook.php');
+        header('location: ' . 'recordbook.php');
         break;
 
-        // gets an single record to edit
+    // gets an single record to edit
     case 'edit':
         if (empty($_SESSION['user'])) {
-            header('location: ' . RP . PRI_PATH . 'login.php');
+            header('location: ' . 'login.php');
             break;
         }
-        $record =new DB_Record();
+        $record = new DB_Record();
         $single_record = $record->getRecord($request['id']);
         $_SESSION['record_id'] = $single_record;
-        header('location: '.RP.PRI_PATH.'record.php');
+        header('location: ' . 'record.php');
         break;
 
-        // for saving recordchanges and adding records
+    // for saving recordchanges and adding records
     case 'save':
         if (empty($_SESSION['user'])) {
-            header('location: ' . RP . PRI_PATH . 'login.php');
+            header('location: ' . 'login.php');
             break;
         }
         // update record
-        if(isset($request['id'])) {
+        if (isset($request['id'])) {
             $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], $request['id']);
-        }
-        // adding record
+            $_SESSION['bool'] = $record->saveRecord($request['record'],
+                $request['comment'], $request['id']);
+        } // adding record
         elseif (isset($request['user'])) {
             $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], NULL, $request['user']);
+            $_SESSION['bool'] = $record->saveRecord($request['record'],
+                $request['comment'], null, $request['user']);
         }
-        header('location: '.RP.PRI_PATH.'dashboard.php');
+        header('location: ' . 'dashboard.php');
         break;
 
     case 'logged':
         if (empty($_SESSION['user'])) {
-            header('location: ' . RP . PRI_PATH . 'login.php');
+            header('location: ' . 'login.php');
             break;
         }
         unset($_SESSION['user']['check']);
-        header('location: '.RP.PRI_PATH.'dashboard.php');
+        header('location: ' . 'dashboard.php');
 
         break;
 
@@ -145,7 +152,7 @@ switch ($request['case']) {
         session_destroy();
 
     default:
-        header('location: '.RP.PRI_PATH.'main.php');
+        header('location: ' . 'landingpage.php');
 }
 
 
