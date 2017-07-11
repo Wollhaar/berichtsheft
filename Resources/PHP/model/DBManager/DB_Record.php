@@ -344,7 +344,7 @@ class DB_Record
     }
 
 // getting all records from one user
-    public function recordOut($user){
+    public function recordOut($user, $operator = 'forward'){
 
 
 //  SET  @start = 1, @finish = 10;
@@ -360,7 +360,7 @@ class DB_Record
                 $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
                 $sth->execute(array($user));
                 $u_id = $sth->fetch();
-                echo $user.' = '.$u_id['user_id'];
+//                echo $user.' = '.$u_id['user_id'];
 
                 /*$sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
                 $sth->execute($u_id['user_id']);
@@ -373,14 +373,21 @@ class DB_Record
                     $sth = $this->dbc->prepare($sql);
                     $sth->execute(array($u_id['user_id']));
                     $count = $sth->fetch();
+                    $_SESSION['rows'] = $count['counter'];
                     $_SESSION['counter'] = $count['counter'];
-                    var_dump($_SESSION);
+//                    var_dump($_SESSION);
                 }
-                $_SESSION['counter'] = $_SESSION['counter'] - 5;
-echo $u_id['user_id'].'->'.$_SESSION['counter'];
+                if ($operator == 'forward') {
+                    $_SESSION['counter'] = ($_SESSION['counter']) - 5;
+                }
+                elseif ($operator == 'back') {
+                    $_SESSION['counter'] = ($_SESSION['counter']) + 5;
+                }
+
+//echo $u_id['user_id'].'->'.$_SESSION['counter'];
                 $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
                                                       FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record 
-                                                      WHERE user = ? ORDER BY record.record_id DESC LIMIT ?,5');
+                                                      WHERE user = ? LIMIT ?,5');
                 $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
                 $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
                 $sth->execute();
