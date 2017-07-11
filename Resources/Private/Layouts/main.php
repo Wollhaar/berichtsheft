@@ -16,12 +16,12 @@ require_once '../../PHP/model/config.php';
   <title>Berichtsheft-Tool</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
-  <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
-  <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
+  <link href="<?php echo PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+  <link href="<?php echo PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
+  <link href="<?php echo PUB_PATH; ?>css/main.css" rel="stylesheet">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
+  <script src="<?php echo PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 
 
