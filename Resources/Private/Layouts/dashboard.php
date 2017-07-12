@@ -22,51 +22,63 @@ require_once '../../PHP/model/config.php';
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="<?php echo PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+<body style="background-image: url(img/img/uebersichts_Seite_BG.png)">
+
+<div class="container">
+    <div class="row" style="background: transparent">
+        <div class="col-md-12 col-md-offset-11">
+            <div class="profile-box" style="display: none">
+                <div class="img-box"><img src="img/img/Profilbild_elisa_meier.png" /></div>
+                <ul>
+                    <li><span><?php if(!empty($_SESSION['user']['career_name'])){echo $_SESSION['user']['career_name'];} ?></span></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=messenger"><span>Nachrichten</span></a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logged"><span>Ausbilder</span></a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-default" id="profile" onclick="" aria-label="Links ausrichten" style="background: transparent">
+                <span aria-hidden="true"><img src="<?php echo PRI_PATH; ?>img/Icon/Profil_Icon.png"></span>
+                <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+                <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
+                <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+                <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
+                <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
+            </button>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-default" style="background: transparent">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
+        <!-- Titel und Schalter werden für eine bessere mobile Ansicht zusammengefasst -->
+        <div class="navbar-header col-md-4">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Navigation ein-/ausblenden</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Berichtsheft-Tool</a>
+            <a class="navbar-brand" href="#" style="font-size: 25pt"><b>Record</b>Book</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+
+        <!-- Alle Navigationslinks, Formulare und anderer Inhalt werden hier zusammengefasst und können dann ein- und ausgeblendet werden -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li> <!-- falls man eingeloggt ist soll der homelink auf den dashboard lenken -->
-                <li><a href="<?php echo RP; ?>index.php?case=logged">Übersicht</a></li> <!-- Im Falle: 'ausgeloggt' soll der link zur Loginseite führen.  -->
-                <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="<?php echo RP; ?>index.php?case=record">Editieren</a></li>
-                        <li><a href="#">Drucken</a></li>
-                        <li><a href="#">Kalender übersicht</a></li>
-                    </ul>
-                </li>
+                <li><a href="<?php echo RP; ?>index.php?case=logged">Übersicht <span class="sr-only">(aktuell)</span></a></li>
+                <li><a href="<?php echo RP; ?>index.php?case=edit">Berichtsheft</a></li>
+                <li><a href="">Ausbilder</a> </li>
+                <li><a href="">Portfolio</a></li>
             </ul>
-            <div class="user-field dropdown">
-                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
-                    <li><hr/></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
-                </ul>
-            </div>
-        </div><!--/.navbar-collapse -->
-    </div>
-</nav>
+        </div><!-- /.navbar-collapse -->
 
 <div class="main">
-    <div class="board">
-
-        <?php if($_SESSION['user']['check'] === true): ?>
+    <div class="board col-md-12">
+<!--    check wird nur nach erfolgreicher registrierung gesetzt    -->
+        <?php if(!empty($_SESSION['user']['check']) && $_SESSION['user']['check'] === true): ?>
             <?php include_once PRI_PATH.'Partials/welcome.html'; ?>
         <?php endif; ?>
         <!--        --><?php //var_dump($_SESSION); ?>
@@ -77,6 +89,8 @@ require_once '../../PHP/model/config.php';
 
             <div class="col-md-9">
                 <div class="records" id="dump-record">
+
+<!--                Falls ein einzelner Bericht bearbeitet wurde, wird hier die Erfolgsmeldung angezeigt.    -->
                     <?php if(isset($_SESSION['bool']) && $_SESSION['bool'] === TRUE): ?>
                         <span>Bericht <?php echo $_SESSION['record_id']['record_id']; ?> aktualisiert.</span>
                     <?php endif; ?>
@@ -132,8 +146,17 @@ require_once '../../PHP/model/config.php';
         </div>
     </div>
 </div>
-<footer>
-    <script src="<?php echo PUB_PATH; ?>js/main.js"></script>
+
+<footer class="navbar navbar-default navbar-fixed-bottom" style="background: transparent">
+    <div class="row">
+        <div class="col-md-12 col-md-offset-10">
+            <ul class="nav nav-tabs">
+                <li role="presentation"><a href="">Impressum</a></li>
+                <li role="presentation"><a href="">Datenschutz</a></li>
+            </ul>
+        </div>
+    </div>
+<script src="<?php echo PUB_PATH; ?>js/main.js"></script>
 </footer>
 </body>
 </html>
