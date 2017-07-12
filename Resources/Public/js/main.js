@@ -10,7 +10,7 @@ $(Document).ready(function () {
 
         console.log(load);
         xhttp.open('POST', 'index.php?case=getter', TRUE);
-        xhttp.send('load='+load);
+        xhttp.send('load=' + load);
     });
 
     document.getElementById('btn-back').onclick(function backLoadRecords(load) {
@@ -23,6 +23,24 @@ $(Document).ready(function () {
 
         console.log(load);
         xhttp.open('POST', 'index.php?case=getter', TRUE);
-        xhttp.send('load='+load);
+        xhttp.send('load=' + load);
     });
+
+
+        document.getElementById('profile').onclick(function () {
+
+            $('.profile-box').toggle();
+        });
+
 });
+
+// javascript
+function getStyleElement(id) {
+    var style;
+    style = document.defaultView.getComputedStyle(document.getElementById(id), '').getPropertyValue("display");
+    return style;
+}
+
+function toggle_box() {
+
+}
