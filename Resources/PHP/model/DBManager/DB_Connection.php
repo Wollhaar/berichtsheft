@@ -2,13 +2,13 @@
 
 class DB_Connection extends PDO
 {
-    protected $host = 'localhost';
+    protected $host = 'dedi3098.your-server.de';
 
-    protected $user = 'davidz_5';
+    protected $user = 'frankb_7';
 
-    protected $password = 'FB9a1Kbxdpe99vCC';
+    protected $password = 'eB7NBTH1Xkt7Tamc';
 
-    protected $options = array('db_name' => 'davidz_report');
+    protected $options = array('db_name' => 'recordbook');
 
     private $dbc = NULL;
 

@@ -1,56 +1,72 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: exinit
- * Date: 28.06.2017
- * Time: 17:07
- */
-
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'On');
 require_once ('../DBManager/DB_Record.php');
 
 
-class AJAXController
-{
-    private $db_record;
+class AJAXController{
 
-    public function __construct()
-    {
-        $this->db_record = new DB_Record();
+    private $dbr;
+    private $request;
+
+
+    public function __construct(){
+        $this->dbr= new DB_Record();
+
+        if(isset($_POST['method']))
+            $this->request = $_POST['method'];
+        else
+            return '[Error] method Post Variable is not set';
+
+        $this->controll($this->request);
     }
 
-    public function execute(){
-        /*
-         * Benötigte variablen für den Aufruf
-         * über JQuery
-         */
-        $methode = "";
-        $jsonObject = NULL;
-        $resultObject = "";
-        $responseObjectJSON = false;
+    public function debug_console($data){
+        if(is_array($data))
+            $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+        else
+            $output = "<script>console.log( 'Debug Objects: "  . $data . "' );</script>";
+
+        echo $output;
+    }
+
+    public function controll($request){
+        switch($request){
+
+            case 'getCurrentMonth': {
+                $currentTimestamp = time();
+                $currentYear = date('Y', $currentTimestamp);
+                $currentMonth = date('m', $currentTimestamp);
 
 
-        //übernahme via $Session Variable möglich ??
-        if(isset($_SESSION['methode'])){
-            $methode = $_SESSION['methode'];
-        }
-
-        //übernahme via Post Variable
-        if(isset($_POST['methode'])){
-            $methode = $_POST['methode'];
-        }
-
-        if(isset($_POST['jsonObject'])){
-            $jsonObject = json_decode($_POST['jsonObject']);
-            $responseObjectJSON = true;
-        }
-
-        switch($methode){
-            case 'getMonthrecords':{
-
+                echo $resultObject = json_encode($this->dbr->getRecordMonth((string)$currentYear,(string)$currentMonth));
                 break;
             }
+            case 'getRecord': {
+                if(isset($_POST['selectRec'])){
+                    $selectedDate = $_POST['selectRec'];
+                    $date = explode('-', $selectedDate);
+
+                    echo $resultObject = json_encode($this->dbr->readRecordDay($date[0], $date[1], $date[2]));
+
+                }else{
+                    debug_console("[Error]case: getRecord");
+                    return false;
+                }
+                break;
+            }
+            default: {
+                debug_console("[Error] methode Post variable: " . $request);
+                return false;
+            }
         }
-
     }
-
 }
+
+$controller = new AJAXController();
+
+
+
+
+
+
