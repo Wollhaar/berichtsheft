@@ -280,6 +280,72 @@ class DB_Record
 
     }
 
+// getting all records from one user
+    public function recordOut($user, $operator = 'forward'){
+
+
+//  SET  @start = 1, @finish = 10;
+//        SELECT @start := 1, @finish := 10;
+
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
+                $sth->execute(array($user));
+                $u_id = $sth->fetch();
+//                echo $user.' = '.$u_id['user_id'];
+
+                /*$sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
+                $sth->execute($u_id['user_id']);
+                $last = $sth->fetch(); */
+
+                if ( empty($_SESSION['counter']) || ($_SESSION['counter'] < 6 )) {
+                    $sql = 'SELECT count(record.record_id) AS counter FROM record 
+                            LEFT JOIN recordbook ON record.record_id = recordbook.record 
+                            WHERE user = ?';
+                    $sth = $this->dbc->prepare($sql);
+                    $sth->execute(array($u_id['user_id']));
+                    $count = $sth->fetch();
+                    $_SESSION['rows'] = $count['counter'];
+                    $_SESSION['counter'] = $count['counter'];
+//                    var_dump($_SESSION);
+                }
+                if ($operator == 'forward') {
+                    $_SESSION['counter'] = ($_SESSION['counter']) - 5;
+                }
+                elseif ($operator == 'back') {
+                    $_SESSION['counter'] = ($_SESSION['counter']) + 5;
+                }
+
+//echo $u_id['user_id'].'->'.$_SESSION['counter'];
+                $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
+                                                      FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record 
+                                                      WHERE user = ? LIMIT ?,5');
+                $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
+                $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
+                $sth->execute();
+              // var_dump(   $sth->debugDumpParams());
+
+                $output = $sth->fetchAll();
+                //while($data=$sth->fetch()){var_dump($data);}
+//var_dump($user, $u_id);
+              /*  echo '<pre>';
+                var_dump($output);
+                echo '</pre>';*/
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
     // getting single record
     public function getRecord($id){
         $this->dbc = new DB_Connection();
@@ -370,20 +436,4 @@ class DB_Record
 
 
 
-    public function startSession() {
-
-        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
-//            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
-            if (isset($_REQUEST['PHPSESSID'])) {
-                $session_id = array($_REQUEST['PHPSESSID']);
-            } elseif (isset($_SESSION['session_id'])) {
-                $session_id = array($_SESSION['session_id']);
-            }
-            session_start($session_id);
-        } else {
-            session_start();
-            header('location: /index.php');
-        }
-        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
-    }
 }
