@@ -2,11 +2,12 @@
 ini_set('display_errors', 1);
 error_reporting( E_ALL );
 
-//die($_SERVER['SERVER_NAME']);
-define('RP', substr($_SERVER['DOCUMENT_ROOT'] , 29, 30).DIRECTORY_SEPARATOR); // eventuelle Änderung, bei Wechsel auf anderen Server.
-define('PUB_PATH', RP.'Resources/Public/'); // DIRECTORY_SEPERATOR evtll gegen '/' austauschen
-define('PRI_PATH', RP.'Resources/Private/Layouts/');
-define('MOD_PATH', RP.'Resources/PHP/Model/');
+//die(substr($_SERVER['DOCUMENT_ROOT'] , 29, 30).DIRECTORY_SEPARATOR);
+define('DS', DIRECTORY_SEPARATOR);
+define('RP', substr($_SERVER['DOCUMENT_ROOT'] , 29, 30).DS); // eventuelle Änderung, bei Wechsel auf anderen Server.
+define('PUB_PATH', RP.'Resources'.DS.'Public'.DS); // DIRECTORY_SEPERATOR evtll gegen '/' austauschen
+define('PRI_PATH', RP.'Resources'.DS.'Private'.DS.'Layouts'.DS);
+define('MOD_PATH', RP.'Resources'.DS.'PHP'.DS.'Model'.DS);
 
 $session = new Helper();
 $session->startSession();
