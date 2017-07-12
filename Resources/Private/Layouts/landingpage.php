@@ -77,10 +77,11 @@ require_once '../../PHP/model/config.php';
 
 
       <div class="container" style="padding-top: 200px">
+        <form method="post" action="<?php echo RP.'index.php?case=login'; ?>">
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <div class="input-group-lg">
-              <input type="text" class="form-control" placeholder="Benutzername" aria-describedby="groessen-addon1" style="background: transparent">
+              <input type="text" class="form-control" name="username" placeholder="Benutzername" aria-describedby="groessen-addon1" style="background: transparent">
             </div>
           </div>
         </div>
@@ -88,10 +89,12 @@ require_once '../../PHP/model/config.php';
         <div class="row">
           <div class="col-md-4 col-md-offset-4">
             <div class="input-group-lg">
-              <input type="password" class="form-control" placeholder="Password" aria-describedby="groessen-addon2" style="background: transparent">
+              <input type="password" class="form-control" name="password" placeholder="Password" aria-describedby="groessen-addon2" style="background: transparent">
             </div>
           </div>
         </div>
+            <button type="submit" style="display: none"></button>
+        </form>
         <div class="row">
           <div class="col-md-2 col-md-offset-4">
             <div class="input-group-lg">
