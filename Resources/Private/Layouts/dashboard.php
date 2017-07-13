@@ -74,7 +74,8 @@ require_once '../../PHP/model/config.php';
                 <li><a href="">Portfolio</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
-
+    </div>
+</nav>
 <div class="main">
     <div class="board col-md-12">
 <!--    check wird nur nach erfolgreicher registrierung gesetzt    -->
@@ -102,7 +103,7 @@ require_once '../../PHP/model/config.php';
 
                     // getting records for displaying
                     $recordOutput = array_reverse($records->recordOut($_SESSION['user']['username']), TRUE);
-
+var_dump($_SESSION);
 //                begin of output
                 foreach($recordOutput as $item => $value): ?>
                     <!--                    --><?php //var_dump($value);?>
@@ -138,9 +139,9 @@ require_once '../../PHP/model/config.php';
                 <!--         ausgabe des Kalenders    -->
                 <ul class="calendar-list">
                     <?php $days = $records->getRecordMonth(2017, 6);
-                foreach ($days as $day) { ?>
-                    <li><?php echo $day; ?> </li>
-                <?php } ?>
+                foreach ($days as $day) {
+                    echo '<li>'.$day['recorddate'].'</li>';
+                 } ?>
                 </ul>
             </div>
         </div>
@@ -156,7 +157,12 @@ require_once '../../PHP/model/config.php';
             </ul>
         </div>
     </div>
-<script src="<?php echo PUB_PATH; ?>js/main.js"></script>
+<script type="text/javascript" src="<?php echo PUB_PATH; ?>js/main.js"></script>
+<script type="text/javascript">
+    $("#profile").click(function () {
+        $(".profile-box").toggle('display');
+    });
+</script>
 </footer>
 </body>
 </html>
