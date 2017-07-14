@@ -8,20 +8,26 @@
  */
 class Helper
 {
-    public function startSession() {
+    public function startSession($user = NULL, $restart = NULL)
+    {
 
-        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+        if (isset($restart) && !empty($user['session_id'])) {
 //            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
-            if (isset($_REQUEST['PHPSESSID'])) {
-                $session_id = array($_REQUEST['PHPSESSID']);
-            } elseif (isset($_SESSION['session_id'])) {
-                $session_id = array($_SESSION['session_id']);
-            }
-            session_start($session_id);
-        } else {
-            session_start();
-            header('location: '.RP.'index.php');
+            session_name($user['session_id']);
         }
+
+//      die session soll erst gestartet werden, wenn sich ein user angemeldet hat.
+        elseif (isset($user)) {
+            session_name($user['username'].'_'.$user['user_id']);
+            session_start();
+//            header('location: '.RP.'index.php');
+        }
+
+        //  restart einer laufenden session
+        if(isset($session_id)) {
+            session_start($session_id);
+        }
+
         $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
     }
 }
