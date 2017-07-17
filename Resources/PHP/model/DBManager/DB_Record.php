@@ -1,21 +1,18 @@
 <?php
 require_once('DB_Connection.php');
 
-
-
 class DB_Record
 {
 
     private $dbc;
 
-
-
-    public function getConnection(){
-        $this->dbc =  new DB_Connection();;
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO'))
+    public function getConnection()
+    {
+        $this->dbc = new DB_Connection();;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
+        }
     }
-
 
     public function deleteDatabase()
     {
@@ -39,7 +36,7 @@ class DB_Record
         $this->getConnection();
         try {
             $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('CREATE DATABASE IF NOT EXISTS recordbook' );
+            $sth = $this->dbc->prepare('CREATE DATABASE IF NOT EXISTS recordbook');
             $sth->execute();
 
             return '[Success] Database created';
@@ -92,12 +89,11 @@ class DB_Record
             echo '[Success] Tabels restored';
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo'[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
+            echo '[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine();
             return false;
         }
 
         return true;
-
     }
 
     public function dropTabels()
@@ -139,7 +135,6 @@ class DB_Record
         $checkTime = new DateTime();
         $checkTime->setDate(2017, 06, 18);
 
-
         try {
             $this->dbc->beginTransaction();
             for ($timestamp->setDate(2017, 06,
@@ -158,7 +153,6 @@ class DB_Record
 
                 $sth->execute();
             }
-
 
             $this->dbc->commit();
         } catch (PDOException $exception) {
@@ -213,34 +207,30 @@ class DB_Record
             $record = $sth->fetchAll(PDO::FETCH_ASSOC);
 
             $this->dbc->commit();
-
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
             echo('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
         return $record;
-
     }
 
-    public function readRecordDay($yeahr, $month, $day){
+    public function readRecordDay($yeahr, $month, $day)
+    {
 
         $this->getConnection();
 
         $recorDayBeginn = new DateTime();
         $recorDayBeginn->setDate($yeahr, $month, $day);
-        $recorDayBeginn->setTime(00,00,00);
+        $recorDayBeginn->setTime(00, 00, 00);
         $queryDayBeginn = $recorDayBeginn->format('Y-m-d H:i:s');
-
-
 
         $recorddayEnd = new DateTime();
         $recorddayEnd->setDate($yeahr, $month, $day);
-        $recorddayEnd->setTime(24,60,60);
+        $recorddayEnd->setTime(24, 60, 60);
         $queryDayEnd = $recorddayEnd->format('Y-m-d H:i:s');
 
-
-        try{
+        try {
             $this->dbc->beginTransaction();
             $sth = $this->dbc->prepare
             ('SELECT
@@ -248,54 +238,37 @@ class DB_Record
                         place,
                         record,
                         comment
-                    FROM record WHERE recorddate >= "' . $queryDayBeginn . '" AND recorddate <= "' . $queryDayEnd .'"
+                    FROM record WHERE recorddate >= "' . $queryDayBeginn . '" AND recorddate <= "' . $queryDayEnd . '"
                     ');
 
             $sth->execute();
             $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(PDOException $exception){
+        } catch (PDOException $exception) {
             $this->dbc->rollBack();
-            echo ('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
+            echo('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
         return $result;
     }
 
-    public function writeRecordDay()
-    {
-        $this->getConnection();
 
-        try{
-
-            $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
-        } catch (PDOException $exception) {
-            $this->dbc->rollBack();
-            echo('Failed: ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
-            return false;
-        }
-
-        return true;
-
-    }
 
 // getting all records from one user
-    public function recordOut($user, $operator = 'forward'){
-
+    public function recordOut($user, $operator = 'forward')
+    {
 
 //  SET  @start = 1, @finish = 10;
 //        SELECT @start := 1, @finish := 10;
 
         $this->dbc = new DB_Connection();
-        $output = NULL;
+        $output = null;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try {
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
-                $sth->execute(array($user));
+                $sth->execute([$user]);
                 $u_id = $sth->fetch();
 //                echo $user.' = '.$u_id['user_id'];
 
@@ -303,12 +276,12 @@ class DB_Record
                 $sth->execute($u_id['user_id']);
                 $last = $sth->fetch(); */
 
-                if ( empty($_SESSION['counter']) || ($_SESSION['counter'] < 6 )) {
+                if (empty($_SESSION['counter']) || ($_SESSION['counter'] < 6)) {
                     $sql = 'SELECT count(record.record_id) AS counter FROM record 
                             LEFT JOIN recordbook ON record.record_id = recordbook.record 
                             WHERE user = ?';
                     $sth = $this->dbc->prepare($sql);
-                    $sth->execute(array($u_id['user_id']));
+                    $sth->execute([$u_id['user_id']]);
                     $count = $sth->fetch();
                     $_SESSION['rows'] = $count['counter'];
                     $_SESSION['counter'] = $count['counter'];
@@ -316,8 +289,7 @@ class DB_Record
                 }
                 if ($operator == 'forward') {
                     $_SESSION['counter'] = ($_SESSION['counter']) - 5;
-                }
-                elseif ($operator == 'back') {
+                } elseif ($operator == 'back') {
                     $_SESSION['counter'] = ($_SESSION['counter']) + 5;
                 }
 
@@ -328,14 +300,14 @@ class DB_Record
                 $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
                 $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
                 $sth->execute();
-              // var_dump(   $sth->debugDumpParams());
+                // var_dump(   $sth->debugDumpParams());
 
                 $output = $sth->fetchAll();
                 //while($data=$sth->fetch()){var_dump($data);}
 //var_dump($user, $u_id);
-              /*  echo '<pre>';
-                var_dump($output);
-                echo '</pre>';*/
+                /*  echo '<pre>';
+                  var_dump($output);
+                  echo '</pre>';*/
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
@@ -347,21 +319,22 @@ class DB_Record
     }
 
     // getting single record
-    public function getRecord($id){
+    public function getRecord($id)
+    {
         $this->dbc = new DB_Connection();
-        $output = NULL;
+        $output = null;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
             try {
                 $this->dbc->beginTransaction();
                 $sth = $this->dbc->prepare('SELECT * FROM record WHERE record_id = ?');
-                $sth->execute(array($id));
+                $sth->execute([$id]);
                 $output = $sth->fetch();
 
 //                var_dump($output);
-/*                echo '<pre>';
-                var_dump($sth->fetchAll());*/
+                /*                echo '<pre>';
+                                var_dump($sth->fetchAll());*/
 
                 $this->dbc->commit();
             } catch (PDOException $exception) {
@@ -373,9 +346,14 @@ class DB_Record
     }
 
 // setting or update record
-    public function saveRecord($record, $comment = NULL, $id = NULL, $user = NULL){
+    public function saveRecord(
+        $record,
+        $comment = null,
+        $id = null,
+        $user = null
+    ) {
         $this->dbc = new DB_Connection();
-        $output = NULL;
+        $output = null;
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
 
@@ -384,30 +362,27 @@ class DB_Record
                     $this->dbc->beginTransaction();
                     // getting user
                     $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
-                    $sth->execute(array($user));
+                    $sth->execute([$user]);
                     $u_id = $sth->fetch();
 
                     // setting records and parallel connection/relation with user
                     $sth = $this->dbc->prepare('INSERT INTO record (record, comment) VALUES (?, ?); 
                                                         INSERT INTO recordbook (record, user) VALUES (LAST_INSERT_ID(), ?)');
-                    $sth->execute(array($record, $comment, $u_id['user_id']));
-
-                }
-                elseif (isset($id)) {
+                    $sth->execute([$record, $comment, $u_id['user_id']]);
+                } elseif (isset($id)) {
                     $this->dbc->beginTransaction();
                     $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ? WHERE record_id = ?');
-                    $sth->execute(array($record, $comment, $id));
+                    $sth->execute([$record, $comment, $id]);
                 }
-                    $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
-                    $sth->execute(array($id));
-                    $control = $sth->fetch();
+                $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
+                $sth->execute([$id]);
+                $control = $sth->fetch();
 
 //var_dump($id, ' id', $control);
                 if ($control['record'] == $record) {
-                    $output = TRUE;
-                }
-                else {
-                    $output = FALSE;
+                    $output = true;
+                } else {
+                    $output = false;
                 }
 
                 $this->dbc->commit();
@@ -419,21 +394,18 @@ class DB_Record
         return $output;
     }
 
+    /* public function createRecordMonth($month, $year)
+     {
+         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+             $this->dbc = $this->dbc->getConnection();
 
-   /* public function createRecordMonth($month, $year)
-    {
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaktion();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
-        }
-    }*/
-
-
+             try {
+                 $this->dbc->beginTransaktion();
+             } catch (PDOException $exception) {
+                 $this->dbc->rollBack();
+                 print('Failed: ' . $exception->getMessage());
+             }
+         }
+     }*/
 
 }
