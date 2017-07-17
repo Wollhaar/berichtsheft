@@ -9,14 +9,14 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
-require_once('../../PHP/model/DBManager/DB_Record.php');
-require_once('../../PHP/model/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/DBManager/DB_Record.php');
+require_once($_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/config.php');
 $recordDBConection = new DB_Record();
 
 
 //$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
-include('html/recordbook.html');
+include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainTemplate.html");
 
 ?>
 
@@ -234,10 +234,9 @@ include('html/recordbook.html');
       </div>
     </form>
   </div>
-
 </div>
-</body>
-</html>
+
+<?php include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Partials/footer.html")?>
 
 
 

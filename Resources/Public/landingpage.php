@@ -10,15 +10,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/config.php';
 
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainTemplate.html");
+echo '<pre>';
+var_dump($_SESSION);
+echo '</pre>';
 
 ?>
 
     <div class="container" style="padding-top: 200px">
       <div class="row">
-        <form action="<?php $_SERVER['DOCUMENT_ROOT'] ?>/index.php" method="post">
+        <form action="/Resources/Public/index.php?case=login" method="post">
           <div class="col-md-4 col-md-offset-4">
             <div class="input-group-lg">
-              <input type="text" class="form-control" id="userName" placeholder="Benutzername" aria-describedby="groessen-addon1">
+              <input type="text" class="form-control" name="username" placeholder="Benutzername" aria-describedby="groessen-addon1">
             </div>
           </div>
       </div>
@@ -26,7 +29,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
       <div class="row">
         <div class="col-md-4 col-md-offset-4">
           <div class="input-group-lg">
-            <input type="password" class="form-control" placeholder="Password" aria-describedby="groessen-addon2">
+            <input type="password" class="form-control" name="password" placeholder="Password" aria-describedby="groessen-addon2">
           </div>
         </div>
       </div>
