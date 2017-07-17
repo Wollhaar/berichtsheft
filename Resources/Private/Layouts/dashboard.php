@@ -30,6 +30,7 @@ require_once '../../PHP/model/config.php';
         <div class="col-md-12 col-md-offset-11">
             <div class="profile-box" style="display: none">
                 <div class="img-box"><img src="img/img/Profilbild_elisa_meier.png" /></div>
+                <span><?php echo isset($_SESSION['user']) ? $_SESSION['user']['first_name'].' '.$_SESSION['user']['last_name'] : '<i>no user</i>'; ?></span>
                 <ul>
                     <li><span><?php if(!empty($_SESSION['user']['career_name'])){echo $_SESSION['user']['career_name'];} ?></span></li>
                     <li><a href="<?php echo RP; ?>index.php?case=messenger"><span>Nachrichten</span></a></li>
@@ -103,7 +104,7 @@ require_once '../../PHP/model/config.php';
 
                     // getting records for displaying
                     $recordOutput = array_reverse($records->recordOut($_SESSION['user']['username']), TRUE);
-var_dump($_SESSION);
+//var_dump($_SESSION,$_REQUEST);
 //                begin of output
                 foreach($recordOutput as $item => $value): ?>
                     <!--                    --><?php //var_dump($value);?>
