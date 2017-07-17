@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: exinit
- * Date: 22.06.2017
- * Time: 11:56
- */
-
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
@@ -183,10 +176,10 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
 
 <div class="container well">
   <div>
-    <form action="" method="post">
+    <form action="" method="post" class="form-horizontal">
       <div class="row">
         <div class="col-md-1 col-md-offset-1">Datum</div>
-        <div class="col-md-2">
+        <div class="col-md-2" class="form-group">
           <label for="status" class="sr-only"></label>
           <select class="form-control" id="status" name="status">
             <option id="statusOption1" value="1">Anwesend</option>
@@ -196,7 +189,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
             <option id="statusOption5" value="5">Krank</option>
           </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2 form-group">
           <label class="sr-only"></label>
           <select class="form-control" name="ort">
             <option id="placeOption1" value="1">Schule</option>
@@ -204,17 +197,18 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
             <option id="placeOption3" value="3">Überbetrieblich</option>
           </select>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1 form-group">
           <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
         </div>
       </div>
       <div class="row" id="newRecordDiv">
-        <div class="col-md-1 col-md-offset-1">
+        <div class="col-md-1 col-md-offset-1 form-group">
+          <label class="sr-only"></label>
           <button id="addRecordButton" class="form-control" value="+" type="button" onclick="addRecord();">
             +
           </button>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 form-group">
           <label class="sr-only"></label>
           <input class="form-control" id="record" name="record" type="text" value="Berichtshefteintrag">
         </div>
@@ -226,7 +220,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
           <input class="form-control" id="comment" name="comment" type="text" value="Kommentare zum Eintrag">
         </div>
       </div>
-      <div id="end"></div>
+      <div id="end" class="form-group"></div>
       <div class="row">
         <div class="col-md-12">
           <input type="submit" value="Save">
@@ -237,6 +231,7 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
 </div>
 
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Partials/footer.html")?>
+<?php include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Partials/javascriptIncludes.html")?>
 
 
 
