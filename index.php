@@ -24,19 +24,36 @@ switch ($request['case']) {
             } elseif (isset($login) && is_object($user)) {
                 $check = $user->login($login['username'], $login['password']);
             }
-            if (is_string($check)) {
-                die($check);
-            }
             if (is_object($user)) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
-                    $_SESSION['user'] = $login;
+//                   übergabe der userdaten zur session
+                    $session = new Helper();
+                    $session->startSession($check['data']);
+
+//                    need to set,  to get logged in
+                    if (isset($_REQUEST['PHPSESSID'])) {
+                        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+                    }
+
+//               setting users session: get set session_id from session, through session variable or with the userspefic set sessionname
+                    if ((isset($_SESSION['session_id']) || session_name() == $check['data']['username'].'_'.$check['data']['user_id']) && session_status() == PHP_SESSION_ACTIVE) {
+
+                        $_SESSION['user'] = $login;
+                        $_SESSION['user']['session_id'] = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : $_REQUEST[session_name()];
 //                    $_SESSION['case'] = 'case';
-                    header('location: ' . PRI_PATH . 'dashboard.php');
+
+                        header('location: ' . PRI_PATH . 'dashboard.php');
+                    }
+
                 } elseif (is_array($access)) {
                     $_SESSION['access'] = $access[0];
-                    header('location: ' . PRI_PATH . 'login.php');
                 }
+                echo '<pre>';
+                var_dump($_SESSION, $_GET, $_POST, $_REQUEST);
+                echo '</pre><br/>session status: '.session_status();
+        //      back to login, when login was not successful
+                header('location: ' . PRI_PATH . 'login.php');
             }
         }
         break;
@@ -45,7 +62,7 @@ switch ($request['case']) {
     case 'register':
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
-            header('location: ' . RP . PRI_PATH . 'register.php');
+            header('location: ' . PRI_PATH . 'register.php');
         }
 
         if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -73,11 +90,17 @@ switch ($request['case']) {
 
             // fb: feedback gets only set, after completed registration
             if ($fb['check'] === true) {
+                $session = new Helper();
+                $session->startSession($fb);
+
+//                setting users session
                 $_SESSION['user'] = $fb;
+                $_SESSION['user']['session_id'] = $_SESSION['session_id'];
+
                 header('location: ' . PRI_PATH . 'dashboard.php');
                 break;
             } else {
-                die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on david@exinit.de');
+                die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on info@report-tool.david.exinitdev.de');
             }
         } else {
             echo 'please set all fields';
@@ -113,6 +136,7 @@ switch ($request['case']) {
         header('location: '.PRI_PATH.'recordbook.php');
         break;
 
+
         // gets an single record to edit
     case 'edit':
         if (empty($_SESSION['user'])) {
@@ -124,6 +148,8 @@ switch ($request['case']) {
         $_SESSION['record_id'] = $single_record;
         header('location: '.PRI_PATH.'record.php');
         break;
+
+
 
         // for saving recordchanges and adding records
     case 'save':
@@ -144,6 +170,9 @@ switch ($request['case']) {
         header('location: '.PRI_PATH.'dashboard.php');
         break;
 
+
+
+    // logged user getting send to dashboard
     case 'logged':
         if (empty($_SESSION['user'])) {
             header('location: ' .PRI_PATH . 'login.php');
@@ -158,7 +187,7 @@ switch ($request['case']) {
 
     // immer an letzter Stelle lassen
     case 'logout':
-        session_destroy();
+        echo session_destroy();
 
     default:
         header('location: '.PRI_PATH.'main.php');
