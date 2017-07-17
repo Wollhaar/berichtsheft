@@ -234,16 +234,20 @@ function addRecord(){
     document.getElementById('end').innerHTML =
       '<div class="row" id="newRecordDiv'+ recordCount + '">' +
         '<div class="row">' +
-          '<div class="col-md-1 col-md-offset-1">' +
+          '<div class="col-md-1 col-md-offset-1 form-group">' +
+            '<label class="sr-only"></label>' +
             '<button id="delRecordButton' + recordCount +'" class="form-control" value="-" type="button" onclick="delRecord(this.id);">-</button>' +
           '</div>'+
-          '<div class="col-md-3">' +
+          '<div class="col-md-3 form-group">' +
+            '<label class="sr-only"></label>' +
             '<input class="form-control" id="record' + recordCount +'" name="record' + recordCount + '" type="text" value="Berichtshefteintrag">' +
           '</div> ' +
-          '<div class="col-md-1"> ' +
+          '<div class="col-md-1 form-group"> ' +
+            '<label class="sr-only"></label>' +
             '<input class="form-control" id="time' + recordCount +'" name="time' + recordCount + '" type="text" value="00:h 00:m">' +
           '</div> ' +
-          '<div class="col-md-4">' +
+          '<div class="col-md-4 form-group">' +
+            '<label class="sr-only"></label>' +
             '<input class="form-control" id="comment' + recordCount + '" name="comment' + recordCount + '" type="text" value="Kommentare zum Eintrag">' +
           '</div>' +
         '</div>' +
