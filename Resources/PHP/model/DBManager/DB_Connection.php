@@ -20,6 +20,7 @@ class DB_Connection extends PDO
         }
     }
 
+//    gives an active pdo object back, if none exists will be one create
     public function getConnection()
     {
         if (!isset($this->dbc) || $this->dbc === NULL) {
