@@ -53,11 +53,6 @@ class DB_Record
     {
         $this->getConnection();
         try {
-            $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('');
-
-            $sth->execute();
-
             $sth = $this->dbc->prepare('CREATE TABLE record (
             record_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             status VARCHAR(200) NULL,
