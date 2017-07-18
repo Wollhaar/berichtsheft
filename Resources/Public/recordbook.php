@@ -22,10 +22,6 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
 //    $something = $recordDBConection->readRecordDay(2017,06,05);
 //    var_dump($something);
 
-
-
-
-
 //    function displayCurrentMonth(){
 //
 //        $recordDBConection = new DB_Record();
