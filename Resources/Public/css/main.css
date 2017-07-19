@@ -1,3 +1,9 @@
+body{
+  background-image: url("../img/img/LandingPage_BG.png");
+}
+
+
+
 .recordLogo{
   font-family: 'Raleway', sans-serif;
   font-size: 25pt;
