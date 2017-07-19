@@ -226,8 +226,11 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
   </div>
 </div>
 
+<!-- Eigene JavaScripte -->
+<script src="<?php $_SERVER['DOCUMENT_ROOT']?>/Resources/Public/js/recordbook.js"></script>
+
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Partials/footer.html")?>
-<?php include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Partials/javascriptIncludes.html")?>
+
 
 
 
