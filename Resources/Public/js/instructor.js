@@ -18,8 +18,9 @@ function showIstructors(ca)
     }
 
     var jsonObject = JSON.parse(response);
-    console.log('Status: ' + status + ' xhr: ' + xhr);
-    console.log(jsonObject[0]); //Object {name: "Berdel", vorname: "Frank", role: "Nabel Instructor"}
+    console.log('Status: ' + status);
+    console.log(jsonObject[0]);
+    //Object {name: "Berdel", vorname: "Frank", role: "Nabel Instructor", location: "Betrieb", imgPath: "img/thumb/frank.jpg"}
 
     var firm = "";
     var school = "";
@@ -31,6 +32,9 @@ function showIstructors(ca)
 
     for (var i = 0; i < jsonObject.length; i++) {
 
+      //jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role']
+      document.getElementById('jumb').innerHTML = jsonObject[0]['role'];
+
       if (jsonObject[i]['location'] == 'Betrieb') {
         firmcount++;
         var head = "<div class=\"row\" id=\"firmRow\">" +
@@ -41,19 +45,19 @@ function showIstructors(ca)
               "        <form class=\"form-horizontal\">" +
               "          <div class=\"form-group\">" +
               "            <div class=\"col-md-6\">" +
-              "              <input type=\"text\" class=\"form-control\" value=" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + " readonly=\"true\">" +
+              "              <input type=\"text\" class=\"form-control inputInstructors\" value='" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + "' readonly=\"true\">" +
               "            </div>" +
-              "            <a href=\"#\" data-toggle=\"popover\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
+              "            <a href=\"#\" data-toggle=\"popover" + i + "\" data-trigger=\"focus\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
               "          </div>" +
               "        </form>";
 
         var popoverScript = "<script>" +
           "          $(document).ready(function ()" +
-          "          {\n" +
-          "            $('[data-toggle=\"popover\"]')" +
+          "          {" +
+          "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
-          "                title: \"<img src='img/img/Profilbild_Ausbilder.png'>\"," +
-          "                content: \"Lorem Ipsum\"," +
+          "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
+          "                content: \"<h4>Ausbilder</h4>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -69,15 +73,12 @@ function showIstructors(ca)
 
         if (firmcount == 1) {
           firm = head;
-//          $('#instructorBlog').append(head + form + popoverScript + endBlog);
         }
         if (i == jsonObject.length) {
           firm += endRow;
-//          $('#instructorBlog').append(endRow);
         }
         else {
           firm += form + popoverScript + endBlog
-//          $('#instructorBlog').append(form + popoverScript + endBlog);
         }
       }
       if (jsonObject[i]['location'] == 'Schule') {
@@ -90,19 +91,19 @@ function showIstructors(ca)
               "        <form class=\"form-horizontal\">" +
               "          <div class=\"form-group\">" +
               "            <div class=\"col-md-6\">" +
-              "              <input type=\"text\" class=\"form-control\" value=" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + " readonly=\"true\">" +
+              "               <input type=\"text\" class=\"form-control inputInstructors\" value='" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + "' readonly=\"true\">" +
               "            </div>" +
-              "            <a href=\"#\" data-toggle=\"popover\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
+              "            <a href=\"#\" data-toggle=\"popover" + i + "\" data-trigger=\"focus\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
               "          </div>" +
               "        </form>";
 
         var popoverScript = "<script>" +
           "          $(document).ready(function ()" +
-          "          {\n" +
-          "            $('[data-toggle=\"popover\"]')" +
+          "          {" +
+          "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
-          "                title: \"<img src='img/img/Profilbild_Ausbilder.png'>\"," +
-          "                content: \"Lorem Ipsum\"," +
+          "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
+          "                content: \"<span><h4>Ausbilder</h4></span>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -136,19 +137,19 @@ function showIstructors(ca)
               "        <form class=\"form-horizontal\">" +
               "          <div class=\"form-group\">" +
               "            <div class=\"col-md-6\">" +
-              "              <input type=\"text\" class=\"form-control\" value=" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + " readonly=\"true\">" +
+              "               <input type=\"text\" class=\"form-control inputInstructors\" value='" + jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role'] + "' readonly=\"true\">" +
               "            </div>" +
-              "            <a href=\"#\" data-toggle=\"popover\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
+              "            <a href=\"#\" data-toggle=\"popover" + i + "\" data-trigger=\"focus\"><img src=\"img/Icon/Informations-Icon.png\"></a>" +
               "          </div>" +
               "        </form>";
 
         var popoverScript = "<script>" +
           "          $(document).ready(function ()" +
-          "          {\n" +
-          "            $('[data-toggle=\"popover\"]')" +
+          "          {" +
+          "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
-          "                title: \"<img src='img/img/Profilbild_Ausbilder.png'>\"," +
-          "                content: \"Lorem Ipsum\"," +
+          "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
+          "                content: \"<h4>Ausbilder</h4>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
