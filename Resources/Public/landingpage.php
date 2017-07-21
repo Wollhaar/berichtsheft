@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: exinit
- * Date: 10.07.2017
- * Time: 09:11
- */
+
 require_once $_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/config.php';
 
 
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainTemplate.html");
+
 echo '<pre>';
 var_dump($_SESSION);
 echo '</pre>';
