@@ -283,9 +283,7 @@ class DB_Record
 // getting all records from one user
     public function recordOut($user, $operator = 'forward'){
 
-
-//  SET  @start = 1, @finish = 10;
-//        SELECT @start := 1, @finish := 10;
+//        $user = intval($user);
 
         $this->dbc = new DB_Connection();
         $output = NULL;
@@ -294,43 +292,53 @@ class DB_Record
 
             try {
                 $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
+/*                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
                 $sth->execute(array($user));
-                $u_id = $sth->fetch();
+                $u_id = $sth->fetch();*/
 //                echo $user.' = '.$u_id['user_id'];
 
                 /*$sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
                 $sth->execute($u_id['user_id']);
                 $last = $sth->fetch(); */
 
-                if ( empty($_SESSION['counter']) || ($_SESSION['counter'] < 6 )) {
-                    $sql = 'SELECT count(record.record_id) AS counter FROM record 
+
+
+                if ( empty($_SESSION[$_SESSION['user']]['counter']) || ($_SESSION[$_SESSION['user']]['counter'] < 6 )) {
+                    $sql = "SELECT count(record.record_id) AS counter FROM record 
                             LEFT JOIN recordbook ON record.record_id = recordbook.record 
-                            WHERE user = ?';
+                            WHERE recordbook.user = :user";
+//                    $sth = $this->dbc->query($sql);
                     $sth = $this->dbc->prepare($sql);
-                    $sth->execute(array($u_id['user_id']));
-                    $count = $sth->fetch();
-                    $_SESSION['rows'] = $count['counter'];
-                    $_SESSION['counter'] = $count['counter'];
+
+                    $sth->bindParam(':user', $user, PDO::PARAM_INT);
+                    $sth->execute();
+                    $count = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+/*                    echo '<pre>';
+                    var_dump($count);
+                    echo '</pre>';*/
+
+                    $_SESSION[$_SESSION['user']]['rows'] = $count[0]['counter'];
+                    $_SESSION[$_SESSION['user']]['counter'] = $count[0]['counter'];
 //                    var_dump($_SESSION);
                 }
                 if ($operator == 'forward') {
-                    $_SESSION['counter'] = ($_SESSION['counter']) - 5;
+                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] - 5;
                 }
                 elseif ($operator == 'back') {
-                    $_SESSION['counter'] = ($_SESSION['counter']) + 5;
+                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] + 5;
                 }
 
-//echo $u_id['user_id'].'->'.$_SESSION['counter'];
+//echo '<br/>'.$user.'->'.$_SESSION[$_SESSION['user']]['counter'].' = '.$count[0]['counter'].'<br/>';
                 $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
                                                       FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record 
                                                       WHERE user = ? LIMIT ?,5');
-                $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
-                $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
+                $sth->bindParam(1, $user, PDO::PARAM_STR);
+                $sth->bindParam(2, $_SESSION[$_SESSION['user']]['counter'], PDO::PARAM_INT);
                 $sth->execute();
               // var_dump(   $sth->debugDumpParams());
 
-                $output = $sth->fetchAll();
+                $output = $sth->fetchAll(PDO::FETCH_ASSOC);
                 //while($data=$sth->fetch()){var_dump($data);}
 //var_dump($user, $u_id);
               /*  echo '<pre>';
