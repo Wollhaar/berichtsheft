@@ -122,10 +122,14 @@ require_once '../../PHP/model/config.php';
                         <span><a href="<?php echo RP; ?>index.php?case=edit&id=<?php echo $value['record_id']; ?>" class="btn btn-link" id="record-link-<?php echo $value['record_id']; ?>">Editieren</a></span>
                     </div>
                 <?php endforeach; ?>
+
                     <hr/>
-                    <?php if($_SESSION[ $_SESSION['user'] ]['counter'] == $_SESSION[ $_SESSION ['user']]['rows']): ?>   <button id="btn-back" onclick="backLoadRecords('back');">Zurück</button>     <?php endif;
-                if($_SESSION[ $_SESSION['user'] ]['counter'] > 6): ?>    <button id="btn-forward" onclick="forwardLoadRecords('forward');">Weiter</button>  <?php endif; ?>
+                    <?php if($_SESSION[ $_SESSION['user'] ]['counter'] == $_SESSION[ $_SESSION ['user']]['rows']): ?>
+                        <button id="btn-back" onclick="backLoadRecords('back');">Zurück</button>     <?php endif;
+                if($_SESSION[ $_SESSION['user'] ]['counter'] > 6): ?>
+                    <button id="btn-forward" onclick="forwardLoadRecords('forward');">Weiter</button>  <?php endif; ?>
                 </div>
+
                 <!--        add new records        -->
                 <div class="add-record container">
                     <!-- form sendet zum speichern und hinzufügen der Berichte, die Daten            -->
