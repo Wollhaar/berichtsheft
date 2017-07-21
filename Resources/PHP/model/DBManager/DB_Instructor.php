@@ -1,30 +1,24 @@
 <?php
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'On');
 
-include($_SERVER['DOCUMENT_ROOT'] . '/Resources/PHP/model/DBManager/DB_Connection.php');
 
 
-class DB_Instructor
+
+class DB_Instructor extends DB_Connection
 {
-    private $dbc;
-
-    public function getConnection()
-    {
-        $this->dbc = new DB_Connection();;
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-        }
-    }
 
     public function getInstructor(){
         $this->getConnection();
+
         try {
             $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('SELECT name, vorname, role FROM recordbook.instructor');
+            $sth = $this->dbc->prepare('SELECT name, vorname, role, location, imgPath FROM recordbook.instructor');
 
             $sth->execute();
             $record = $sth->fetchAll(PDO::FETCH_ASSOC);
 
-            return $_SESSION['instructors'] = $record;
+            return $record;
 
             $this->dbc->commit();
 
