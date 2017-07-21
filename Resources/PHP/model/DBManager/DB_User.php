@@ -25,7 +25,7 @@ class DB_User
         $sql = 'SELECT * FROM User WHERE username = ?';
         $stmt = $this->dbc->prepare($sql);
         $stmt->execute(array($user));
-        $data = $stmt->fetch();
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
 //        var_dump($data);
 
         if ($data['password'] == $pw) {
