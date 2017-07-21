@@ -1,18 +1,23 @@
 <?php
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
+
+
 require_once('../DBManager/DB_Record.php');
+require_once ('../DBManager/DB_Instructor.php');
 
 class AJAXController
 {
 
     private $dbr;
+    private $dbi;
 
     private $request;
 
     public function __construct()
     {
         $this->dbr = new DB_Record();
+        $this->dbi = new DB_Instructor();
 
         if (isset($_POST['method'])) {
             $this->request = $_POST['method'];
@@ -52,6 +57,12 @@ class AJAXController
                 }
                 break;
             }
+            case 'getInstructor':{
+                echo $resultObject = json_encode($this->dbi->getInstructor());
+//                $this->debug_console($resultObject);
+
+                break;
+            }
             default: {
                 $this->debug_console("[Error] methode Post variable: " . $request);
                 return false;
@@ -79,9 +90,3 @@ class AJAXController
 }
 
 $controller = new AJAXController();
-
-
-
-
-
-
