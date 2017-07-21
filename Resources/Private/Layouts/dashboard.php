@@ -80,7 +80,7 @@ require_once '../../PHP/model/config.php';
 <div class="main">
     <div class="board col-md-12">
 <!--    check wird nur nach erfolgreicher registrierung gesetzt    -->
-        <?php if(!empty($_SESSION['user']['check']) && $_SESSION['user']['check'] === true): ?>
+        <?php if(!empty($_SESSION[$_SESSION['user']]['check']) && $_SESSION[$_SESSION['user']]['check'] === true): ?>
             <?php include_once PRI_PATH.'Partials/welcome.html'; ?>
         <?php endif; ?>
         <!--        --><?php //var_dump($_SESSION); ?>
@@ -103,29 +103,34 @@ require_once '../../PHP/model/config.php';
                     $records = new DB_Record();
 
                     // getting records for displaying
-                    $recordOutput = array_reverse($records->recordOut($_SESSION['user']['username']), TRUE);
-//var_dump($_SESSION,$_REQUEST);
+//                    echo '<br/>'.$_SESSION[$_SESSION]
+                    $recordOutput = array_reverse($records->recordOut($_SESSION[$_SESSION['user']]['user_id']), TRUE);
+
+/*                    echo '<pre>';
+                    var_dump($_SESSION,$_REQUEST, $recordOutput);
+                    echo '</pre>';*/
+
 //                begin of output
                 foreach($recordOutput as $item => $value): ?>
                     <!--                    --><?php //var_dump($value);?>
                     <div class="records">
-                        <span><?php echo $value['record_id']; ?></span>
-                        <label class="">Bericht</label><span ><?php echo $value['recorddate']; ?></span>
-                        <div class="record"><?php echo $value['records']; ?></div>
+                        <span>       <?php echo $value['record_id']; ?>      </span>
+                        <label class="">Bericht</label><span >    <?php echo $value['recorddate']; ?>      </span>
+                        <div class="record">     <?php echo $value['records']; ?>         </div>
                         <label>Kommentar</label>
-                        <div class="comment"><?php echo $value['comment']; ?></div>
+                        <div class="comment">   <?php echo $value['comment']; ?></div>
                         <span><a href="<?php echo RP; ?>index.php?case=edit&id=<?php echo $value['record_id']; ?>" class="btn btn-link" id="record-link-<?php echo $value['record_id']; ?>">Editieren</a></span>
                     </div>
                 <?php endforeach; ?>
                     <hr/>
-                    <?php if($_SESSION['counter'] == $_SESSION['rows']): ?><button id="btn-back" onclick="backLoadRecords('back');">Zurück</button><?php endif;
-                if($_SESSION['counter'] > 6): ?><button id="btn-forward" onclick="forwardLoadRecords('forward');">Weiter</button><?php endif; ?>
+                    <?php if($_SESSION[ $_SESSION['user'] ]['counter'] == $_SESSION[ $_SESSION ['user']]['rows']): ?>   <button id="btn-back" onclick="backLoadRecords('back');">Zurück</button>     <?php endif;
+                if($_SESSION[ $_SESSION['user'] ]['counter'] > 6): ?>    <button id="btn-forward" onclick="forwardLoadRecords('forward');">Weiter</button>  <?php endif; ?>
                 </div>
                 <!--        add new records        -->
                 <div class="add-record container">
                     <!-- form sendet zum speichern und hinzufügen der Berichte, die Daten            -->
                     <h3>Neuen Bericht hinzufügen:</h3>
-                    <form class="form-group" action="<?php echo RP; ?>index.php?case=save&user=<?php echo $_SESSION['user']['username']; ?>" method="post">
+                    <form class="form-group" action="<?php echo RP; ?>index.php?case=save&user=<?php echo $_SESSION[ $_SESSION['user'] ]['username']; ?>" method="post">
                         <!--                Inhalt des Berichts und das Datum        -->
                         <label class="">Bericht</label>
                         <textarea class="record" name="record"></textarea>
