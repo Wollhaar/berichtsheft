@@ -28,19 +28,24 @@ switch ($request['case']) {
                 $access = $user->checkLogin($check);
                 if ($access === TRUE) {
 //                   übergabe der userdaten zur session
-                    $session = new Helper();
-                    $session->startSession($check['data']);
-
+                    if (empty(session_id())) {
+                        $session = new Helper();
+                        $session->startSession($check['data']);
+                    }
+//var_dump($_REQUEST['PHPSESSID']);
 //                    need to set,  to get logged in
                     if (isset($_REQUEST['PHPSESSID'])) {
                         $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
                     }
 
 //               setting users session: get set session_id from session, through session variable or with the userspefic set sessionname
-                    if ((isset($_SESSION['session_id']) || session_name() == $check['data']['username'].'_'.$check['data']['user_id']) && session_status() == PHP_SESSION_ACTIVE) {
+                    if (isset($_SESSION['session_id']) && session_status() == PHP_SESSION_ACTIVE) { //  || session_name() == $check['data']['username'].'_'.$check['data']['user_id']
 
-                        $_SESSION['user'] = $login;
-                        $_SESSION['user']['session_id'] = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : $_REQUEST[session_name()];
+//              userdaten werden in die user_id in der session abgespeichert
+                        $_SESSION[$check['data']['user_id']] = $check['data'];
+                        $_SESSION['user'] = $check['data']['user_id'];
+//var_dump($_SESSION);
+//                        $_SESSION[$check['data']['user_id']]['session_id'] = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : $_REQUEST[session_name()];
 //                    $_SESSION['case'] = 'case';
 
                         header('location: ' . PRI_PATH . 'dashboard.php');
@@ -180,14 +185,16 @@ switch ($request['case']) {
         }
 
         // detletes the in register setted check
-        unset($_SESSION['user']['check']);
+        if (isset($_SESSION['user']['check'])) {
+            unset($_SESSION['user']['check']);
+        }
         header('location: '.PRI_PATH.'dashboard.php');
 
         break;
 
     // immer an letzter Stelle lassen
     case 'logout':
-        echo session_destroy();
+        session_destroy();
 
     default:
         header('location: '.PRI_PATH.'main.php');
