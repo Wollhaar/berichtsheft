@@ -1,6 +1,8 @@
 <?php
 require_once('DB_Connection.php');
 
+
+
 class DB_Record
 {
 
@@ -53,15 +55,6 @@ class DB_Record
     {
         $this->getConnection();
         try {
-            $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('CREATE TABLE recordday ( 
-            user INT UNSIGNED ZEROFILL NOT NULL , 
-            record INT NOT NULL 
-            )
-            CHARACTER SET utf8_general_ci');
-
-            $sth->execute();
-
             $sth = $this->dbc->prepare('CREATE TABLE record (
             record_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             status VARCHAR(200) NULL,
@@ -135,6 +128,7 @@ class DB_Record
         $checkTime = new DateTime();
         $checkTime->setDate(2017, 06, 18);
 
+
         try {
             $this->dbc->beginTransaction();
             for ($timestamp->setDate(2017, 06,
@@ -153,6 +147,7 @@ class DB_Record
 
                 $sth->execute();
             }
+
 
             $this->dbc->commit();
         } catch (PDOException $exception) {
@@ -207,12 +202,14 @@ class DB_Record
             $record = $sth->fetchAll(PDO::FETCH_ASSOC);
 
             $this->dbc->commit();
+
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
             echo('[Error] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
         return $record;
+
     }
 
     public function readRecordDay($yeahr, $month, $day)
@@ -224,6 +221,8 @@ class DB_Record
         $recorDayBeginn->setDate($yeahr, $month, $day);
         $recorDayBeginn->setTime(00, 00, 00);
         $queryDayBeginn = $recorDayBeginn->format('Y-m-d H:i:s');
+
+
 
         $recorddayEnd = new DateTime();
         $recorddayEnd->setDate($yeahr, $month, $day);
@@ -251,71 +250,21 @@ class DB_Record
         return $result;
     }
 
-
-
-// getting all records from one user
-    public function recordOut($user, $operator = 'forward')
+    public function writeRecordDay()
     {
+        $this->getConnection();
 
-//  SET  @start = 1, @finish = 10;
-//        SELECT @start := 1, @finish := 10;
+        try {
 
-        $this->dbc = new DB_Connection();
-        $output = null;
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-
-            try {
-                $this->dbc->beginTransaction();
-                $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
-                $sth->execute([$user]);
-                $u_id = $sth->fetch();
-//                echo $user.' = '.$u_id['user_id'];
-
-                /*$sth = $this->dbc->prepare('SELECT MAX(record_id) AS last FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record WHERE user = ?');
-                $sth->execute($u_id['user_id']);
-                $last = $sth->fetch(); */
-
-                if (empty($_SESSION['counter']) || ($_SESSION['counter'] < 6)) {
-                    $sql = 'SELECT count(record.record_id) AS counter FROM record 
-                            LEFT JOIN recordbook ON record.record_id = recordbook.record 
-                            WHERE user = ?';
-                    $sth = $this->dbc->prepare($sql);
-                    $sth->execute([$u_id['user_id']]);
-                    $count = $sth->fetch();
-                    $_SESSION['rows'] = $count['counter'];
-                    $_SESSION['counter'] = $count['counter'];
-//                    var_dump($_SESSION);
-                }
-                if ($operator == 'forward') {
-                    $_SESSION['counter'] = ($_SESSION['counter']) - 5;
-                } elseif ($operator == 'back') {
-                    $_SESSION['counter'] = ($_SESSION['counter']) + 5;
-                }
-
-//echo $u_id['user_id'].'->'.$_SESSION['counter'];
-                $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
-                                                      FROM record LEFT JOIN recordbook ON record.record_id = recordbook.record 
-                                                      WHERE user = ? LIMIT ?,5');
-                $sth->bindParam(1, $u_id['user_id'], PDO::PARAM_INT);
-                $sth->bindParam(2, $_SESSION['counter'], PDO::PARAM_INT);
-                $sth->execute();
-                // var_dump(   $sth->debugDumpParams());
-
-                $output = $sth->fetchAll();
-                //while($data=$sth->fetch()){var_dump($data);}
-//var_dump($user, $u_id);
-                /*  echo '<pre>';
-                  var_dump($output);
-                  echo '</pre>';*/
-
-                $this->dbc->commit();
-            } catch (PDOException $exception) {
-                $this->dbc->rollBack();
-                print('Failed: ' . $exception->getMessage());
-            }
+            $this->dbc->beginTransaction();
+            $sth = $this->dbc->prepare('INSERT INTO recordday(place, status, record, attachment) VALUES ()');
+        } catch (PDOException $exception) {
+            $this->dbc->rollBack();
+            echo('Failed: ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
+            return false;
         }
-        return $output;
+
+        return true;
     }
 
     // getting single record
@@ -394,18 +343,36 @@ class DB_Record
         return $output;
     }
 
-    /* public function createRecordMonth($month, $year)
-     {
-         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-             $this->dbc = $this->dbc->getConnection();
 
-             try {
-                 $this->dbc->beginTransaktion();
-             } catch (PDOException $exception) {
-                 $this->dbc->rollBack();
-                 print('Failed: ' . $exception->getMessage());
-             }
-         }
-     }*/
+   /* public function createRecordMonth($month, $year)
+    {
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
 
+            try {
+                $this->dbc->beginTransaktion();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+    }*/
+
+    public function startSession()
+    {
+
+        if (isset($_REQUEST['PHPSESSID']) || isset($_SESSION['session_id'])) {
+//            var_dump($_REQUEST, ' folgt die session', $_SESSION, 'session name', session_name());
+            if (isset($_REQUEST['PHPSESSID'])) {
+                $session_id = [$_REQUEST['PHPSESSID']];
+            } elseif (isset($_SESSION['session_id'])) {
+                $session_id = [$_SESSION['session_id']];
+            }
+            session_start($session_id);
+        } else {
+            session_start();
+            header('location: /index.php');
+        }
+        $_SESSION['session_id'] = $_REQUEST['PHPSESSID'];
+    }
 }

@@ -1,50 +1,12 @@
-html {
-    height: 100%;
-    width: 100%;
-    font-size: 100%;
+body{
+  background-image: url("../img/img/LandingPage_BG.png");
 }
 
-div.main, body {
-    width: 100%;
-    height: 100%;
-}
 
-div.main div.container {
-    width: 40rem;
-    min-height: 40rem;
-    margin: auto;
 
-    margin-top: 5rem;
-    padding: 1rem;
-    border-radius: 1rem;
-}
-
-div.form-block {
-    display: inline-block;
-}
-
-div.user-field {
-    float: right;
-    margin: 0 1rem;
-    position: relative;
-}
-
-div.user-field > span.username > a {
-    text-decoration: none;
-    color: #d5d5d5;
-
-}
-
-div.board > div.container label {
-
-}
-
-div.board > div.container textarea {
-    height: 15rem;
-    width: 30rem;
-    margin: 2rem 1rem;
-    padding: 0.5rem;
-
-    border-radius: 1rem;
-    border: 0.2rem inset;
+.recordLogo{
+  font-family: 'Raleway', sans-serif;
+  font-size: 25pt;
+  line-height: 1.42857143;
+  background: transparent;
 }
