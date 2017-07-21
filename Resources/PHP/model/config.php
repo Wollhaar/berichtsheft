@@ -9,8 +9,14 @@ define('PUB_PATH', RP.'Resources'.DS.'Public'.DS); // DIRECTORY_SEPERATOR evtll 
 define('PRI_PATH', RP.'Resources'.DS.'Private'.DS.'Layouts'.DS);
 define('MOD_PATH', RP.'Resources'.DS.'PHP'.DS.'model'.DS);
 
+$user_session = NULL;
+
+if (isset($_REQUEST['PHPSESSID'])) {
+    $user_session = $_REQUEST['PHPSESSID'];
+}
+
 $session = new Helper();
-$session->startSession(NULL, $_REQUEST[$_REQUEST['key']]);
+$session->startSession(NULL, $user_session);
 //  isset($session['user']) ? $session_user['user'] : NULL, isset($session_user) ? $session_user['session_id'] : NULL
 
 /*include_once 'DBManager/DB_Connection.php';
