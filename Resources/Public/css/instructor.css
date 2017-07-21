@@ -4,7 +4,8 @@ body {
   line-height: 1.42857143;
   color: #fff;
   background-color: #0f0f0f;
-  background-image: url("../img/img/Background_Ausbilder_Unterseite.jpg");}
+  background-image: url("../img/img/Background_Ausbilder_Unterseite.jpg");
+}
 
 .popover {
   font-family: 'Raleway', sans-serif;
@@ -14,11 +15,15 @@ body {
   background-color: #fff;
 }
 
-.popover h4{
+.popover h4 {
   background-color: #2aabd2;
 }
 
-.inputInstructors  {
+.inputInstructors {
   background-color: transparent !important;
+  color: #fff;
+}
+
+a {
   color: #fff;
 }
