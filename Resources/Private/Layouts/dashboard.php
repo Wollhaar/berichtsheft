@@ -23,7 +23,7 @@ require_once '../../PHP/model/config.php';
     <script src="<?php echo PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 
-<body style="background-image: url(img/img/uebersichts_Seite_BG.png); position: fixed;">
+<body style="background-image: url(img/img/uebersichts_Seite_BG.png); position: fixed; overflow-y: scroll">
 
 <div class="container">
     <div class="row" style="background: transparent">
@@ -133,6 +133,8 @@ require_once '../../PHP/model/config.php';
                         <span><a href="<?php echo RP; ?>index.php?case=edit&id=<?php echo $value['record_id']; ?>" class="btn btn-link" id="record-link-<?php echo $value['record_id']; ?>">Editieren</a></span>
                     </div>
                 <?php endforeach; ?>
+
+                    <div id="dump-record"><!--- output zusätzlicher records ----></div>
 
                     <hr/>
                     <?php if($_SESSION[ $_SESSION['user'] ]['counter'] == $_SESSION[ $_SESSION ['user']]['rows']): ?>
