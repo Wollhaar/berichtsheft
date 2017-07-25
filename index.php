@@ -2,9 +2,9 @@
 require_once 'Resources/PHP/model/config.php';
 
 $request = array('case' => '');
-if(isset($_POST['username']) || isset($_GET['case'])) {
+if(isset($_POST['username']) || isset($_GET['case']) || isset($_POST['load'])) {
     $request = $_REQUEST;
-//    echo 'post';
+    var_dump($_REQUEST);
 }
 elseif (empty($session) && !isset($_POST)) {
     $session = $_SESSION;
@@ -126,10 +126,10 @@ switch ($request['case']) {
     case 'getter':
         if (empty($records)) {
             $records = new DB_Record();
-            $records->recordOut($_SESSION['user']['username'], $request['load']);
+            $records->gettingRecords($_SESSION[$_SESSION['user']]['user_id'], $request['load']);
         }
         else {
-            $records->recordOut($_SESSION['user']['username'], $request['load']);
+            $records->gettingRecords($_SESSION[$_SESSION['user']]['user_id'], $request['load']);
         }
         break;
 
