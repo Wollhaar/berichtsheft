@@ -14,10 +14,88 @@ ul {
     list-style-type: none;
 }
 
+button#profile {
+    height: 4.4rem;
+    width: 6.1rem;
+}
+
+button#profile img {
+
+    width: 3rem;
+    height: 2.7rem;
+}
+
+button#profile span#username {
+    color: #EEdd88;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 1rem;
+    top: 2rem;
+    z-index: 5;
+
+
+}
+
 /* begin profile-box */
-div.profile-box::before {
+/*div.profile-box::before {
 border-collapse: collapse;
-border-top: 2rem;
+    background: none;
+    z-index: -1;
+    position: absolute;
+    top: 100%;
+    left: 80%;
+    margin-left: -10px;
+    content:'';
+    width: 0;
+    height: 0;
+    border-bottom: solid 10px #eee;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+}*/
+
+
+
+/*div#arrow {
+    display: block;
+    z-index: -1;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -10px;
+    content:'';
+    width: 0;
+    height: 0;
+    border-bottom: solid 10px #eee;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+}*/
+
+div.dropdown > div.dropdown-menu#arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;  /* left arrow slant */
+    border-right: 5px solid transparent; /* right arrow slant */
+    border-bottom: 5px solid #eee; /* bottom, add background color here */
+    font-size: 0;
+    line-height: 0;
+
+    position: absolute;
+    top: 90%;
+    left: 10%;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 0;
+    padding: 0 0;
+    margin: 0 0 0;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
 div.profile-box {
