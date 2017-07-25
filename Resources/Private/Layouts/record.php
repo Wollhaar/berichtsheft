@@ -15,52 +15,44 @@ require_once '../../PHP/model/config.php';
     <title>Berichtsheft-Tool</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo RP.PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
-    <link href="<?php echo RP.PUB_PATH; ?>css/main.css" rel="stylesheet">
+    <link href="<?php echo PUB_PATH; ?>css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo PUB_PATH; ?>css/bootstrap-theme.css" rel="stylesheet">
+    <link href="<?php echo PUB_PATH; ?>css/main.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="<?php echo RP.PUB_PATH; ?>js/bootstrap.min.js"></script>
+    <script src="<?php echo PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Berichtsheft-Tool</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li> <!-- falls man eingeloggt ist soll der homelink auf den dashboard lenken -->
-                <li><a href="<?php echo RP; ?>index.php?case=logged">Übersicht</a></li> <!-- Im Falle: 'ausgeloggt' soll der link zur Loginseite führen.  -->
-                <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Berichtsheft <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="<?php echo RP; ?>index.php?case=record">Editieren</a></li>
-                        <li><a href="#">Drucken</a></li>
-                        <li><a href="#">Kalender übersicht</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="user-field dropdown">
-                <span class="username dropdown-toggle" data-toggle="dropdown">Eingeloggt als <a href="<?php echo RP; ?>index.php?case=logged"><?php echo $_SESSION['user']['username']; ?></a></span>
-                <ul class="dropdown-menu">
-                    <li><a href="<?php echo RP; ?>index.php?case=logged">home</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=profile">Profil</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=status">Status</a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=settings">Einstellungen</a></li>
-                    <li><hr/></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=logout">Logout</a></li>
+<div class="container">
+    <div class="row" style="background: transparent">
+        <div class="col-md-12 col-md-offset-11 dropdown">
+<!--            <div class="dropdown-menu" id="arrow"></div>-->
+            <div class="profile-box dropdown-menu" style="top: 140%; background: url(img/img/Profil_Hover.png);">
+                <div class="img-box"><img src="img/img/Profilbild_elisa_meier.png" /></div>
+                <span><?php echo !empty($_SESSION['user']['username']) ? $_SESSION['user']['first_name'].' '.$_SESSION['user']['last_name'] : '<i>no user</i>'; ?></span>
+                <ul>
+                    <li><span><?php if(!empty($_SESSION['user']['career_name'])){echo $_SESSION['user']['career_name'];} ?></span></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=messenger"><span>Nachrichten</span></a></li>
+                    <li><a href="<?php echo RP; ?>index.php?case=logged"><span>Ausbilder</span></a></li>
                 </ul>
             </div>
-        </div><!--/.navbar-collapse -->
+            <button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown" id="profile" onclick="" aria-label="Links ausrichten" style="background: transparent; position:relative;">
+                <span aria-hidden="true"><img src="<?php echo PRI_PATH; ?>img/Icon/Profil_Icon.png"></span>
+                <span class="username"><?php echo empty($_SESSION['user']['username']) ? 'Elisa' : $_SESSION['user']['username']; ?></span>
+                <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+                <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
+                <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
+            </button>
+            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+                <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
+                <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
+            </button>
+        </div>
     </div>
+</div>
 </nav>
 
 <div class="main">
