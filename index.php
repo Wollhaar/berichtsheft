@@ -148,10 +148,13 @@ switch ($request['case']) {
             header('location: ' . PRI_PATH . 'login.php');
             break;
         }
-        $record =new DB_Record();
-        $single_record = $record->getRecord($request['id']);
-        $_SESSION['record_id'] = $single_record;
-        header('location: '.PRI_PATH.'record.php');
+        if (isset($request['id'])) {
+            $record = new DB_Record();
+            $single_record = $record->getRecord($request['id']);
+            $_SESSION['record_id'] = $single_record;
+            header('location: '.PRI_PATH.'record.php');
+        }
+        header('location: '.PRI_PATH.'recordbook.php');
         break;
 
 
@@ -197,7 +200,7 @@ switch ($request['case']) {
         session_destroy();
 
     default:
-        header('location: '.PRI_PATH.'main.php');
+        header('location: '.PRI_PATH.'landingpage.php');
 }
 
 
