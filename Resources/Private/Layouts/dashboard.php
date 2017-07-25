@@ -23,35 +23,37 @@ require_once '../../PHP/model/config.php';
     <script src="<?php echo PUB_PATH; ?>js/bootstrap.min.js"></script>
 </head>
 
-<body style="background-image: url(img/img/uebersichts_Seite_BG.png)">
+<body style="background-image: url(img/img/uebersichts_Seite_BG.png); position: fixed;">
 
 <div class="container">
     <div class="row" style="background: transparent">
-        <div class="col-md-12 col-md-offset-11">
-            <div class="profile-box" style="display: none">
-                <div class="img-box"><img src="img/img/Profilbild_elisa_meier.png" /></div>
-                <span><?php echo isset($_SESSION['user']) ? $_SESSION['user']['first_name'].' '.$_SESSION['user']['last_name'] : '<i>no user</i>'; ?></span>
-                <ul>
-                    <li><span><?php if(!empty($_SESSION['user']['career_name'])){echo $_SESSION['user']['career_name'];} ?></span></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=messenger"><span>Nachrichten</span></a></li>
-                    <li><a href="<?php echo RP; ?>index.php?case=logged"><span>Ausbilder</span></a></li>
-                </ul>
-            </div>
-            <button type="button" class="btn btn-default" id="profile" onclick="" aria-label="Links ausrichten" style="background: transparent">
-                <span aria-hidden="true"><img src="<?php echo PRI_PATH; ?>img/Icon/Profil_Icon.png"></span>
-                <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
-            </button>
-            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
-                <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
-                <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
-            </button>
-            <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
-                <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
-                <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
-            </button>
+      <div class="col-md-12 col-md-offset-11 dropdown">
+        <div class="dropdown-menu" id="arrow" style="min-width: 0; padding 0; border solid; border-left: 5rem transparent; border-right: 5rem transparent; border-bottom: 5rem #eee; background: none; width: 0; "></div>
+        <div class="profile-box dropdown-menu" style="top: 140%; display: none">
+          <div class="img-box"><img src="img/img/Profilbild_elisa_meier.png" /></div>
+          <span><?php echo !empty($_SESSION['user']['username']) ? $_SESSION['user']['first_name'].' '.$_SESSION['user']['last_name'] : '<i>no user</i>'; ?></span>
+          <ul>
+            <li><span><?php if(!empty($_SESSION['user']['career_name'])){echo $_SESSION['user']['career_name'];} ?></span></li>
+            <li><a href="<?php echo RP; ?>index.php?case=messenger"><span>Nachrichten</span></a></li>
+            <li><a href="<?php echo RP; ?>index.php?case=logged"><span>Ausbilder</span></a></li>
+          </ul>
         </div>
+        <button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown" id="profile" onclick="" aria-label="Links ausrichten" style="background: transparent; position:relative;">
+          <span aria-hidden="true"><img src="<?php echo PRI_PATH; ?>img/Icon/Profil_Icon.png"></span>
+          <span class="username"><?php echo empty($_SESSION['user']['username']) ? 'Elisa' : $_SESSION['user']['username']; ?></span>
+          <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
+        </button>
+        <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+          <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
+          <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
+        </button>
+        <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+          <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
+          <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
+        </button>
+      </div>
     </div>
-</div>
+  </div>
 
 <nav class="navbar navbar-default" style="background: transparent">
     <div class="container">
@@ -77,7 +79,16 @@ require_once '../../PHP/model/config.php';
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
+<!----------------------  Navbar Ende ----------------->
+
+
 <div class="main">
+    <div class="col-md-12 row">
+
+    </div>
+
+<!------------------------   dashboard ENDE    -------------------->
+    <div class="col-md-12 row">
     <div class="board col-md-12">
 <!--    check wird nur nach erfolgreicher registrierung gesetzt    -->
         <?php if(!empty($_SESSION[$_SESSION['user']]['check']) && $_SESSION[$_SESSION['user']]['check'] === true): ?>
@@ -148,7 +159,8 @@ require_once '../../PHP/model/config.php';
             <div class="calendar col-md-3">
                 <!--         ausgabe des Kalenders    -->
                 <ul class="calendar-list">
-                    <?php $days = $records->getRecordMonth(2017, 6);
+                    <?php $days = $records->getRecordMonth(2017, 7);
+                    var_dump($days);
                 foreach ($days as $day) {
                     echo '<li>'.$day['recorddate'].'</li>';
                  } ?>
@@ -156,6 +168,7 @@ require_once '../../PHP/model/config.php';
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <footer class="navbar navbar-default navbar-fixed-bottom" style="background: transparent">
@@ -168,11 +181,6 @@ require_once '../../PHP/model/config.php';
         </div>
     </div>
 <script type="text/javascript" src="<?php echo PUB_PATH; ?>js/main.js"></script>
-<script type="text/javascript">
-    $("#profile").click(function () {
-        $(".profile-box").toggle('display');
-    });
-</script>
 </footer>
 </body>
 </html>
