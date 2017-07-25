@@ -26,7 +26,7 @@ require_once '../../PHP/model/config.php';
 
 
 
-<body>
+<body style="background: url(img/img/LandingPage_BG.png)">
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
