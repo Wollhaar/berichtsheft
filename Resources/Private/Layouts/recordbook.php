@@ -20,11 +20,7 @@ include('html/recordbook.html');
 
 ?>
 
-
-<div class="container">
-    <div class="jumbotron">
-      <div class="row">
-    <?php
+ <?php
 
 //    $something = $recordDBConection->readRecordDay(2017,06,05);
 //    var_dump($something);
@@ -174,14 +170,7 @@ include('html/recordbook.html');
 
     ?>
 
-      </div>
-  </div>
-</div>
-
-<button class="bg-danger" onclick="loadCurrentMonth();">Display</button>
-
-
-<div class="container well">
+<div class="container well" style="background: transparent;">
   <div>
     <form action="" method="post">
       <div class="row">
