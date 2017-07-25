@@ -1,5 +1,5 @@
 <?php
-require_once('DB_Connection.php');
+//require_once('DB_Connection.php');
 
 
 
@@ -12,14 +12,16 @@ class DB_Record
 
     public function getConnection(){
         $this->dbc =  new DB_Connection();;
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO'))
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
             $this->dbc = $this->dbc->getConnection();
+            return $this->dbc;
+        }
     }
 
 
     public function deleteDatabase()
     {
-        $this->getConnection();
+        $this->dbc = $this->getConnection();
         try {
             $this->dbc->beginTransaction();
             $sth = $this->dbc->prepare('DROP DATABASE IF EXISTS recordbook');
@@ -172,7 +174,7 @@ class DB_Record
 
     public function getRecordMonth($yeahr, $month)
     {
-        $this->getConnection();
+        $this->dbc = $this->getConnection();
 
         if (checkdate($month, 28, $yeahr) == true) {
             $lastDayOfMonth = new DateTime();
@@ -198,14 +200,17 @@ class DB_Record
             $lastDayOfMonth = date('Y-m-d',
                 $lastDayOfMonth->getTimestamp());
         }
+        var_dump($this->dbc);
         try {
+
+//            $lastDayOfMonth = ;
 
             $this->dbc->beginTransaction();
             $sth = $this->dbc->prepare
             ('SELECT 
                         recorddate
                     FROM recordbook.record 
-                    WHERE record.recorddate <= "' . $lastDayOfMonth . '"
+                    WHERE record.recorddate <= "' . 31 . '"
                     
             ');
 
@@ -322,12 +327,8 @@ class DB_Record
                     $_SESSION[$_SESSION['user']]['counter'] = $count[0]['counter'];
 //                    var_dump($_SESSION);
                 }
-                if ($operator == 'forward') {
-                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] - 5;
-                }
-                elseif ($operator == 'back') {
-                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] + 5;
-                }
+
+
 
 //echo '<br/>'.$user.'->'.$_SESSION[$_SESSION['user']]['counter'].' = '.$count[0]['counter'].'<br/>';
                 $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, comment, recorddate 
@@ -353,6 +354,52 @@ class DB_Record
         }
         return $output;
     }
+
+
+//    getting called over AJAX
+    public function gettingRecords($user, $operator) {
+
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+
+                if ($operator == 'forward') {
+                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] - 5;
+                }
+                elseif ($operator == 'back') {
+                    $_SESSION[$_SESSION['user']]['counter'] = $_SESSION[$_SESSION['user']]['counter'] + 5;
+                }
+
+                echo '<br/>'.$user.'->'.$_SESSION[$_SESSION['user']]['counter'];
+
+                $sth = $this->dbc->prepare('SELECT record.record_id, status, place, record.record AS records, 
+                                                      comment, recorddate FROM record LEFT JOIN recordbook 
+                                                      ON record.record_id = recordbook.record WHERE user = ? LIMIT ?,5');
+                $sth->bindParam(1, $user, PDO::PARAM_STR);
+                $sth->bindParam(2, $_SESSION[$_SESSION['user']]['counter'], PDO::PARAM_INT);
+                $sth->execute();
+                // var_dump(   $sth->debugDumpParams());
+
+                $output = $sth->fetchAll(PDO::FETCH_ASSOC);
+                //while($data=$sth->fetch()){var_dump($data);}
+                //var_dump($user, $u_id);
+                /*  echo '<pre>';
+                  var_dump($output);
+                  echo '</pre>';*/
+
+                $this->dbc->commit();
+                } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
 
     // getting single record
     public function getRecord($id){
