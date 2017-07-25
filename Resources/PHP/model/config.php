@@ -4,10 +4,17 @@ error_reporting( E_ALL );
 
 //die(substr($_SERVER['DOCUMENT_ROOT'] , 29, 30).DIRECTORY_SEPARATOR);
 define('DS', DIRECTORY_SEPARATOR);
-define('RP', substr($_SERVER['DOCUMENT_ROOT'] , 29, 30).DS); // eventuelle Änderung, bei Wechsel auf anderen Server.
+define('RP', substr($_SERVER['DOCUMENT_ROOT'] , 28 , 20).DS); // eventuelle Änderung, bei Wechsel auf anderen Server.
 define('PUB_PATH', RP.'Resources'.DS.'Public'.DS); // DIRECTORY_SEPERATOR evtll gegen '/' austauschen
 define('PRI_PATH', RP.'Resources'.DS.'Private'.DS.'Layouts'.DS);
 define('MOD_PATH', RP.'Resources'.DS.'PHP'.DS.'model'.DS);
+
+// Definierung des Userstatus
+define(0, 'ADMIN');
+define(1, 'AZUBI');
+define(2, 'AUSBILDER');
+define(3, 'NOT_ACTIVE');
+
 
 $user_session = NULL;
 
