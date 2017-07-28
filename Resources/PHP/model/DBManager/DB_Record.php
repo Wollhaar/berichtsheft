@@ -450,7 +450,9 @@ class DB_Record
                 }
                 elseif (isset($id)) {
                     $this->dbc->beginTransaction();
-                    $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ? WHERE record_id = ?');
+
+                    $last_update = time();
+                    $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ?, last_update = ? WHERE record_id = ?');
                     $sth->execute(array($record, $comment, $id));
                 }
                     $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
@@ -472,6 +474,39 @@ class DB_Record
             }
         }
         return $output;
+    }
+
+
+//    get last users record
+    public function lastRecord($user) {
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'DB_Connection')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+
+                $sth = $this->dbc->prepare('SELECT record_id, recorddate FROM record WHERE record_id = (SELECT max(recordbook.record) FROM recordbook WHERE user = :user)');
+
+                $sth->bindParam(':user', $user, PDO::PARAM_STR);
+                $sth->execute();
+
+//                    $sth->debugDumpParams();
+
+                $output = $sth->fetch(PDO::FETCH_ASSOC);
+                }
+                catch (PDOException $exception) {
+                    print('Failed: ' . $exception->getMessage());
+                }
+            }
+        return $output;
+    }
+
+
+
+    public function getDate(){
+//        only date of record
     }
 
 
