@@ -1,0 +1,13 @@
+div.recordbook div.col-md-4 > div {
+    margin: 1.5rem 0;
+    border: 1rem outset #aeaeae;
+    background-color: #eeeeee;
+}
+
+div.recordbook div.col-md-4 > div {
+
+}
+
+div.recordbook div.col-md-4 > div.name-box, div.recordbook div.col-md-4 > div.time-box {
+
+}
