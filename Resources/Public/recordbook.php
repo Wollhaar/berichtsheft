@@ -4,6 +4,8 @@ ini_set('display_errors', 'On');
 
 require_once($_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/DBManager/DB_Record.php');
 require_once($_SERVER['DOCUMENT_ROOT'] .'/Resources/PHP/model/config.php');
+
+require_once ($_SERVER['DOCUMENT_ROOT'].'/Resources/PHP/model/filehandler.php');
 $recordDBConection = new DB_Record();
 
 
@@ -15,159 +17,26 @@ include ($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainT
 
 
 <div class="container">
-    <div class="jumbotron">
-      <div class="row">
-    <?php
+  <div class="row">
+    <div class="col-md-12">
+        <?php
 
-//    $something = $recordDBConection->readRecordDay(2017,06,05);
-//    var_dump($something);
+        $test = new fileHandler();
+//        $out = $test->readProfileFolder('frank0019');
+//        echo '<pre>';
+//        var_dump($out);
+//        echo '</pre>';
 
-//    function displayCurrentMonth(){
-//
-//        $recordDBConection = new DB_Record();
-//
-//        $currentTimestamp = time();
-//
-//        $currentYear = date('Y', $currentTimestamp);
-//        $currentMonth = date('m', $currentTimestamp);
-//
-//
-//        $_SESSION['recordMonth'] = $recordDBConection->getRecordMonth((string)$currentYear,(string)$currentMonth);
-//
-//        $thursday = array();
-//        array_push($thursday, '<div class="col-md-2">');
-//        array_push($thursday, '<div class="list-group">');
-//        array_push($thursday, '<button class="list-group-item">Donnerstag</button>');
-//
-//        $friday = array();
-//        array_push($friday, '<div class="col-md-2">');
-//        array_push($friday, '<div class="list-group">');
-//        array_push($friday, '<button class="list-group-item">Freitag</button>');
-//
-//        $saturday = array();
-//        array_push($saturday, '<div class="col-md-2">');
-//        array_push($saturday, '<div class="list-group">');
-//        array_push($saturday, '<button class="list-group-item">Samstag</button>');
-//
-//        $sunday = array();
-//        array_push($sunday, '<div class="col-md-2">');
-//        array_push($sunday, '<div class="list-group">');
-//        array_push($sunday, '<button class="list-group-item">Sonntag</button>');
-//
-//        $monday = array();
-//        array_push($monday, '<div class="col-md-2">');
-//        array_push($monday, '<div class="list-group">');
-//        array_push($monday, '<button class="list-group-item" onclick="displaySelectedButton();">Montag</button>');
-//
-//        $tuesday = array();
-//        array_push($tuesday, '<div class="col-md-2">');
-//        array_push($tuesday, '<div class="list-group">');
-//        array_push($tuesday, '<button class="list-group-item">Dienstag</button>');
-//
-//        $wednesday = array();
-//        array_push($wednesday, '<div class="col-md-2">');
-//        array_push($wednesday, '<div class="list-group">');
-//        array_push($wednesday, '<button class="list-group-item">Mittwoch</button>');
-//
-//        for($i=0; $i<count($_SESSION['recordMonth']); $i++){
-//
-//            $day = substr($_SESSION['recordMonth'][$i]['recorddate'], 0,10);
-//            $formatDay = DateTime::createFromFormat('Y-m-d', $day);
-//            $newFormatDay = $formatDay->format('D');
-//
-//
-//
-//            switch($newFormatDay) {
-//                case 'Thu': {
-//                    $sth = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($thursday, $sth);
-//                    break;
-//                }
-//                case 'Fri': {
-//                    $sth  = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($friday, $sth);
-//                    break;
-//                }
-//                case 'Sat': {
-//                    $sth = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($saturday, $sth);
-//                    break;
-//                }
-//                case 'Sun':{
-//                    $sth = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($sunday, $sth);
-//                    break;
-//                }
-//                case 'Mon':{
-//                    $sth = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($monday, $sth);
-//                    break;
-//                }
-//                case 'Tue':{
-//                    $sth  = '<button class="list-group-item" id="selectDay'. $i . '">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($tuesday, $sth);
-//                    break;
-//                }
-//                case 'Wed':{
-//                    $sth = '<button class="list-group-item">' . $_SESSION['recordMonth'][$i]['recorddate'] . '</button>';
-//                    array_push($wednesday, $sth);
-//                    break;
-//                }
-//
-//            }
-//
-//        }
-//
-//        array_push($thursday,'</div>');
-//        array_push($thursday,'</div>');
-//
-//        array_push($friday,'</div>');
-//        array_push($friday,'</div>');
-//
-//        array_push($saturday,'</div>');
-//        array_push($saturday,'</div>');
-//
-//        array_push($sunday,'</div>');
-//        array_push($sunday,'</div>');
-//
-//        array_push($monday,'</div>');
-//        array_push($monday,'</div>');
-//
-//        array_push($tuesday,'</div>');
-//        array_push($tuesday,'</div>');
-//
-//        array_push($wednesday,'</div>');
-//        array_push($wednesday,'</div>');
-//
-//
-//        foreach($monday AS $out){
-//            echo $out;
-//        }
-//        foreach($tuesday AS $out){
-//            echo $out;
-//        }
-//
-//        foreach($wednesday AS $out){
-//            echo $out;
-//        }
-//
-//        foreach($thursday AS $out){
-//            echo $out;
-//        }
-//
-//        foreach($friday AS $out){
-//            echo $out;
-//        }
-//    }
-//    displayCurrentMonth();
+        $test->serverControll("http://recordbook.frankb.exinitdev.de/Resources/Public/recordbook.php", "f.berdel@exinit.de");
 
-    ?>
 
-      </div>
+        ?>
+
+    </div>
   </div>
 </div>
 
-<button class="bg-danger" onclick="loadCurrentMonth();">Display</button>
+
 
 
 <div class="container well">
