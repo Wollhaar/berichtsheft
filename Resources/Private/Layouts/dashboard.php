@@ -38,19 +38,17 @@ require_once '../../PHP/model/config.php';
             <li><a href="<?php echo RP; ?>index.php?case=logged"><span>Ausbilder</span></a></li>
           </ul>
         </div>
-        <button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown" id="profile" onclick="" aria-label="Links ausrichten" style="background: transparent; position:relative;">
           <span aria-hidden="true"><img src="<?php echo PRI_PATH; ?>img/Icon/Profil_Icon.png"></span>
           <span class="username"><?php echo empty($_SESSION['user']['username']) ? 'Elisa' : $_SESSION['user']['username']; ?></span>
           <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
-        </button>
-        <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+
           <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
           <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
-        </button>
-        <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
+
+
           <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
           <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
-        </button>
+
       </div>
     </div>
   </div>
@@ -80,16 +78,39 @@ require_once '../../PHP/model/config.php';
     </div>
 </nav>
 <!----------------------  Navbar Ende ----------------->
+<?php $records = new DB_Record(); ?>
 
-
-<div class="main">
-    <div class="col-md-12 row">
+<div class="container main">
+    <div class="col-md-12 row" style="margin: 2rem 0">
 
     </div>
+    <div class="col-md-12 row" style="margin: 2rem 0">
+        <div class="col-md-6 last-record">
+            <div class="img-box" style="display: inline-block;">
+                <img src="img/img/Letzter_Beitrag_Bild.png" id="" />
+            </div>
+            <div style="display: inline-block">
+                <h3><b>Letzter Beitrag</b></h3>
+                <?php $user = isset($_SESSION[$_SESSION['user']]['user_id']) ? $_SESSION[$_SESSION['user']]['user_id'] : NULL;
+            $last_record = $records->lastRecord($user); ?>
+                <span style="font-size: 1.5rem;">Bericht:
+                <a style="text-decoration: none; color: #2acbd2" href="<?php echo RP.'index.php?case=edit&id='.$last_record['record_id']; ?>">
+                    <?php echo date('d.M Y', $last_record['recorddate']); ?></a>
+            </span>
+            </div>
+        </div>
+        <div class="col-md-6 recordbook">
+            <div class="img-box" style="display: inline-block"><img src="img/img/Zum_Editor_Bild.png" /></div>
+            <div style="display: inline-block">
+                <h3><b>Zum Editor</b></h3>
+                <span>Schreibe hier deinen <a href="<?php echo RP; ?>index.php?case=edit">Bericht</a></span>
+            </div>
+        </div>
+    </div>
+<?php ?>
 
 <!------------------------   dashboard ENDE    -------------------->
-    <div class="col-md-12 row">
-    <div class="board col-md-12">
+
 <!--    check wird nur nach erfolgreicher registrierung gesetzt    -->
         <?php if(!empty($_SESSION[$_SESSION['user']]['check']) && $_SESSION[$_SESSION['user']]['check'] === true): ?>
             <?php include_once PRI_PATH.'Partials/welcome.html'; ?>
