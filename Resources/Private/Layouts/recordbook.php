@@ -168,63 +168,102 @@ include('html/recordbook.html');
 //    }
 //    displayCurrentMonth();
 
+$records = new DB_Record();
+$user = new DB_User();
+$year = $user->getYears($_SESSION[$_SESSION['user']]['user_id']);
+if (isset($single_record)) {
+    $date = $records->getDate();
+}
+
+if(empty($_SESSION['record_id'])) {
+    if (isset($id)) {
+        $records->getRecord(Sid);
+    }
+}
+
+if (isset($_SESSION[$_SESSION['user']]['user_record'])){
+    $date = $_SESSION[$_SESSION['user']]['user_record']['recorddate'];
+}
     ?>
 
 <div class="container well" style="background: transparent;">
   <div>
-    <form action="" method="post">
-      <div class="row">
-        <div class="col-md-1 col-md-offset-1">Datum</div>
-        <div class="col-md-2">
-          <label for="status" class="sr-only"></label>
-          <select class="form-control" id="status" name="status">
-            <option id="statusOption1" value="1">Anwesend</option>
-            <option id="statusOption2" value="2">Urlaub</option>
-            <option id="statusOption3" value="3">Sonderurlaub</option>
-            <option id="statusOption4" value="4">Feiertag</option>
-            <option id="statusOption5" value="5">Krank</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="sr-only"></label>
-          <select class="form-control" name="ort">
-            <option id="placeOption1" value="1">Schule</option>
-            <option id="placeOption2" value="2">Betrieb</option>
-            <option id="placeOption3" value="3">Überbetrieblich</option>
-          </select>
-        </div>
-        <div class="col-md-1">
-          <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row" id="newRecordDiv">
-        <div class="col-md-1 col-md-offset-1">
-          <button id="addRecordButton" class="form-control" value="+" type="button" onclick="addRecord();">
-            +
-          </button>
-        </div>
-        <div class="col-md-3">
-          <label class="sr-only"></label>
-          <input class="form-control" id="record" name="record" type="text" value="Berichtshefteintrag">
-        </div>
-        <div class="col-md-1">
-          <input class="form-control" id="time" name="time" type="text" value="00:h 00:m">
+      <div class="row recordbook">
+        <div class="col-md-4">
+            <div>
+              <label for="timetype" class="sr-only">Schreibanzahl</label>
+              <select class="form-control" id="timetype" name="timetype">
+                <option value="1">täglich</option>
+                <option value="2">wöchentlich</option>
+                <option value="3">monatlich</option>
+              </select>
+            </div>
+            <div>
+              <label for="year" class="sr-only">Ausbildungsjahr</label>
+              <select class="form-control" id="year" name="year">
+                <?php if(isset($year[0])){ echo '<option value="1">erstes</option>';} ?>
+                <?php if(isset($year[1])){ echo '<option value="2">zweites</option>';} ?>
+                <?php if(isset($year[2])){ echo '<option value="3">drittes</option>';} ?>
+              </select>
+            </div>
         </div>
         <div class="col-md-4">
-          <label class="sr-only"></label>
-          <input class="form-control" id="comment" name="comment" type="text" value="Kommentare zum Eintrag">
+            <div>
+              <label class="sr-only" for="recorddate">Berichtsdatum</label>
+              <input class="form-control" id="recorddate" name="recorddate" type="date" />
+            </div>
+            <div>
+              <label class="sr-only" for="department">Berichtsdatum</label>
+              <input class="form-control" id="departemnt" name="department" type="text" placeholder="Abteilung" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="name-box" style="text-align: center">
+                <?php echo $_SESSION[$_SESSION['user']]['first_name'].' '.$_SESSION[$_SESSION['user']]['last_name']; ?>
+        </div>
+            <div class="time-box" style="text-align: center">
+                <?php if (isset($date)){ echo $date; }?>
+            </div>
         </div>
       </div>
-      <div id="end"></div>
-      <div class="row">
-        <div class="col-md-12">
-          <input type="submit" value="Save">
-        </div>
-      </div>
-    </form>
   </div>
-
 </div>
+      <div class="container" style="display: block; background: #bbb">
+          <div class="inner-box">
+              <div class="record-box" style="border: 1px solid black">
+                  <div class="work">
+                      <h3>Betrieb</h3>
+                      <p><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
+                  </div>
+                  <div class="school">
+                      <h3>Berufsschule</h3>
+                      <p ></p>
+                  </div>
+                  <div class="extern">
+                      <h3>sonstiges)</h3>
+                      <p></p>
+                  </div>
+              </div>
+              <div class="" style="border: 1px solid black">
+                  <div class="col-md-4 autograph-box">
+                      <span>Azubi/Vetreter</span>
+                      <hr style="margin-top: 3rem"/>
+                      <span>Datum, Unterschrift</span>
+                  </div>
+                  <div class="col-md-4 autograph-box" style="border: 1px solid black">
+                      <span>Ausbilder</span>
+                      <hr style="margin-top: 3rem"/>
+                      <span>Datum, Unterschrift</span>
+                  </div>
+                  <div class="col-md-4 autograph-box">
+                      <span>Berufsschule</span>
+                      <hr style="margin-top: 3rem"/>
+                      <span>Datum, Unterschrift</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+
 </body>
 </html>
 
