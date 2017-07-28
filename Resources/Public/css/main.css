@@ -157,6 +157,18 @@ div.user-field > span.username > a {
 
 }
 
+
+/* images */
+div.main div.img-box {
+width: 5rem;
+height: 5rem;
+}
+
+div.main div.img-box img {
+    width: 100%;
+    height: 100%;
+}
+
 div.board > div.container label {
 
 }
