@@ -4,7 +4,7 @@ require_once 'Resources/PHP/model/config.php';
 $request = array('case' => '');
 if(isset($_POST['username']) || isset($_GET['case']) || isset($_POST['load'])) {
     $request = $_REQUEST;
-    var_dump($_REQUEST);
+//    var_dump($_REQUEST);
 }
 elseif (empty($session) && !isset($_POST)) {
     $session = $_SESSION;
@@ -151,8 +151,10 @@ switch ($request['case']) {
         if (isset($request['id'])) {
             $record = new DB_Record();
             $single_record = $record->getRecord($request['id']);
-            $_SESSION['record_id'] = $single_record;
-            header('location: '.PRI_PATH.'record.php');
+            $_SESSION[$_SESSION['user']]['user_record'] = $single_record;
+            if (false) {
+                header('location: ' . PRI_PATH . 'record.php');
+            }
         }
         header('location: '.PRI_PATH.'recordbook.php');
         break;
