@@ -25,12 +25,15 @@
   </head>
 
 
+
+
+
   <body>
     <div class="container"  >
       <div class="row" style="background: transparent">
-        <div class="col-md-12 col-md-offset-11"> <!-- data-spy="affix" data-offset-top="0" funktioniert nicht -->
+        <div class="col-md-12 col-md-offset-11"> <!-- data-spy="affix" data-offset-top="0" funktioniert nicht    -->
           <button type="button" class="btn btn-default" aria-label="Links ausrichten">
-            <span aria-hidden="true"><a href= "/Resources/Public/index.php"><img src="/Resources/Public/img/Icon/Profil_Icon.png"></a></span>
+            <span aria-hidden="true"><a href=""><img id="profileIcon" src="/Resources/Public/img/Icon/Profil_Icon.png" onmouseover="hover(this)" onmouseout="unhover(this)"></a></span>
             <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
           </button>
           <button type="button" class="btn btn-default" aria-label="Links ausrichten">
@@ -71,3 +74,14 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
+
+    <script type="application/javascript">
+      function hover(element) {
+        element.setAttribute('src', '/Resources/Public/img/Icon/Profil_Fill_Icon.png');
+        console.log('Hover');
+        document.getElementsByClassName('btn-default').style.background = "transparent";
+      }
+      function unhover(element) {
+        element.setAttribute('src', '/Resources/Public/img/Icon/Profil_Icon.png');
+      }
+    </script>
