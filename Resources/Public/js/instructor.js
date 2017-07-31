@@ -51,13 +51,17 @@ function showIstructors(ca)
               "          </div>" +
               "        </form>";
 
+        /*
+        Evt. bessere Lösung wäre es den popoverScrpt variable mit eval() ausführen zu lassen
+         */
+
         var popoverScript = "<script>" +
           "          $(document).ready(function ()" +
           "          {" +
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<h4>Ausbilder</h4>\"," +
+          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -103,7 +107,7 @@ function showIstructors(ca)
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<span><h4>Ausbilder</h4></span>\"," +
+          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -149,7 +153,7 @@ function showIstructors(ca)
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<h4>Ausbilder</h4>\"," +
+          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
