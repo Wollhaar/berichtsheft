@@ -63,6 +63,27 @@ class AJAXController
 
                 break;
             }
+            case 'writeInstructor':{
+                $this->debug_console(var_dump($_POST));
+
+
+                if(isset($_POST['name']) && isset($_POST['vorname']) && isset($_POST['rolle'])){
+
+                    if($this->dbi->writeInstructor($_POST['name'], $_POST['vorname'], $_POST['location'], $_POST['rolle'],  $_POST['content'])== true){
+                        echo "true";
+                    }
+
+
+
+                    return true;
+
+
+                }else{
+                    $this->debug_console("[Error] SQL Statment");
+                    return false;
+                }
+//                $resultObject = json_encode($this->dbi->writeInstructor())
+            }
             default: {
                 $this->debug_console("[Error] methode Post variable: " . $request);
                 return false;
