@@ -4,6 +4,107 @@ aus der Session variable Instructor dementsprechende Instructoren ziehen
 anzahl benötigter Felder erzeugen und mit Inhalt füllen
  */
 
+
+
+function addInstructor()
+{
+
+  console.log("Funktion durchgelaufen");
+
+  var instructorForm = "<form id='instructorForm' method='post'>\n" +
+    "      <div class=\"row\">\n" +
+    "        <div class=\"col-md-4\">\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <label for=\"instructorName\">Name</label>\n" +
+    "            <input type=\"text\" class=\"form-control\" id=\"instructorName\"></input>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <label for=\"instructorVorname\">Vorname</label>\n" +
+    "            <input type=\"text\" class=\"form-control\" id=\"instructorVorname\"></input>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <label for=\"instructorRolle\">Rolle</label>\n" +
+    "            <input type=\"text\" class=\"form-control\" id=\"instructorRolle\"></input>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"col-md-4\">\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <label for=\"location\">Location</label>\n" +
+    "            <select class=\"form-control\" id=\"location\">\n" +
+    "              <option value=\"Betrieb\">Betrieb</option>\n" +
+    "              <option value=\"Schule\">Schule</option>\n" +
+    "              <option value=\"Extern\">Extern</option>\n" +
+    "            </select>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <label for=\"content\">Kurzbeschreibung</label>\n" +
+    "            <textarea class=\"form-control\" id=\"content\" rows=\"6\"></textarea>\n" +
+    "          </div>\n" +
+    "          <div class=\"form-group\">\n" +
+    "            <button type=\"submit\" class=\"btn btn-default\"  onclick=\"addDB();\">\n" +
+    "              <span class=\"glyphicon glyphicon glyphicon-ok\" aria-hidden=\"true\"></span>\n" +
+    "            </button>\n" +
+    "            <button type=\"button\" class=\"btn btn-default\" onclick=\"reseter();\">\n" +
+    "              <span class=\"glyphicon glyphicon glyphicon-remove\" aria-hidden=\"true\" ></span>\n" +
+    "            </button>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </form>"
+
+  document.getElementById("jumb").innerHTML = instructorForm;
+
+}
+
+function reseter()
+{
+  console.log("Do something");
+  var parent = document.getElementById("jumb");
+  var chield = document.getElementById('instructorForm');
+  parent.removeChild(chield);
+
+
+  var addForm = "<div class=\"row\">\n" +
+    "      <div class=\"col-md-2\">\n" +
+    "        <button type=\"button\" class=\"btn btn-default\" id=\"addInstructor\" onclick=\"addInstructor()\">\n" +
+    "          <span class=\"glyphicon glyphicon glyphicon-plus\" aria-hidden=\"true\" ></span>\n" +
+    "          <label for=\"addInstructor\">Instructor hinzufügen</label>\n" +
+    "        </button>\n" +
+    "      </div>\n" +
+    "    </div>";
+
+  document.getElementById("jumb").innerHTML = addForm;
+
+}
+
+function addDB()
+{
+
+  var URL = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
+//  var data = "method=writeInstructor";
+  var data = {
+    method: "writeInstructor",
+    name: document.getElementById('instructorName').value,
+    vorname: document.getElementById('instructorVorname').value,
+    rolle: document.getElementById('instructorRolle').value,
+    location: document.getElementById('location').value,
+    content: document.getElementById('content').value};
+  var dataType = "text";
+
+  $.post(URL, data, function (response, status, xhr) {
+    if (status != 'success') {
+      console.log("Status: " + status + " XHR: " + xhr);
+    }
+
+    console.log(response);
+
+  }, dataType)
+
+}
+
+
+
+
 function showIstructors(ca)
 {
 
@@ -18,8 +119,6 @@ function showIstructors(ca)
     }
 
     var jsonObject = JSON.parse(response);
-    console.log('Status: ' + status);
-    console.log(jsonObject[0]);
     //Object {name: "Berdel", vorname: "Frank", role: "Nabel Instructor", location: "Betrieb", imgPath: "img/thumb/frank.jpg"}
 
     var firm = "";
@@ -31,9 +130,6 @@ function showIstructors(ca)
     var extcount = 0;
 
     for (var i = 0; i < jsonObject.length; i++) {
-
-      //jsonObject[i]['name'] + jsonObject[i]['vorname'] + jsonObject[i]['role']
-      document.getElementById('jumb').innerHTML = jsonObject[0]['role'];
 
       if (jsonObject[i]['location'] == 'Betrieb') {
         firmcount++;
@@ -61,7 +157,7 @@ function showIstructors(ca)
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
+          "                content: \"<h4>Ausbilder</h4><p>" + jsonObject[i]['content'] + "</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -107,7 +203,7 @@ function showIstructors(ca)
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
+          "                 content: \"<h4>Ausbilder</h4><p>" + jsonObject[i]['content'] + "</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
@@ -153,7 +249,7 @@ function showIstructors(ca)
           "            $('[data-toggle=\"popover" + i + "\"]')" +
           "              .popover({\n" +
           "                title: \"<img src='" + jsonObject[i]['imgPath'] + "' class='img-responsive'>\"," +
-          "                content: \"<h4>Ausbilder</h4><p>zusätliche Informationen zum Ausbilder</P>\"," +
+          "                content: \"<h4>Ausbilder</h4><p>" + jsonObject[i]['content'] + "</P>\"," +
           "                placment: \"right\"," +
           "                html: true" +
           "              });" +
