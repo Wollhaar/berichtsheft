@@ -6,6 +6,8 @@ ini_set('display_errors', 'On');
 include_once $_SERVER['DOCUMENT_ROOT'] . '/Resources/PHP/model/DBManager/DB_Instructor.php';
 include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTemplate.html');
 
+
+
 ?>
 
 <link rel="stylesheet" href="css/instructor.css">
@@ -13,6 +15,17 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
 
 <div class="container">
   <div class="jumbotron" id="jumb" style="background:transparent">
+    <div class="row">
+      <div class="col-md-2">
+        <button type="button" class="btn btn-default" id="addInstructor" onclick="addInstructor()">
+          <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true" ></span>
+          <label for="addInstructor">Instructor hinzufügen</label>
+        </button>
+      </div>
+    </div>
+
+
+
     <?php
 
     ?>
