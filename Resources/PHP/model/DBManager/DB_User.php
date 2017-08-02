@@ -145,8 +145,8 @@ class DB_User
 //$time = date_format(time(),'Y, m, d');
 $time = new DateTime();
 //$date['format'] =
-                $output = date_diff($date['start_date'], $time);
-                var_dump($output);
+//                $output = date_diff($date['start_date'], $time);
+//                var_dump($output);
             }
             catch (PDOException $exception) {
                 print('Failed: ' . $exception->getMessage());
