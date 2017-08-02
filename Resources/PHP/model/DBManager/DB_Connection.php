@@ -22,7 +22,7 @@ class DB_Connection extends PDO
 
     protected $options = array('db_name' => 'recordbook');*/
 
-    private $dbc = NULL;
+    public $dbc = NULL;
 
     public function __construct()
     {

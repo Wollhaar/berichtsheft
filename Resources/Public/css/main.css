@@ -1,9 +1,12 @@
-html {
-    height: 100%;
-    width: 100%;
-    font-size: 100%;
+body{
+  background-image: url("../img/img/LandingPage_BG.png");
 }
 
+.recordLogo{
+  font-family: 'Raleway', sans-serif;
+  font-size: 25pt;
+  line-height: 1.42857143;
+  background: transparent;
 
 body {
 width: 100%;

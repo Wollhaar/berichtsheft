@@ -58,15 +58,6 @@ class DB_Record
     {
         $this->getConnection();
         try {
-            $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('CREATE TABLE recordday ( 
-            user INT UNSIGNED ZEROFILL NOT NULL , 
-            record INT NOT NULL 
-            )
-            CHARACTER SET utf8_general_ci');
-
-            $sth->execute();
-
             $sth = $this->dbc->prepare('CREATE TABLE record (
             record_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             status VARCHAR(200) NULL,
