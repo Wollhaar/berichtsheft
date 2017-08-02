@@ -88,14 +88,14 @@ require_once '../../PHP/model/config.php';
         <div class="col-md-6 last-record">
             <div class="img-box" style="display: inline-block;">
                 <img src="img/img/Letzter_Beitrag_Bild.png" id="" />
-            </div>
+                </div>
             <div style="display: inline-block">
                 <h3><b>Letzter Beitrag</b></h3>
                 <?php $user = isset($_SESSION[$_SESSION['user']]['user_id']) ? $_SESSION[$_SESSION['user']]['user_id'] : NULL;
-            $last_record = $records->lastRecord($user); ?>
+                $last_record = $records->lastRecord($user); ?>
                 <span style="font-size: 1.5rem;">Bericht:
                 <a style="text-decoration: none; color: #2acbd2" href="<?php echo RP.'index.php?case=edit&id='.$last_record['record_id']; ?>">
-                    <?php echo date('d.M Y', $last_record['recorddate']); ?></a>
+                    <?php echo date('l, d.F', strtotime($last_record['recorddate'])); ?></a>
             </span>
             </div>
         </div>
