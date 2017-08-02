@@ -175,11 +175,11 @@ if (isset($single_record)) {
     $date = $records->getDate();
 }
 
-if(empty($_SESSION['record_id'])) {
+/*if(empty($_SESSION['record_id'])) {
     if (isset($id)) {
         $records->getRecord(Sid);
     }
-}
+}*/
 
 if (isset($_SESSION[$_SESSION['user']]['user_record'])){
     $date = $_SESSION[$_SESSION['user']]['user_record']['recorddate'];
@@ -222,35 +222,35 @@ if (isset($_SESSION[$_SESSION['user']]['user_record'])){
                 <?php echo $_SESSION[$_SESSION['user']]['first_name'].' '.$_SESSION[$_SESSION['user']]['last_name']; ?>
         </div>
             <div class="time-box" style="text-align: center">
-                <?php if (isset($date)){ echo $date; }?>
+                <?php if (isset($date)){ echo date('l, jS F Y', strtotime($date));} ?>
             </div>
         </div>
       </div>
   </div>
 </div>
-      <div class="container" style="display: block; background: #bbb">
+      <div class="container" style="display: block; background: #eee">
           <div class="inner-box">
               <div class="record-box" style="border: 1px solid black">
                   <div class="work">
                       <h3>Betrieb</h3>
-                      <p><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
+                      <p class=""><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
                   </div>
                   <div class="school">
                       <h3>Berufsschule</h3>
-                      <p ></p>
+                      <p></p>
                   </div>
-                  <div class="extern">
-                      <h3>sonstiges)</h3>
+                  <div class="other">
+                      <h3>sonstiges</h3>
                       <p></p>
                   </div>
               </div>
-              <div class="" style="border: 1px solid black">
+<!--              <div class="graph">
                   <div class="col-md-4 autograph-box">
                       <span>Azubi/Vetreter</span>
-                      <hr style="margin-top: 3rem"/>
+                      <hr style="margin-top: 5rem; color: #000;"/>
                       <span>Datum, Unterschrift</span>
                   </div>
-                  <div class="col-md-4 autograph-box" style="border: 1px solid black">
+                  <div class="col-md-4 autograph-box">
                       <span>Ausbilder</span>
                       <hr style="margin-top: 3rem"/>
                       <span>Datum, Unterschrift</span>
@@ -260,10 +260,10 @@ if (isset($_SESSION[$_SESSION['user']]['user_record'])){
                       <hr style="margin-top: 3rem"/>
                       <span>Datum, Unterschrift</span>
                   </div>
-              </div>
+              </div>-->
           </div>
       </div>
-
+<script src="<?php echo PUB_PATH; ?>js/main.js"></script>
 </body>
 </html>
 
