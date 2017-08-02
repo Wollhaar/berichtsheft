@@ -430,11 +430,14 @@ class DB_Record
 // setting or update record
     public function saveRecord($record, $comment = NULL, $id = NULL, $user = NULL){
         $this->dbc = new DB_Connection();
+        $this->dbc = $this->dbc->getConnection();
         $output = NULL;
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
+
+//        only if connection is pdo start the sql-script
+        if (is_a($this->dbc, 'PDO')) {
 
             try {
+//              when $id got not transmitted, then a new record has to be created
                 if (empty($id)) {
                     $this->dbc->beginTransaction();
                     // getting user
@@ -448,16 +451,17 @@ class DB_Record
                     $sth->execute(array($record, $comment, $u_id['user_id']));
 
                 }
+//                when id is got through post set, then update record
                 elseif (isset($id)) {
                     $this->dbc->beginTransaction();
 
                     $last_update = time();
                     $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ?, last_update = ? WHERE record_id = ?');
-                    $sth->execute(array($record, $comment, $id));
+                    $sth->execute(array($record, $comment, $id, $last_update));
                 }
-                    $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
-                    $sth->execute(array($id));
-                    $control = $sth->fetch();
+                $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
+                $sth->execute(array($id));
+                $control = $sth->fetch();
 
 //var_dump($id, ' id', $control);
                 if ($control['record'] == $record) {
@@ -473,6 +477,7 @@ class DB_Record
                 print('Failed: ' . $exception->getMessage());
             }
         }
+
         return $output;
     }
 
@@ -487,7 +492,9 @@ class DB_Record
             try {
                 $this->dbc->beginTransaction();
 
-                $sth = $this->dbc->prepare('SELECT record_id, recorddate FROM record WHERE record_id = (SELECT max(recordbook.record) FROM recordbook WHERE user = :user)');
+                $sth = $this->dbc->prepare('SELECT record_id, recorddate FROM record 
+                                                      WHERE record_id = (SELECT max(recordbook.record) 
+                                                      FROM recordbook WHERE user = :user)');
 
                 $sth->bindParam(':user', $user, PDO::PARAM_STR);
                 $sth->execute();
