@@ -1,7 +1,11 @@
 div.recordbook div.col-md-4 > div {
     margin: 1.5rem 0;
-    border: 1rem outset #aeaeae;
-    background-color: #eeeeee;
+    border: 0.1rem solid #aeaeae;
+    background-color: #fff;
+    height: 2rem;
+    width: 10rem;
+
+    color: #111;
 }
 
 div.recordbook div.col-md-4 > div {
@@ -11,3 +15,57 @@ div.recordbook div.col-md-4 > div {
 div.recordbook div.col-md-4 > div.name-box, div.recordbook div.col-md-4 > div.time-box {
 
 }
+
+div.container > div.inner-box * {
+    color: #111;
+}
+
+div.container > div.inner-box > div.record-box > div h3 {
+    color: #eee;
+    background-color: #2aabd2;
+
+}
+
+div.container > div.inner-box div.record-box > div p {
+    min-height: 10rem;
+}
+
+div.inner-box > div.record-box {
+    min-height: 30rem;
+    margin: 1rem 0;
+
+}
+
+div.inner-box > div.graph, div.record-box {
+    border: solid 0.1rem;
+}
+
+div.inner-box > div.graph, div.record-box h3 {
+    margin: 0;
+    padding: 0.5rem 0;
+    text-align: center;
+}
+
+div.record-box div > textarea.text-edit {
+    height: 100%;
+    width: 100%;
+
+    margin: 0.5rem;
+    border: solid 0.1rem #d5d5d5;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    border-radius: 0.5rem;
+}
+
+div.inner-box > div.graph, div.record-box p {
+    margin: 0.5rem;
+}
+
+div.inner-box > div.graph {
+    height: 10rem;
+}
+
+div.autograph-box:nth-child(2) {
+
+}
+
