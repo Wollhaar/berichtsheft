@@ -14,17 +14,15 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
 <script src="js/instructor.js"></script>
 
 <div class="container">
-  <div class="jumbotron" id="jumb" style="background:transparent">
+  <div class="jumbotron" id="jumb"  style="background:transparent">
     <div class="row">
-      <div class="col-md-2">
-        <button type="button" class="btn btn-default" id="addInstructor" onclick="addInstructor()">
-          <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true" ></span>
-          <label for="addInstructor">Instructor hinzufügen</label>
-        </button>
+      <div id="jumbDrop" ondrop="drop(event)" ondragover="allowDrop(event)" class="col-md-6">
+        <p></p>
+      </div>
+      <div class="col-md-6">
+        <div id="edit"></div>
       </div>
     </div>
-
-
 
     <?php
 
@@ -40,11 +38,29 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
         <li role="presentation" onclick="showIstructors('Betrieb')"><a href="#">Betrieb</a></li>
         <li role="presentation" onclick="showIstructors('Schule')"><a href="#">Schule</a></li>
         <li role="presentation" onclick="showIstructors('Extern')"><a href="#">Extern</a></li>
+        <li role="presentation" onclick="addInstructor()"><span class="glyphicon glyphicon glyphicon-plus"></span></li>
       </ul>
     </div>
   </div>
 
   <div class="container" id="instructorBlog">
+
+<!--    <script>-->
+<!--      function allowDrop(ev) {-->
+<!--        ev.preventDefault();-->
+<!--      }-->
+<!---->
+<!--      function drag(ev) {-->
+<!--        ev.dataTransfer.setData("text", ev.target.id);-->
+<!--      }-->
+<!---->
+<!--      function drop(ev) {-->
+<!--        ev.preventDefault();-->
+<!--        var data = ev.dataTransfer.getData("text");-->
+<!--        ev.target.appendChild(document.getElementById(data));-->
+<!--      }-->
+<!---->
+<!--    </script>-->
 
 
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Partials/footer.html'); ?>
