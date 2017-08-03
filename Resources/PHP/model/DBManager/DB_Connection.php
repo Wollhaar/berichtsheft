@@ -4,23 +4,16 @@ class DB_Connection extends PDO
 {
     protected $host = 'dedi3098.your-server.de';
 
-    protected $user = 'davidz_5';
-
-    protected $password = 'FB9a1Kbxdpe99vCC';
-
-    protected $options = array('db_name' => 'davidz_report'/*,
-                                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-                                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION*/);
-
-//    Database: berichtsheft
-/*    protected $host = 'dedi3098.your-server.de';
-
     protected $user = 'frankb_7';
 
     protected $password = 'eB7NBTH1Xkt7Tamc';
 
-    protected $options = array('db_name' => 'recordbook');*/
+    protected $options = array('db_name' => 'recordbook'/*,
+                                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+                                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION*/);
+
+
 
     public $dbc = NULL;
 
