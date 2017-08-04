@@ -5,7 +5,7 @@
  * Date: 10.07.2017
  * Time: 09:11
  */
-require_once '../../PHP/model/config.php';
+require_once '../PHP/model/config.php';
 ?>
 
 <!DOCTYPE html>
@@ -51,11 +51,11 @@ require_once '../../PHP/model/config.php';
                     <!--<span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span>-->
                 </button>
                 <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
-                    <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/Einstellung_Icon.png"></span></a>
+                    <a href="<?php echo RP; ?>index.php?case=settings"><span aria-hidden="true"><img src="/Resources/Public/img/Icon/Einstellung_Icon.png"></span></a>
                     <!--<span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
                 </button>
                 <button type="button" class="btn btn-default" aria-label="Links ausrichten" style="background: transparent">
-                    <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Private/Layouts/img/Icon/AnmeldenAbmelden_icon" </span></a>
+                    <a href="<?php echo RP; ?>index.php?case=logout"><span aria-hidden="true"><img src="/Resources/Public/img/Icon/AnmeldenAbmelden_icon" </span></a>
                     <!--<span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span>-->
                 </button>
             </div>
