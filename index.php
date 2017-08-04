@@ -48,7 +48,7 @@ switch ($request['case']) {
 //                        $_SESSION[$check['data']['user_id']]['session_id'] = isset($_SESSION['session_id']) ? $_SESSION['session_id'] : $_REQUEST[session_name()];
 //                    $_SESSION['case'] = 'case';
 
-                        header('location: ' . PRI_PATH . 'dashboard.php');
+                        header('location: ' . PUB_PATH . 'dashboard.php');
                     }
 
                 } elseif (is_array($access)) {
@@ -58,7 +58,7 @@ switch ($request['case']) {
                 var_dump($_SESSION, $_GET, $_POST, $_REQUEST);
                 echo '</pre><br/>session status: '.session_status();
         //      back to login, when login was not successful
-                header('location: ' . PRI_PATH . 'login.php');
+                header('location: ' . PUB_PATH . 'login.php');
             }
         }
         break;
@@ -67,7 +67,7 @@ switch ($request['case']) {
     case 'register':
         if (empty($_SESSION['request']) || !isset($request['ready'])) {
             $_SESSION['request'] = $request;
-            header('location: ' . PRI_PATH . 'register.php');
+            header('location: ' . PUB_PATH . 'register.php');
         }
 
         if (isset($session) && !(isset($request['username']) && isset($request['password']) && isset($request['email']))) {
@@ -102,7 +102,7 @@ switch ($request['case']) {
                 $_SESSION['user'] = $fb;
                 $_SESSION['user']['session_id'] = $_SESSION['session_id'];
 
-                header('location: ' . PRI_PATH . 'dashboard.php');
+                header('location: ' . PUB_PATH . 'dashboard.php');
                 break;
             } else {
                 die('Sorry, something went wrong. Please try again later. If you have time, give us feedback on info@report-tool.david.exinitdev.de');
@@ -116,10 +116,10 @@ switch ($request['case']) {
     case 'profile':
 //        var_dump($_SESSION['user']);
         if (empty($_SESSION['user'])) {
-            header('location: ' . PRI_PATH . 'login.php');
+            header('location: ' . PUB_PATH . 'login.php');
             break;
         }
-        header('location: ' .  PRI_PATH . 'account.php');
+        header('location: ' .  PUB_PATH . 'account.php');
         break;
 
 // get Records through AJAX
@@ -135,17 +135,17 @@ switch ($request['case']) {
 
     case 'record':
         if (empty($_SESSION['user'])) {
-            header('location: ' .  PRI_PATH . 'login.php');
+            header('location: ' .  PUB_PATH . 'login.php');
             break;
         }
-        header('location: '.PRI_PATH.'recordbook.php');
+        header('location: '.PUB_PATH.'recordbook.php');
         break;
 
 
         // gets an single record to edit
     case 'edit':
         if (empty($_SESSION['user'])) {
-            header('location: ' . PRI_PATH . 'login.php');
+            header('location: ' . PUB_PATH . 'login.php');
             break;
         }
         if (isset($request['id'])) {
@@ -153,10 +153,10 @@ switch ($request['case']) {
             $single_record = $record->getRecord($request['id']);
             $_SESSION[$_SESSION['user']]['user_record'] = $single_record;
             if (false) {
-                header('location: ' . PRI_PATH . 'record.php');
+                header('location: ' . PUB_PATH . 'record.php');
             }
         }
-        header('location: '.PRI_PATH.'recordbook.php');
+        header('location: '.PUB_PATH.'recordbook.php');
         break;
 
 
@@ -164,20 +164,20 @@ switch ($request['case']) {
         // for saving recordchanges and adding records
     case 'save':
         if (empty($_SESSION['user'])) {
-            header('location: ' . PRI_PATH . 'login.php');
+            header('location: ' . PUB_PATH . 'login.php');
             break;
         }
         // update record
         if(isset($request['id'])) {
             $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], $request['id']);
+            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['id']);
         }
         // adding record
         elseif (isset($request['user'])) {
             $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['comment'], NULL, $request['user']);
+            $_SESSION['bool'] = $record->saveRecord($request['record'], NULL, $request['user']);
         }
-        header('location: '.PRI_PATH.'dashboard.php');
+        header('location: '.PUB_PATH.'dashboard.php');
         break;
 
 
@@ -185,7 +185,7 @@ switch ($request['case']) {
     // logged user getting send to dashboard
     case 'logged':
         if (empty($_SESSION['user'])) {
-            header('location: ' .PRI_PATH . 'login.php');
+            header('location: ' .PUB_PATH . 'login.php');
             break;
         }
 
@@ -193,7 +193,7 @@ switch ($request['case']) {
         if (isset($_SESSION['user']['check'])) {
             unset($_SESSION['user']['check']);
         }
-        header('location: '.PRI_PATH.'dashboard.php');
+        header('location: '.PUB_PATH.'dashboard.php');
 
         break;
 
@@ -202,7 +202,7 @@ switch ($request['case']) {
         session_destroy();
 
     default:
-        header('location: '.PRI_PATH.'landingpage.php');
+        header('location: '.PUB_PATH.'landingpage.php');
 }
 
 
