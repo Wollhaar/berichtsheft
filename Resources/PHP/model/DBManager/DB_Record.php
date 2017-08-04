@@ -502,6 +502,32 @@ class DB_Record
     }
 
 
+    public function getDepartments($user) {
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'DB_Connection')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+                $this->dbc->beginTransaction();
+
+                $sth = $this->dbc->prepare('SELECT department FROM record LEFT JOIN recordbook ON record.record_id = 
+                                                      recordbook.record WHERE user = :user GROUP BY record.department');
+
+                $sth->bindParam(':user', $user, PDO::PARAM_STR);
+                $sth->execute();
+
+//                    $sth->debugDumpParams();
+
+                $output = $sth->fetchAll(PDO::FETCH_ASSOC);
+            }
+            catch (PDOException $exception) {
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
 
     public function getDate(){
 //        only date of record
