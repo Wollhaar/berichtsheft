@@ -1,5 +1,5 @@
 <?php
-require_once '../../PHP/model/config.php';
+require_once '../PHP/model/config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
