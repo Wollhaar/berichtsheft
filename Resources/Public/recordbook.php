@@ -9,14 +9,14 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
-require_once('../../PHP/model/DBManager/DB_Record.php');
-require_once('../../PHP/model/config.php');
+require_once('../PHP/model/DBManager/DB_Record.php');
+require_once('../PHP/model/config.php');
 $recordDBConection = new DB_Record();
 
 
 //$_SESSION['recordMonth'] = $recordDBConection->getRecordMonth(2017, 06);
 
-include('html/recordbook.html');
+include '../Private/Layouts/html/recordbook.html';
 
 ?>
 
@@ -170,29 +170,36 @@ include('html/recordbook.html');
 
 $records = new DB_Record();
 $user = new DB_User();
-$year = $user->getYears($_SESSION[$_SESSION['user']]['user_id']);
-if (isset($single_record)) {
+$year = $user->getYearsInApprentice($_SESSION[$_SESSION['user']]['user_id']);
+ $department = $records->getDepartments($_SESSION[$_SESSION['user']]['user_id']);
+
+ $min = $user->getStart($_SESSION[$_SESSION['user']]['user_id']);
+ $max = new DateTime();
+
+ if (isset($single_record)) {
     $date = $records->getDate();
 }
 
-/*if(empty($_SESSION['record_id'])) {
-    if (isset($id)) {
-        $records->getRecord(Sid);
-    }
-}*/
+ /*if(empty($_SESSION['record_id'])) {
+     if (isset($id)) {
+         $records->getRecord(Sid);
+     }
+ }*/
 
-if (isset($_SESSION[$_SESSION['user']]['user_record'])){
+ if (isset($_SESSION[$_SESSION['user']]['user_record'])){
     $date = $_SESSION[$_SESSION['user']]['user_record']['recorddate'];
 }
-    ?>
+
+
+ ?>
 
 <div class="container well" style="background: transparent;">
   <div>
       <div class="row recordbook">
         <div class="col-md-4">
             <div>
-              <label for="timetype" class="sr-only">Schreibanzahl</label>
-              <select class="form-control" id="timetype" name="timetype">
+              <label for="recordtype" class="sr-only">Schreibanzahl</label>
+              <select class="form-control" id="recordtype" name="recordtype">
                 <option value="1">täglich</option>
                 <option value="2">wöchentlich</option>
                 <option value="3">monatlich</option>
@@ -201,20 +208,27 @@ if (isset($_SESSION[$_SESSION['user']]['user_record'])){
             <div>
               <label for="year" class="sr-only">Ausbildungsjahr</label>
               <select class="form-control" id="year" name="year">
-                <?php if(isset($year[0])){ echo '<option value="1">erstes</option>';} ?>
-                <?php if(isset($year[1])){ echo '<option value="2">zweites</option>';} ?>
-                <?php if(isset($year[2])){ echo '<option value="3">drittes</option>';} ?>
+                <?php if($year->y >= 0){ echo '<option value="0">erstes</option>';} ?>
+                <?php if($year->y >= 1){ echo '<option value="1">zweites</option>';} ?>
+                <?php if($year->y >= 2){ echo '<option value="2">drittes</option>';} ?>
               </select>
             </div>
         </div>
         <div class="col-md-4">
             <div>
               <label class="sr-only" for="recorddate">Berichtsdatum</label>
-              <input class="form-control" id="recorddate" name="recorddate" type="date" />
+              <input class="form-control" id="recorddate" name="recorddate" type="date"
+                     min="<?php echo $min['start_date']; ?>"
+                     max="<?php echo date_format($max, 'Y-m-d'); ?>"
+                     pattern="[1-2]{1}[0-9]{3}-[0-1]{1}[0-9]{1}-[0-3]{1}[0-9]{1}" />
             </div>
             <div>
-              <label class="sr-only" for="department">Berichtsdatum</label>
-              <input class="form-control" id="departemnt" name="department" type="text" placeholder="Abteilung" />
+              <label class="sr-only" for="department">Abteilung</label>
+                <select class="form-control" id="department" name="department">
+                    <?php foreach ($department as $location): ?>
+                    <option><?php echo $location['department']; ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
         </div>
         <div class="col-md-4">
@@ -231,6 +245,7 @@ if (isset($_SESSION[$_SESSION['user']]['user_record'])){
       <div class="container" style="display: block; background: #eee">
           <div class="inner-box">
               <div class="record-box" style="border: 1px solid black">
+                  <input type="hidden" id="hidden_id" value="<?php echo $_SESSION[$_SESSION['user']]['user_record']['record_id'] ?>"/>
                   <div class="work">
                       <h3>Betrieb</h3>
                       <p class=""><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
