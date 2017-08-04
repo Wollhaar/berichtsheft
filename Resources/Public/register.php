@@ -8,7 +8,7 @@ include($_SERVER['DOCUMENT_ROOT'] . "/Resources/Private/Layouts/Templates/mainTe
 
   <div class="register container">
 
-    <form method="post" action="index.php?case=register&ready=true">
+    <form method="post" action="/index.php?case=register&ready=true">
 
       <div class="form-group">
         <div class="form-block">
