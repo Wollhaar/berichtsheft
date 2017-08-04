@@ -2,8 +2,9 @@ div.recordbook div.col-md-4 > div {
     margin: 1.5rem 0;
     border: 0.1rem solid #aeaeae;
     background-color: #fff;
-    height: 2rem;
-    width: 10rem;
+    height: 3.4rem;
+    width: 20rem;
+    border-radius: 0.5rem;
 
     color: #111;
 }
