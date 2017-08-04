@@ -126,7 +126,7 @@ class DB_User
 
 
     //    get years of apprentice
-    public function getYears($user){
+    public function getStart($user){
         $this->dbc = new DB_Connection();
         $output = NULL;
         if (isset($this->dbc) || is_a($this->dbc, 'DB_Connection')) {
@@ -139,14 +139,9 @@ class DB_User
                 $sth->bindParam(':user' ,$user, PDO::PARAM_STR);
                 $sth->execute();
 
-                $date = $sth->fetch(PDO::FETCH_ASSOC);
+                $output = $sth->fetch(PDO::FETCH_ASSOC);
 
 //                    $sth->debugDumpParams();
-//$time = date_format(time(),'Y, m, d');
-$time = new DateTime();
-//$date['format'] =
-//                $output = date_diff($date['start_date'], $time);
-//                var_dump($output);
             }
             catch (PDOException $exception) {
                 print('Failed: ' . $exception->getMessage());
@@ -155,4 +150,18 @@ $time = new DateTime();
         return $output;
     }
 
+    public function getYearsInApprentice($user){
+
+        $date = $this->getStart($user);
+
+        $time = new DateTime();
+        $date['format'] = new DateTime($date['start_date']);
+        $diff = date_diff($date['format'], $time);
+
+//        if ($diff->y )
+
+//        var_dump(/*$output, */$diff);
+
+        return $diff;
+    }
 }
