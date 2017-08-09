@@ -418,6 +418,51 @@ class DB_Record
         return $output;
     }
 
+    // getting record over AJAX, with detailed parameters, without the record_id
+    public function getSpecialRecord($user, $date, $department = 'ALL'){
+        $this->dbc = new DB_Connection();
+        $output = NULL;
+        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
+            $this->dbc = $this->dbc->getConnection();
+
+            try {
+//              getting all records from this date from one user
+                if ($department == 'ALL') {
+                    $this->dbc->beginTransaction();
+                    $sth = $this->dbc->prepare('SELECT r.record_id, r.recorddate, r.record FROM record AS r 
+                                                      LEFT JOIN recordbook AS rb ON r.record_id = rb.record WHERE user = :user 
+                                                      AND date_format(r.recorddate, ' % Y -%m -%d') = :date');
+                $sth->bindParam(':user', $user, PDO::PARAM_STR);
+                $sth->bindParam(':date', $date, PDO::PARAM_STR);
+                $sth->execute();
+                $output = $sth->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+//            get one record from a specialized department
+                elseif ($department != 'ALL') {
+                    $this->dbc->beginTransaction();
+                    $sth = $this->dbc->prepare('SELECT r.record_id, r.recorddate, r.record FROM record AS r 
+                                                      LEFT JOIN recordbook AS rb ON r.record_id = rb.record WHERE user = :user 
+                                                      AND date_format(r.recorddate, ' % Y -%m -%d') = :date AND r.department = :department LIMIT 1');
+                $sth->bindParam(':user', $user, PDO::PARAM_STR);
+                $sth->bindParam(':date', $date, PDO::PARAM_STR);
+                $sth->bindParam(':department', $department, PDO::PARAM_STR);
+                $sth->execute();
+                $output = $sth->fetch(PDO::FETCH_ASSOC);
+                }
+//                var_dump($output);
+/*                echo '<pre>';
+                var_dump($sth->fetchAll());*/
+
+                $this->dbc->commit();
+            } catch (PDOException $exception) {
+                $this->dbc->rollBack();
+                print('Failed: ' . $exception->getMessage());
+            }
+        }
+        return $output;
+    }
+
 // setting or update record
     public function saveRecord($record, $comment = NULL, $id = NULL, $user = NULL){
         $this->dbc = new DB_Connection();
