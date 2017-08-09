@@ -190,7 +190,7 @@ $year = $user->getYearsInApprentice($_SESSION[$_SESSION['user']]['user_id']);
     $date = $_SESSION[$_SESSION['user']]['user_record']['recorddate'];
 }
 
-
+$user_record = $records->getSpecialRecord($_SESSION[$_SESSION['user']]['user_id'], '2017-07-07');
  ?>
 
 <div class="container well" style="background: transparent;">
@@ -245,19 +245,50 @@ $year = $user->getYearsInApprentice($_SESSION[$_SESSION['user']]['user_id']);
       <div class="container" style="display: block; background: #eee">
           <div class="inner-box">
               <div class="record-box" style="border: 1px solid black">
-                  <input type="hidden" id="hidden_id" value="<?php echo $_SESSION[$_SESSION['user']]['user_record']['record_id'] ?>"/>
-                  <div class="work">
-                      <h3>Betrieb</h3>
-                      <p class=""><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
-                  </div>
-                  <div class="school">
-                      <h3>Berufsschule</h3>
-                      <p></p>
-                  </div>
-                  <div class="other">
-                      <h3>sonstiges</h3>
-                      <p></p>
-                  </div>
+<!--                  <input type="hidden" id="hidden_id" value="--><?php //echo $_SESSION[$_SESSION['user']]['user_record']['record_id'] ?><!--"/>-->
+<!--                  <div class="work">-->
+<!--                      <h3>Betrieb</h3>-->
+<!--                      <p class="">--><?php //echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?><!--</p>-->
+<!--                  </div>-->
+<!--                  <div class="school">-->
+<!--                      <h3>Berufsschule</h3>-->
+<!--                      <p></p>-->
+<!--                  </div>-->
+<!--                  <div class="other">-->
+<!--                      <h3>sonstiges</h3>-->
+<!--                      <p></p>-->
+<!--                  </div>-->
+                  <?php if(isset($_SESSION[$_SESSION['user']]['user_record'])): ?>
+                      <input type="hidden" id="hidden_id" value="<?php echo $_SESSION[$_SESSION['user']]['user_record']['record_id'] ?>"/>
+                      <div class="random">
+                          <h3><?php echo $_SESSION[$_SESSION['user']]['user_record']['department']; ?></h3>
+                          <p class=""><?php echo $_SESSION[$_SESSION['user']]['user_record']['record']; ?></p>
+                      </div>
+                  <?php endif; ?>
+
+                  <?php if(isset($user_record)): ?>
+                      <!--              if one single record is set        -->
+                      <?php if(isset($user_record['record'])): ?>
+                          <input type="hidden" id="hidden_id" value="<?php echo $user_record['record_id']; ?>"/>
+                          <div class="one-record">
+                              <h3><?php if(isset($user_record['department'])){echo $user_record['department'];} ?></h3>
+                              <p class=""><?php if(isset($user_record['record'])){$user_record['record_id'];}
+                                  elseif($user_record[0]['record_id']){$user_record[0]['record'];} ?></p>
+                          </div>
+                      <?php endif; ?>
+
+                      <!--                 if all records of one day got set     -->
+                      <?php var_dump($user_record);
+                      if(is_array($user_record[0])): ?>
+                          <?php foreach($user_record AS $one_record): ?>
+                              <input type="hidden" id="hidden_id" value="<?php echo $user_record['record_id']; ?>" />
+                              <div class="one-record">
+                                  <h3><?php echo $one_record['department']; ?></h3>
+                                  <p><?php echo $one_record['record']; ?></p>
+                              </div>
+                          <?php endforeach; ?>
+                      <?php endif; ?>
+                  <?php endif; ?>
               </div>
 <!--              <div class="graph">
                   <div class="col-md-4 autograph-box">
