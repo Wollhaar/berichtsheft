@@ -110,7 +110,7 @@ require_once '../PHP/model/config.php';
         <div class="row">
           <div class="col-md-2 col-md-offset-4">
             <div class="input-group-lg">
-              <span><a href="">Neues Konto erstellen</a> </span>
+              <span><a href="<?php echo RP; ?>index.php?case=register">Neues Konto erstellen</a> </span>
             </div>
           </div>
           <div class="col-md-2">
