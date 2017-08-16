@@ -46,7 +46,8 @@ function addInstructor()
     "          </div>\n" +
     "        </div>\n" +
     "      </div>\n" +
-    "    </form>"
+    "    </form>";
+
 
   document.getElementById("edit").innerHTML = instructorForm;
 
@@ -54,13 +55,22 @@ function addInstructor()
 
 function reseter()
 {
-  console.log("Do something");
+
   var parent = document.getElementById('edit');
+
+  var parent2 = document.getElementById('jumbDrop');
+  var nodes = parent2.childNodes;
+  for(var i=1; i<=nodes.length; i++){
+    parent2.removeChild(nodes[i]);
+    console.log(nodes[i]);
+}
+
+
+
   var chield = document.getElementById('instructorForm');
   parent.removeChild(chield);
 
-  document.getElementById("jumb").innerHTML = addForm;
-
+//  document.getElementById("jumb").innerHTML = addForm;
 }
 
 function addDB()
@@ -106,27 +116,32 @@ function drop(ev)
   ev.target.appendChild(document.getElementById(data));
 }
 
-function updateInstructor(inputElement)
-{
+var outresp = "Nicht definiert";
 
+function getUpdateInstructor()
+{
   var url = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
   var data = {
     method: 'getSingleInstructor',
     single_id: document.getElementById('instructorId').value
-  }
+  };
   var dataType = "text";
-  $.post(url, data, function (response, status, xhr) {
-    if (status != 'success') {
-      console.log("Status: " + status + " XHR: " + xhr);
-    }
 
-    console.log(response);
-    var jsonObject = JSON.parse(response);
-    console.log(jsonObject[0]);
+  $(document).ready(function () {
+    $.post(url, data, function (response, status, xhr) {
+      if (status != 'success') {
+        console.log("Status: " + status + " XHR: " + xhr);
+        return false;
+      }
+      console.log("Response der getUpdateInstructor Funktion: " + response + "<br>" + "Typeof: " + typeof response);
+    }), dataType;
+  });
+}
 
-
-  }), dataType
-
+function updateInstructor(inputElement)
+{
+  getUpdateInstructor();
+  console.log("Response Wert nach Aufruf von updateInstruvtor Funktion: " + outresp);
 
   var string = inputElement.value;
   var splitter = string.split("\t");
@@ -134,15 +149,18 @@ function updateInstructor(inputElement)
   console.log(inputElement.parentNode.getAttributeNode('id'));
 
   var test = document.getElementById('jumbDrop');
-  if (inputElement.parentNode.getAttributeNode('id') == test.getAttributeNode('id')) {
+  if (inputElement.parentNode.getAttributeNode('id') == test.getAttributeNode(
+      'id')) {
 
     addInstructor();
 
     document.getElementById('instructorName').value = splitter[0];
     document.getElementById('instructorVorname').value = splitter[1];
     document.getElementById('instructorRolle').value = splitter[2];
-    document.getElementById('location').value = document.getElementById('location') ;
-    document.getElementById('content').value = document.getElementById('content');
+    document.getElementById('location').value = document.getElementById(
+      'location');
+    document.getElementById('content').value = document.getElementById(
+      'content');
 //    document.getElementById('imgPath').value = $() ;
 
     document.getElementById('submitB').setAttribute("onclick", "transmit()");

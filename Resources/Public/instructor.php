@@ -16,6 +16,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
 <div class="container">
   <div class="jumbotron" id="jumb"  style="background:transparent">
     <div class="row">
+      <p>Zu bearbeitenden Ausbilder per D&D in das untere Feld ziehen</p>
       <div id="jumbDrop" ondrop="drop(event)" ondragover="allowDrop(event)" class="col-md-6">
         <p></p>
       </div>
@@ -45,22 +46,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
 
   <div class="container" id="instructorBlog">
 
-<!--    <script>-->
-<!--      function allowDrop(ev) {-->
-<!--        ev.preventDefault();-->
-<!--      }-->
-<!---->
-<!--      function drag(ev) {-->
-<!--        ev.dataTransfer.setData("text", ev.target.id);-->
-<!--      }-->
-<!---->
-<!--      function drop(ev) {-->
-<!--        ev.preventDefault();-->
-<!--        var data = ev.dataTransfer.getData("text");-->
-<!--        ev.target.appendChild(document.getElementById(data));-->
-<!--      }-->
-<!---->
-<!--    </script>-->
+
 
 
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Partials/footer.html'); ?>
