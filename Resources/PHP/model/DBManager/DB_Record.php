@@ -431,7 +431,7 @@ class DB_Record
                     $this->dbc->beginTransaction();
                     $sth = $this->dbc->prepare('SELECT r.record_id, r.recorddate, r.record FROM record AS r 
                                                       LEFT JOIN recordbook AS rb ON r.record_id = rb.record WHERE user = :user 
-                                                      AND date_format(r.recorddate, ' % Y -%m -%d') = :date');
+                                                      AND date_format(r.recorddate, \%Y - \%m -\%d) = :date');
                 $sth->bindParam(':user', $user, PDO::PARAM_STR);
                 $sth->bindParam(':date', $date, PDO::PARAM_STR);
                 $sth->execute();
@@ -443,7 +443,7 @@ class DB_Record
                     $this->dbc->beginTransaction();
                     $sth = $this->dbc->prepare('SELECT r.record_id, r.recorddate, r.record FROM record AS r 
                                                       LEFT JOIN recordbook AS rb ON r.record_id = rb.record WHERE user = :user 
-                                                      AND date_format(r.recorddate, ' % Y -%m -%d') = :date AND r.department = :department LIMIT 1');
+                                                      AND date_format(r.recorddate, \%Y - \%m - \%d) = :date AND r.department = :department LIMIT 1');
                 $sth->bindParam(':user', $user, PDO::PARAM_STR);
                 $sth->bindParam(':date', $date, PDO::PARAM_STR);
                 $sth->bindParam(':department', $department, PDO::PARAM_STR);
@@ -464,7 +464,7 @@ class DB_Record
     }
 
 // setting or update record
-    public function saveRecord($record, $comment = NULL, $id = NULL, $user = NULL){
+    public function saveRecord($record, $id = NULL, $user = NULL){
         $this->dbc = new DB_Connection();
         $this->dbc = $this->dbc->getConnection();
         $output = NULL;
@@ -476,30 +476,37 @@ class DB_Record
 //              when $id got not transmitted, then a new record has to be created
                 if (empty($id)) {
                     $this->dbc->beginTransaction();
-                    // getting user
-                    $sth = $this->dbc->prepare('SELECT user_id FROM User WHERE username = ?');
-                    $sth->execute(array($user));
-                    $u_id = $sth->fetch();
 
                     // setting records and parallel connection/relation with user
-                    $sth = $this->dbc->prepare('INSERT INTO record (record, comment) VALUES (?, ?); 
-                                                        INSERT INTO recordbook (record, user) VALUES (LAST_INSERT_ID(), ?)');
-                    $sth->execute(array($record, $comment, $u_id['user_id']));
+                    $sth = $this->dbc->prepare('INSERT INTO record (record) VALUES (:record); 
+                                                        INSERT INTO recordbook (record, user) VALUES (LAST_INSERT_ID(), :user)');
+                    $sth->bindParam(':record', $record, PDO::PARAM_STR);
+                    $sth->bindParam(':user', $user, PDO::PARAM_STR);
+                    $sth->execute();
 
+                    $bool = $sth->fetch();
                 }
-//                when id is got through post set, then update record
+//                when id got transmit through post, then update record
                 elseif (isset($id)) {
                     $this->dbc->beginTransaction();
 
-                    $last_update = time();
-                    $sth = $this->dbc->prepare('UPDATE record SET record = ?, comment = ?, last_update = ? WHERE record_id = ?');
-                    $sth->execute(array($record, $comment, $id, $last_update));
+                    $last_update = date('Y-m-d H:i:s');
+                    // updating record with current time for last updated
+                    $sth = $this->dbc->prepare('UPDATE record SET record = :record, last_update = :update WHERE record_id = :record_id');
+                    $sth->bindParam(':record', $record, PDO::PARAM_STR);
+                    $sth->bindValue(':update', $last_update, PDO::ATTR_TIMEOUT);
+                    $sth->bindParam(':record_id', $id, PDO::PARAM_STR);
+                    $sth->execute();
+
+                    $bool = $sth->fetch();
                 }
-                $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = ?');
-                $sth->execute(array($id));
+                $sth = $this->dbc->prepare('SELECT record FROM record WHERE record_id = :record_id');
+                $sth->bindParam(':record_id', $id, PDO::PARAM_STR);
+                $sth->execute();
                 $control = $sth->fetch();
 
-//var_dump($id, ' id', $control);
+
+var_dump($id, ' id', $control, $bool);
                 if ($control['record'] == $record) {
                     $output = TRUE;
                 }
