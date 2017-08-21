@@ -57,6 +57,33 @@ class AJAXController
                 }
                 break;
             }
+
+            case 'getSpecialRecord':
+                $request = $_POST;
+
+                $record = $this->dbr->getSpecialRecord($request['user'], $request['date'], $request['department']);
+                return $record;
+                die('ups');
+
+            // for saving recordchanges and adding records
+            case 'save':
+                $request = $_POST;
+                // update record
+                if(isset($request['id'])) {
+                    $bool = $this->dbr->saveRecord($request['record'], $request['id']);
+                }
+                // adding record
+                elseif (isset($request['user'])) {
+                    $bool = $this->dbr->saveRecord($request['record'], NULL, $request['user']);
+                }
+                else {
+                    echo false;
+                    break;
+                }
+                echo 'DB_Output: '.$bool;
+                break;
+
+
             case 'getInstructor':{
                 echo $resultObject = json_encode($this->dbi->getInstructor());
 //                $this->debug_console($resultObject);
