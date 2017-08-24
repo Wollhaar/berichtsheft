@@ -51,6 +51,7 @@ input[id="instructorId"]{
 #instructorForm{
   visibility: visible;
   align-content: center;
+  margin-top: 40px;
 }
 
 .panelInstructor{
@@ -60,3 +61,21 @@ input[id="instructorId"]{
 
 }
 
+
+.btn-instructor{
+  /*background: transparent;*/
+  border: solid 1px;
+  border-color: #fff;
+  margin-left: 2px;
+  margin-bottom: 4px;
+  margin-right: 2px;
+}
+
+.btn-instructor:hover{
+  color: #2e6da4;
+}
+
+.btn-instructor:focus{
+  outline-color: #3c3c3c;
+  color: #fff;
+}
