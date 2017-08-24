@@ -14,19 +14,34 @@ $instructorSchool = $instructorDB->getSchool();
 $instructorExtern = $instructorDB->getExtern();
 
 $instructorView = new instructorView();
-$instructorView->loadDefaultPage();
+
 
 if (isset($_GET['click'])) {
     switch ($_GET['click']) {
         case 'enterprice': {
-            $instructorView->render($instructorView, $instructorEnterprise);
+            $instructorView->render($instructorEnterprise, $_GET['click']);
+            break;
+        }
+        case 'school':{
+            $instructorView->render($instructorSchool, $_GET['click']);
+            break;
+        }
+        case 'extern':{
+            $instructorView->render($instructorExtern, $_GET['click']);
+            break;
+        }
+        case 'add':{
+            $instructorView->render($instructorExtern, $_GET['click']);
             break;
         }
         default: {
-            $instructorView->loadDefaultPage();
+            $instructorView->loadDefaultPage($instructorView);
+//            $instructorView->printSide($instructorView);
         }
     }
-}
+}else
+    $instructorView->loadDefaultPage();
+
 
 
 
