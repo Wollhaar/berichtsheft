@@ -4,7 +4,9 @@ body {
   line-height: 1.42857143;
   color: #fff;
   background-color: #0f0f0f;
-  background-image: url("../img/img/Background_Ausbilder_Unterseite.jpg");}
+  background-image: url("../img/img/Background_Ausbilder_Unterseite.jpg");
+
+}
 
 option{
   background-color: #242c2e;
@@ -18,8 +20,6 @@ li[role="presentation"]{
   background-color: transparent;
   color: #fff;
 }
-
-
 
 .popover {
   font-family: 'Raleway', sans-serif;
@@ -46,5 +46,17 @@ input[id="instructorId"]{
   border: solid 1px;
   border-color: #fff;
   min-height: 140px;
+}
+
+#instructorForm{
+  visibility: visible;
+  align-content: center;
+}
+
+.panelInstructor{
+  background-color: transparent;
+  background: transparent;
+  /*overflow: auto;*/
+
 }
 

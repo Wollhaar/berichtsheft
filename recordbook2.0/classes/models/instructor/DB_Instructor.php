@@ -2,25 +2,119 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/Resources/PHP/model/DBManager/DB_Connection.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/classes/models/DBManager/DB_Connection.php');
 
 class DB_Instructor extends DB_Connection
 {
 
-    public function getInstructor()
+    private $school;
+    private $extern;
+    private $enterprise;
+
+    /**
+     * @return mixed
+     */
+    public function getSchool()
+    {
+        return $this->school;
+    }
+
+    /**
+     * @param mixed $school
+     */
+    public function setSchool($school)
+    {
+        $this->school = $school;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtern()
+    {
+        return $this->extern;
+    }
+
+    /**
+     * @param mixed $extern
+     */
+    public function setExtern($extern)
+    {
+        $this->extern = $extern;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnterprise()
+    {
+        return $this->enterprise;
+    }
+
+    /**
+     * @param mixed $enterprise
+     */
+    public function setEnterprise($enterprise)
+    {
+        $this->enterprise = $enterprise;
+    }
+
+    public function __construct(){
+        $this->getInstructor('Betrieb');
+        $this->getInstructor('Extern');
+        $this->getInstructor('Schule');
+
+    }
+
+    public function getInstructor($location)
     {
         $this->getConnection();
 
         try {
             $this->dbc->beginTransaction();
-            $sth = $this->dbc->prepare('SELECT instructor_id, name, vorname, role, location, imgPath, content FROM recordbook.instructor');
+//            $sth = $this->dbc->prepare('SELECT instructor_id, name, vorname, role, location, imgPath, content FROM recordbook.instructor');
+
+            $sth = $this->dbc->prepare('SELECT 
+                                              instructor_id, 
+                                              name, vorname, 
+                                              role, 
+                                              location, 
+                                              imgPath, 
+                                              content 
+                                              FROM recordbook.instructor WHERE location=?');
+
+            $sth->bindParam(1, $location, PDO::PARAM_STR);
 
             $sth->execute();
-            $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+            switch ($location){
+                case 'Betrieb':{
+                    $this->setEnterprise($sth->fetchAll(PDO::FETCH_ASSOC));
+                    break;
+                }
+                case 'Schule':{
+                    $this->setSchool($sth->fetchAll(PDO::FETCH_ASSOC));
+                    break;
+                }
+                case 'Extern':{
+                    $this->setExtern($sth->fetchAll(PDO::FETCH_ASSOC));
+                    break;
+                }
+                default:{
+                    echo "Fehler bei paramterübergabe in getInstructor() funktion";
+                    return false;
 
-            return $record;
+                }
+            }
 
+//            $record = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+//            return $record;
             $this->dbc->commit();
+            $this->dbc = NULL;
+            return true;
+
+
+//
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
             echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
@@ -47,8 +141,6 @@ class DB_Instructor extends DB_Connection
             $this->dbc->commit();
 
             return $record;
-
-
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
             echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
@@ -90,6 +182,9 @@ class DB_Instructor extends DB_Connection
             return false;
         }
     }
+
+//updateInstructor ist noch Fehlerhaft da nicht berücksichtigt wird das vorhandene einträge die nicht überschrieben werden sollen
+//mit Null überschrieben werden
 
     public function updateInstructor(
         $instructor_id,

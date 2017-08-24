@@ -4,9 +4,15 @@ aus der Session variable Instructor dementsprechende Instructoren ziehen
 anzahl benötigter Felder erzeugen und mit Inhalt füllen
  */
 
+
+
+/*
+  Function die ein Formular in die aktuelle Seite einsetzt um:
+    neue Instructoren zu erzeugen
+    vorhanden Instructorn zu editieren
+ */
 function addInstructor()
 {
-
   var instructorForm = "<form id='instructorForm' method='post'>\n" +
     "      <div class=\"row\">\n" +
     "        <div class=\"col-md-4\">\n" +
@@ -48,11 +54,15 @@ function addInstructor()
     "      </div>\n" +
     "    </form>";
 
-
   document.getElementById("edit").innerHTML = instructorForm;
 
 }
 
+
+
+/*
+  Funktion stellt den ursprungszustand der Seite wieder her
+ */
 function reseter()
 {
 
@@ -60,24 +70,24 @@ function reseter()
 
   var parent2 = document.getElementById('jumbDrop');
   var nodes = parent2.childNodes;
-  for(var i=1; i<=nodes.length; i++){
-    parent2.removeChild(nodes[i]);
+  for (var i = 1; i <= nodes.length; i++) {
     console.log(nodes[i]);
-}
+    parent2.removeChild(nodes[i]);
 
-
-
+  }
   var chield = document.getElementById('instructorForm');
   parent.removeChild(chield);
-
-//  document.getElementById("jumb").innerHTML = addForm;
 }
 
+
+
+/*
+  übermittelt Inhalte der Formularfelder und den Aufruf zum Schreiben in die Instruktor Datenbank
+  via Ajax
+ */
 function addDB()
 {
-
   var URL = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
-//  var data = "method=writeInstructor";
   var data = {
     method: "writeInstructor",
     name: document.getElementById('instructorName').value,
@@ -92,21 +102,32 @@ function addDB()
     if (status != 'success') {
       console.log("Status: " + status + " XHR: " + xhr);
     }
-
     console.log(response);
-
   }, dataType)
-
 }
 
+
+
+/*
+    Funktioen für die Drag&Drop input Felder
+    function allowDrop -> verhindert das die Daten des zu draggenden Objekts als link behandelt werden
+    function drag -> setzt den zu übermttelnden Datentype und den Inhalt des "gedraggten" Elements hier die id des elemts
+    function drop -> verhindert das Standartverhalten für drop elemente
+                      zieht sich die Informationen des "gedraggten" elements hier die id des gedraggten elments
+                      fügt an das drop element das elemnt mit der gedraggten id an
+ */
 function allowDrop(ev)
 {
   ev.preventDefault();
 }
 
+
 function drag(ev)
 {
   ev.dataTransfer.setData("text", ev.target.id);
+  var strLength = ev.target.id.length;
+  var popoverId = ev.target.id.slice(strLength-1, strLength);
+
 }
 
 function drop(ev)
@@ -115,6 +136,11 @@ function drop(ev)
   var data = ev.dataTransfer.getData("text");
   ev.target.appendChild(document.getElementById(data));
 }
+
+//-------------------------------------------------------------------------------
+
+
+
 
 var outresp = "Nicht definiert";
 
@@ -157,12 +183,8 @@ function updateInstructor(inputElement)
     document.getElementById('instructorName').value = splitter[0];
     document.getElementById('instructorVorname').value = splitter[1];
     document.getElementById('instructorRolle').value = splitter[2];
-    document.getElementById('location').value = document.getElementById(
-      'location');
-    document.getElementById('content').value = document.getElementById(
-      'content');
-//    document.getElementById('imgPath').value = $() ;
-
+    document.getElementById('location').value = document.getElementById('location');
+    document.getElementById('content').value = document.getElementById('content');
     document.getElementById('submitB').setAttribute("onclick", "transmit()");
   }
 
@@ -193,14 +215,19 @@ function transmit()
       reseter();
       console.log(jsonObject);
     }
-
   }), dataType;
 
 }
 
+
+
+/*
+  lädt alle informationen aus der Instructor Datenbank und weist anhand des 'location' elemnts
+  den instructoren ihre passenden html container zu
+  durch den übergebenen Paramter wird festgelegt welche der container im Frontend angezeigt wird
+ */
 function showIstructors(ca)
 {
-
   var URL = "http://recordbook.frankb.exinitdev.de/Resources/PHP/model/AJAXControler/AJAXController.php";
   var data = "method=getInstructor";
   var dataType = "text";
@@ -242,7 +269,7 @@ function showIstructors(ca)
               "        </form>";
 
         /*
-        Evt. bessere Lösung wäre es den popoverScrpt variable mit eval() ausführen zu lassen
+        Evt. bessere Lösung wäre es den popoverScript variable mit eval() ausführen zu lassen
          */
 
         var popoverScript = "<script>" +

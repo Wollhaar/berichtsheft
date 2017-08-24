@@ -2,14 +2,14 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
-
 require_once('../DBManager/DB_Record.php');
-require_once ('../DBManager/DB_Instructor.php');
+require_once('../DBManager/DB_Instructor.php');
 
 class AJAXController
 {
 
     private $dbr;
+
     private $dbi;
 
     private $request;
@@ -86,30 +86,37 @@ class AJAXController
 
             case 'getInstructor':{
                 echo $resultObject = json_encode($this->dbi->getInstructor());
-//                $this->debug_console($resultObject);
 
                 break;
             }
-            case 'writeInstructor':{
+            case 'getSingleInstructor':{
+                echo $resultObject = json_encode($this->dbi->getSingleInstructor($_POST['single_id']));
+//                $this->debug_console(var_dump($resultObject));
+                break;
+            }
+            case 'writeInstructor': {
                 $this->debug_console(var_dump($_POST));
 
+                if (isset($_POST['name']) && isset($_POST['vorname']) && isset($_POST['rolle'])) {
 
-                if(isset($_POST['name']) && isset($_POST['vorname']) && isset($_POST['rolle'])){
-
-                    if($this->dbi->writeInstructor($_POST['name'], $_POST['vorname'], $_POST['location'], $_POST['rolle'],  $_POST['content'])== true){
+                    if ($this->dbi->writeInstructor($_POST['name'],
+                            $_POST['vorname'], $_POST['location'],
+                            $_POST['rolle'], $_POST['content']) == true) {
                         echo "true";
                     }
-
-
-
                     return true;
-
-
-                }else{
+                } else {
                     $this->debug_console("[Error] SQL Statment");
                     return false;
                 }
 //                $resultObject = json_encode($this->dbi->writeInstructor())
+            }
+            case 'updateInstructor': {
+//                $this->debug_console(var_dump($_POST));
+                echo $resultObject = json_encode($this->dbi->updateInstructor($_POST['instructor_id'], $_POST['name'],
+                    $_POST['vorname'], $_POST['location'],
+                    $_POST['role'], $_POST['content']));
+                break;
             }
             default: {
                 $this->debug_console("[Error] methode Post variable: " . $request);

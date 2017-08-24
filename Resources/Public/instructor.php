@@ -14,17 +14,16 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
 <script src="js/instructor.js"></script>
 
 <div class="container">
-  <div class="jumbotron" id="jumb" style="background:transparent">
+  <div class="jumbotron" id="jumb"  style="background:transparent">
     <div class="row">
-      <div class="col-md-2">
-        <button type="button" class="btn btn-default" id="addInstructor" onclick="addInstructor()">
-          <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true" ></span>
-          <label for="addInstructor">Instructor hinzufügen</label>
-        </button>
+      <p>Zu bearbeitenden Ausbilder per D&D in das untere Feld ziehen</p>
+      <div id="jumbDrop" ondrop="drop(event)" ondragover="allowDrop(event)" class="col-md-6">
+        <p></p>
+      </div>
+      <div class="col-md-6">
+        <div id="edit"></div>
       </div>
     </div>
-
-
 
     <?php
 
@@ -40,11 +39,14 @@ include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Templates/mainTe
         <li role="presentation" onclick="showIstructors('Betrieb')"><a href="#">Betrieb</a></li>
         <li role="presentation" onclick="showIstructors('Schule')"><a href="#">Schule</a></li>
         <li role="presentation" onclick="showIstructors('Extern')"><a href="#">Extern</a></li>
+        <li role="presentation" onclick="addInstructor()"><span class="glyphicon glyphicon glyphicon-plus"></span></li>
       </ul>
     </div>
   </div>
 
   <div class="container" id="instructorBlog">
+
+
 
 
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/Resources/Private/Layouts/Partials/footer.html'); ?>
