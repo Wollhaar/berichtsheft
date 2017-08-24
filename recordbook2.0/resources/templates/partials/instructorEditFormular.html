@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-offset-2">
+      <form id='instructorForm' method='post'>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="instructorName">Name</label>
+              <input type="text" class="form-control formInput" id="instructorName"></input>
+            </div>
+            <div class="form-group">
+              <label for="instructorVorname">Vorname</label>
+              <input type="text" class="form-control formInput" id="instructorVorname"></input>
+            </div>
+            <div class="form-group">
+              <label for="instructorRolle">Rolle</label>
+              <input type="text" class="form-control formInput" id="instructorRolle"></input>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <select class="form-control formInput" id="location">
+                <option value="Betrieb" class="location">Betrieb</option>
+                <option value="Schule" class="location">Schule</option>
+                <option value="Extern" class="location">Extern</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="content">Kurzbeschreibung</label>
+              <textarea class="form-control formInput" id="content" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <button type="button" id="submitB" class="btn btn-default formInput" onclick="addDB();">
+                <span class="glyphicon glyphicon glyphicon-ok formInput" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-default" onclick="reseter();">
+                <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
