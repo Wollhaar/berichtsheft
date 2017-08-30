@@ -2,7 +2,7 @@
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 'On');
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/classes/models/DBManager/DB_Connection.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/classes/models/DBManager/DB_Connection.php');
 
 class DB_Instructor extends DB_Connection
 {
