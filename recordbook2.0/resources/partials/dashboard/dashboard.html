@@ -1,0 +1,27 @@
+<div class="container main">
+    <div class="col-md-12 row" style="margin: 2rem 0">
+
+    </div>
+    <div class="col-md-12 row" style="margin: 2rem 0">
+        <div class="col-md-6 last-record">
+            <div class="img-box" style="display: inline-block;">
+                <img src="img/img/Letzter_Beitrag_Bild.png" id="" />
+            </div>
+            <div style="display: inline-block">
+                <h3><b>Letzter Beitrag</b></h3>
+                <?php $user = isset($_SESSION[$_SESSION['user']]['user_id']) ? $_SESSION[$_SESSION['user']]['user_id'] : NULL;
+                $last_record = $records->lastRecord($user); ?>
+                <span style="font-size: 1.5rem;">Bericht:
+                <a style="text-decoration: none; color: #2acbd2" href="<?php echo RP.'index.php?case=edit&id='.$last_record['record_id']; ?>">###CONTENT###</a>
+            </span>
+            </div>
+        </div>
+        <div class="col-md-6 recordbook">
+            <div class="img-box" style="display: inline-block"><img src="img/img/Zum_Editor_Bild.png" /></div>
+            <div style="display: inline-block">
+                <h3><b>Zum Editor</b></h3>
+                <span>Schreibe hier deinen <a href="<?php echo RP; ?>index.php?case=edit">Bericht</a></span>
+            </div>
+        </div>
+    </div>
+</div>
