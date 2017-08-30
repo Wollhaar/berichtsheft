@@ -110,6 +110,7 @@ class instructorView
         $this->instTemplate['extern'] = $extern;
     }
 
+
     function __construct()
     {
         $instTemplate = [
@@ -127,11 +128,11 @@ class instructorView
 
     function loadDefaultPage()
     {
-        $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/header.html'));
-        $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/mainNavigation.html'));
-        $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor.html'));
-        $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/footer.html'));
-        $this->setInstTemplateScripts(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructorScripts.html'));
+        $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/header.html'));
+        $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/mainNavigation.html'));
+        $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructor.html'));
+        $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/footer.html'));
+        $this->setInstTemplateScripts(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructorScripts.html'));
 
         $this->printSide($this);
     }
@@ -154,10 +155,10 @@ class instructorView
 
         foreach ($dbEntries as $entry) {
 
-//          $recordTemplate = readfile($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/recordDbInstructor.html');
+//          $recordTemplate = readfile($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/templates/partials/recordDbInstructor.html');
 //          readFile liest die datei als file ein daher kann kein String replace über die Variable gemacht werden
 //          file_get_cotent liest die file als String ein
-            $recordTemplate = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/recordDbInstructor.html');
+            $recordTemplate = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/recordDbInstructor.html');
 
 
             $search = [
@@ -178,11 +179,11 @@ class instructorView
         switch ($operator) {
 
             case 'enterprice': {
-                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/header.html'));
-                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/mainNavigation.html'));
-                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor.html'));
-                $this->setInstTemplateEnterprice(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/enterpriceShow.html'));
-                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/footer.html'));
+                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/header.html'));
+                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/mainNavigation.html'));
+                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructor.html'));
+                $this->setInstTemplateEnterprice(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/enterpriceShow.html'));
+                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/footer.html'));
 
                 $this->setInstTemplateEnterprice(str_replace('###CONTENT###',
                     $content, $this->getInstTemplateEnterprice()));
@@ -191,11 +192,11 @@ class instructorView
                 break;
             }
             case 'school': {
-                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/header.html'));
-                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/mainNavigation.html'));
-                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor.html'));
-                $this->setInstTemplateSchool(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/schoolShow.html'));
-                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/footer.html'));
+                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/header.html'));
+                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/mainNavigation.html'));
+                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructor.html'));
+                $this->setInstTemplateSchool(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/schoolShow.html'));
+                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/footer.html'));
 
                 $this->setInstTemplateSchool(str_replace('###CONTENT###',
                     $content, $this->getInstTemplateSchool()));
@@ -204,11 +205,12 @@ class instructorView
                 break;
             }
             case 'extern': {
-                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/header.html'));
-                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/mainNavigation.html'));
-                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor.html'));
-                $this->setInstTemplateExtern(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/externShow.html'));
-                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/footer.html'));
+                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/header.html'));
+                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/mainNavigation.html'));
+                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructor.html'));
+                $this->setInstTemplateExtern(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/externShow.html'));
+                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/footer.html'));
+
                 $this->setInstTemplateExtern(str_replace('###CONTENT###',
                     $content, $this->getInstTemplateExtern()));
 
@@ -216,12 +218,12 @@ class instructorView
                 break;
             }
             case 'add':{
-                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/header.html'));
-                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/mainNavigation.html'));
-                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor.html'));
-                $this->setInstTemplateEditFormular(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructorEditFormular.html'));
-                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/footer.html'));
-                $this->setInstTemplateScripts(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructorScripts.html'));
+                $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/header.html'));
+                $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/mainNavigation.html'));
+                $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructor.html'));
+                $this->setInstTemplateEditFormular(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructorEditFormular.html'));
+                $this->setInstTemplateFooter(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/footer.html'));
+                $this->setInstTemplateScripts(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/instructorScripts.html'));
 
 
                 $this->printSide($this);
