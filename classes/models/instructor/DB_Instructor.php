@@ -8,7 +8,9 @@ class DB_Instructor extends DB_Connection
 {
 
     private $school;
+
     private $extern;
+
     private $enterprise;
 
     /**
@@ -59,11 +61,11 @@ class DB_Instructor extends DB_Connection
         $this->enterprise = $enterprise;
     }
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->getInstructor('Betrieb');
         $this->getInstructor('Extern');
         $this->getInstructor('Schule');
-
     }
 
     public function getInstructor($location)
@@ -86,42 +88,33 @@ class DB_Instructor extends DB_Connection
             $sth->bindParam(1, $location, PDO::PARAM_STR);
 
             $sth->execute();
-            switch ($location){
-                case 'Betrieb':{
+            switch ($location) {
+                case 'Betrieb': {
                     $this->setEnterprise($sth->fetchAll(PDO::FETCH_ASSOC));
                     break;
                 }
-                case 'Schule':{
+                case 'Schule': {
                     $this->setSchool($sth->fetchAll(PDO::FETCH_ASSOC));
                     break;
                 }
-                case 'Extern':{
+                case 'Extern': {
                     $this->setExtern($sth->fetchAll(PDO::FETCH_ASSOC));
                     break;
                 }
-                default:{
+                default: {
                     echo "Fehler bei paramterübergabe in getInstructor() funktion";
                     return false;
-
                 }
             }
 
-//            $record = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-//            return $record;
             $this->dbc->commit();
-            $this->dbc = NULL;
+            $this->dbc = null;
             return true;
-
-
-//
         } catch (PDOException $exception) {
             $this->dbc->rollBack();
             echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
-
-        return true;
     }
 
     public function getSingleInstructor($single_id)
@@ -188,12 +181,12 @@ class DB_Instructor extends DB_Connection
 
     public function updateInstructor(
         $instructor_id,
-        $name = null,
-        $vorname = null,
-        $location = null,
-        $role = null,
-        $imgPath = null,
-        $content = null
+        $name,
+        $vorname,
+        $location ,
+        $role,
+        $imgPath,
+        $content
     ) {
         $this->getConnection();
 
@@ -219,5 +212,42 @@ class DB_Instructor extends DB_Connection
             echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
             return false;
         }
+    }
+
+    public function deleteInstructor($id)
+    {
+
+        if (isset($id) == false) {
+            echo 'Nothing to Delete';
+            return false;
+        }
+
+        $this->getConnection();
+
+        try {
+
+            $this->dbc->beginTransaction();
+            $sth = $this->dbc->prepare("DELETE FROM instructor WHERE instructor_id = :instructur_id");
+            $sth->bindParam("instructur_id", $id, PDO::PARAM_INT);
+
+            $sth->execute();
+            $sth->debugDumpParams();
+            $this->errorLog($id);
+
+            $this->dbc->commit();
+
+            return true;
+
+        } catch (PDOException $exception) {
+            echo('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
+            $this->errorLog('[Error ] ' . $exception->getMessage() . 'in Line: ' . $exception->getLine());
+            return false;
+        }
+    }
+
+    public function errorLog($log){
+        $errorFile = fopen($_SERVER['DOCUMENT_ROOT'] . 'errorFile.txt', 'a');
+        fwrite($errorFile, $log);
+        fclose($errorFile);
     }
 }
