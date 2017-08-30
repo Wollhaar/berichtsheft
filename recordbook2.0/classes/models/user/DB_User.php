@@ -90,6 +90,11 @@ class DB_User
         }
     }
 
+    /**
+     * @param $user string username
+     * @param $pass string password
+     * @return bool
+     */
     public function loginProfile($user, $pass){
         $this->dbc = new DB_Connection();
         if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
