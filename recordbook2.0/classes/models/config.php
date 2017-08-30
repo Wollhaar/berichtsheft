@@ -34,11 +34,14 @@ include_once 'Helper.php';*/
 
 function __autoload ($classname) {
 //    echo $classname.'<br/>';
-    if (substr($classname, 0, 2) == 'DB') {
-        require 'DBManager'.DS.$classname.'.php';
+    if (substr($classname, 0, 13) == 'DB_Connection') {
+        require 'DBManager'.DS.'DB_Connection.php';
     }
     elseif ($classname == 'Helper') {
         require_once 'Helper.php';
+    }
+    else {
+        require_once strtolower(substr($classname, 3, 10)).DS.$classname.'php';
     }
 }
 
