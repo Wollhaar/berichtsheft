@@ -152,34 +152,14 @@ switch ($request['case']) {
             $record = new DB_Record();
             $single_record = $record->getRecord($request['id']);
             $_SESSION[$_SESSION['user']]['user_record'] = $single_record;
+//            unset($_SESSION[$_SESSION['user']]['user_record']);
+
             if (false) {
                 header('location: ' . PUB_PATH . 'record.php');
             }
         }
         header('location: '.PUB_PATH.'recordbook.php');
         break;
-
-
-
-        // for saving recordchanges and adding records
-    case 'save':
-        if (empty($_SESSION['user'])) {
-            header('location: ' . PUB_PATH . 'login.php');
-            break;
-        }
-        // update record
-        if(isset($request['id'])) {
-            $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], $request['id']);
-        }
-        // adding record
-        elseif (isset($request['user'])) {
-            $record = new DB_Record();
-            $_SESSION['bool'] = $record->saveRecord($request['record'], NULL, $request['user']);
-        }
-        header('location: '.PUB_PATH.'dashboard.php');
-        break;
-
 
 
     // logged user getting send to dashboard
@@ -200,6 +180,11 @@ switch ($request['case']) {
     // immer an letzter Stelle lassen
     case 'logout':
         session_destroy();
+//        echo session_name().' + '.session_id();
+        unset($_REQUEST['PHPSESSID']);
+        if (session_status() == PHP_SESSION_DISABLED){
+            header('location: '.PUB_PATH.'dashboard.php');
+        }
 
     default:
         header('location: '.PUB_PATH.'landingpage.php');
