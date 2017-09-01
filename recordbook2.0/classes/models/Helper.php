@@ -51,7 +51,7 @@ class Helper
         }
     }
 
-    function render($dbArray)
+    function render($dbArray, $classname, $templateName)
     {
 // switch case, was angezeigt werden soll (Betrieb/Schule/Extern) - z.B. über Request-Parameter
 // (die Seite wird ja neu geladen, wenn man auf der Seite einen der Links angeklickt, da kann man dann den Parameter ranhängen.
@@ -66,13 +66,13 @@ class Helper
 
 //            muss dynamisch gehalten werden je nachdem welches partial geladen werden soll.
 //            also den namen des gefordert partial mit übergeben und worauf hier dann nach dem pfad gesucht wird
-            $template = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/recordbook2.0/resources/partials/instructor/recordDbInstructor.html');
+            $template = file_get_contents($_SERVER['DOCUMENT_ROOT'] . TEMP_PATH.$classname.$templateName.'.html');
 
 //            schleife bauen um die richtigen marker zu finden und diese in einem array zu verstauen
 
-            $find = array();
+//            $find = array();
 
-
+/*
 //            je nachdem wie viele marker im HTML gefunden werden, sollen genauso viele durch str_replace mit daten ersetzt werden
             $search = [
 //                foreach ($find as $marker):
@@ -89,7 +89,11 @@ class Helper
 //   ^^^^ ^^  ^^  ^^  nach Lösung wird gesucht ^^^^
 //
             $template = str_replace($search, $replace, $template);
-//            $content .= $recordTemplate;
+//            $content .= $recordTemplate;*/
+
+            foreach ($array as $key => $value) {
+                $template = preg_replace('###' . strtoupper($key) . '###', $value, $template);
+            }
         }
 //        das durch daten ersetzte template wird zur view zurückgegeben
         return $template;
