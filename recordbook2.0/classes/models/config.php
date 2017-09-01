@@ -9,6 +9,7 @@ define('RP', $_SERVER['SERVER_NAME'] . DS);
 define('PUB_PATH', RP.'Resources'.DS.'Public'.DS); // DIRECTORY_SEPERATOR evtll gegen '/' austauschen
 define('PRI_PATH', RP.'Resources'.DS.'Private'.DS.'Layouts'.DS);
 define('MOD_PATH', RP.'Resources'.DS.'PHP'.DS.'model'.DS);
+define('TEMP_PATH', DS.'recordbook2.0'.DS.'resources'.DS.'partials'.DS);
 
 // Definierung des Userstatus
 define(0, 'ADMIN');
