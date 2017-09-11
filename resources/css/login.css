@@ -1,0 +1,14 @@
+body{
+  background-image: url("../../resources/img/img/LandingPage_BG.png");
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #fff;
+  background-color: #0f0f0f;
+}
+
+
+input::placeholder{
+  color: #fff;
+}
+
