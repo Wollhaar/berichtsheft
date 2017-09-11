@@ -1,0 +1,28 @@
+<div class="container">
+  <form method="post">
+    <div class="form-group">
+      <label class="sr-only" for="user"></label>
+      <input type="text" id="user" placeholder="User" name="user"></input>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="password"></label>
+      <input type="password" id="password" name="password"></input>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <label class="sr-only" for="loginBtn"></label>
+        <button class="btn btn-default" id="loginBtn" type="submit" formaction="loginController.php?click=login">Login</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <div class="col-md-4">
+      <a href="loginController.php?click=createAccount">Neues Konto erstellen</a>
+    </div>
+    <div class="col-md-4">
+      <a href="">Passwort vergessen</a>
+    </div>
+  </div>
+</div>
+
