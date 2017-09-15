@@ -1,4 +1,7 @@
 <?php
+
+
+
 class instructorView
 {
 
@@ -136,7 +139,6 @@ class instructorView
 
     function loadDefaultPage()
     {
-        var_dump($_POST);
         $this->setInstTemplateHeader(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor/header.html'));
         $this->setInstTemplateMainNavigation(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor/mainNavigation.html'));
         $this->setInstTemplateBody(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/resources/templates/partials/instructor/instructor.html'));
