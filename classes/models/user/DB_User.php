@@ -1,38 +1,37 @@
 <?php
 
+include_once($_SERVER['DOCUMENT_ROOT'] . '/classes/models/DBManager/DB_Connection.php');
 
-class DB_User
+class DB_User extends DB_Connection
 {
-
-    private $dbc;
-
-
 
     public function __construct()
     {
-        /*if (isset(\model\DB_Manager\DB_Connection::host)) {
-            echo \model\DB_Manager\DB_Connection::host;*/
+
     }
 
 
     public function login($user, $password) {
-        $this->dbc = new DB_Connection();
-        if (isset($this->dbc) || is_a($this->dbc, 'PDO')) {
-            $this->dbc = $this->dbc->getConnection();
-        }
+
+        $this->getConnection();
+
 
         $pw = sha1($password, true);
-        $sql = 'SELECT * FROM User WHERE username = ?';
+        $sql = 'SELECT username, password FROM User WHERE username = ?';
+
         $stmt = $this->dbc->prepare($sql);
-        $stmt->execute(array($user));
+        $stmt->bindParam(1, $user, PDO::PARAM_STR);
+        $stmt->execute();
+
+
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-//        var_dump($data);
 
         if ($data['password'] == $pw) {
-            return array('data' => $data, 'post' => array('username' => $user, 'pw' => $pw));
+            return true;
+//            return array('data' => $data, 'post' => array('username' => $user, 'pw' => $pw));
         }
         else {
-            return 'password false';
+            return false;
         }
     }
 
