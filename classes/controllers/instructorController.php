@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once('../models/instructor/DB_Instructor.php');
 require_once('../views/instructorView.php');
 
